@@ -1,0 +1,22 @@
+{
+  "name": "Spring_Backend",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/Backend/Spring_Backend/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mvn spring-boot:run",
+        "cwd": "apps/Backend/Spring_Backend"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mvn test package -DskipTests",
+        "cwd": "apps/Backend/Spring_Backend"
+      }
+    }
+  }
+}

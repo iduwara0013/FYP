@@ -1,0 +1,244 @@
+{
+  "apps/Backend/Spring_Backend": {
+    "root": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "name": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "$schema": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "sourceRoot": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "projectType": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.executor": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.options": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.options.command": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.options.cwd": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build.executor": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build.options": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build.options.command": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build.options.cwd": [
+      "apps/Backend/Spring_Backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.cache": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.serve.parallelism": [
+      "nx.json",
+      "nx/target-defaults"
+    ]
+  },
+  "apps/Backend/python_backend": {
+    "root": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
+    "name": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
+    "$schema": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
+    "sourceRoot": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
+    "projectType": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.executor": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.options": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.options.command": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.options.cwd": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve.cache": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.serve.parallelism": [
+      "nx.json",
+      "nx/target-defaults"
+    ]
+  },
+  "apps/frontend": {
+    "root": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "name": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "$schema": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "sourceRoot": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "projectType": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.start": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.start.executor": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.start.options": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.start.options.command": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.start.options.cwd": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.android": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.android.executor": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.android.options": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.android.options.command": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.android.options.cwd": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.ios": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.ios.executor": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.ios.options": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.ios.options.command": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.ios.options.cwd": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.web": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.web.executor": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.web.options": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.web.options.command": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.web.options.cwd": [
+      "apps/frontend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.start.cache": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.start.parallelism": [
+      "nx.json",
+      "nx/target-defaults"
+    ]
+  }
+}

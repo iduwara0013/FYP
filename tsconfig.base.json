@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022"],
+    "allowJs": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["apps/frontend/*"],
+      "@ui/*": ["libs/ui/*"],
+      "@api/*": ["libs/api/*"],
+      "@models/*": ["libs/models/*"],
+      "@utils/*": ["libs/utils/*"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}
