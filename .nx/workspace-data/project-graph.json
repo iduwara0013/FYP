@@ -14350,12 +14350,12 @@
       },
       {
         "source": "frontend",
-        "target": "npm:expo-symbols",
+        "target": "npm:@expo/vector-icons",
         "type": "static"
       },
       {
         "source": "frontend",
-        "target": "npm:@expo/vector-icons",
+        "target": "npm:expo-symbols",
         "type": "static"
       }
     ],
@@ -36358,5 +36358,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1774613874007
+  "computedAt": 1775793249377
 }
