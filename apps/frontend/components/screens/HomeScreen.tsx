@@ -1,6 +1,9 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
+    ActivityIndicator,
+    Animated,
+    Easing,
     FlatList,
     SafeAreaView,
     ScrollView,
@@ -10,8 +13,11 @@ import {
     View,
 } from "react-native";
 
+import { ProfileData } from "./profile-types";
+
 const actionCards = [
   {
+    id: "crop",
     icon: "leaf",
     title: "Crop Recommendation",
     description: "Get AI-powered crop suggestions",
@@ -19,6 +25,7 @@ const actionCards = [
     iconColor: "#15803D",
   },
   {
+    id: "yield",
     icon: "chart-line",
     title: "Yield Prediction",
     description: "Forecast your harvest yield",
@@ -26,20 +33,32 @@ const actionCards = [
     iconColor: "#B45309",
   },
   {
+    id: "weather",
     icon: "weather-partly-cloudy",
     title: "Weather Update",
-    description: "Real-time weather forecast",
+    description: "Tap to load live weather for your region",
     background: "#DBEAFE",
     iconColor: "#2563EB",
   },
   {
+    id: "market",
     icon: "currency-usd",
     title: "Market Prices",
     description: "Latest crop market rates",
     background: "#FFEDD5",
     iconColor: "#EA580C",
   },
-];
+] as const;
+
+type WeatherState = {
+  locationName: string;
+  temperature: number;
+  humidity: number | null;
+  windSpeed: number | null;
+  weatherCode: number;
+  description: string;
+  updatedAt: string;
+};
 
 const recentPredictions = [
   { crop: "Rice", confidence: "94%", status: "Excellent", accent: "#16A34A" },
@@ -48,54 +67,223 @@ const recentPredictions = [
 ];
 
 type HomeScreenProps = {
+  profile?: ProfileData | null;
   onProfile?: () => void;
 };
 
-export function HomeScreen({ onProfile }: HomeScreenProps) {
+function getWeatherDescription(code: number) {
+  if (code === 0) return "Clear sky";
+  if (code === 1 || code === 2) return "Partly cloudy";
+  if (code === 3) return "Overcast";
+  if (code === 45 || code === 48) return "Foggy";
+  if ([51, 53, 55, 56, 57].includes(code)) return "Drizzle";
+  if ([61, 63, 65, 66, 67].includes(code)) return "Rain";
+  if ([71, 73, 75, 77].includes(code)) return "Snow";
+  if ([80, 81, 82].includes(code)) return "Showers";
+  if ([95, 96, 99].includes(code)) return "Thunderstorm";
+  return "Current weather";
+}
+
+function getWeatherIcon(code: number) {
+  if (code === 0) return "weather-sunny";
+  if (code === 1 || code === 2) return "weather-partly-cloudy";
+  if (code === 3) return "weather-cloudy";
+  if (code === 45 || code === 48) return "weather-fog";
+  if ([51, 53, 55, 56, 57].includes(code)) return "weather-rainy";
+  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return "weather-pouring";
+  if ([71, 73, 75, 77].includes(code)) return "weather-snowy";
+  if ([95, 96, 99].includes(code)) return "weather-lightning-rainy";
+  return "weather-partly-cloudy";
+}
+
+export function HomeScreen({ profile, onProfile }: HomeScreenProps) {
+  const isFarmer = profile?.role !== "buyer";
+  const accentColor = isFarmer ? "#0F7A3A" : "#C47F00";
+  const accentSoft = isFarmer ? "#DCFCE7" : "#FEF3C7";
+  const roleLabel = isFarmer ? "Farmer Profile" : "Buyer Profile";
+  const cardOpacity = useRef(new Animated.Value(0)).current;
+  const cardOffset = useRef(new Animated.Value(12)).current;
+  const greetingName = profile?.fullName?.split(" ")[0] ?? "Farmer";
+  const weatherRegion = profile?.region?.trim() || "Kandy";
+  const [weatherLoading, setWeatherLoading] = useState(false);
+  const [weatherError, setWeatherError] = useState("");
+  const [weatherState, setWeatherState] = useState<WeatherState | null>(null);
+
+  const profileMeta = isFarmer
+    ? profile
+      ? `Region: ${profile.region} | Land: ${profile.totalLandArea ?? "--"} ha`
+      : "Region: Kandy | Land: 1.8 ha"
+    : profile
+      ? `Region: ${profile.region} | ${profile.organizationName ?? "Buyer"}`
+      : "Region: Kandy | Buyer profile";
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(cardOpacity, {
+        toValue: 1,
+        duration: 520,
+        easing: Easing.bezier(0.16, 1, 0.3, 1),
+        useNativeDriver: true,
+      }),
+      Animated.timing(cardOffset, {
+        toValue: 0,
+        duration: 520,
+        easing: Easing.bezier(0.16, 1, 0.3, 1),
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [cardOpacity, cardOffset]);
+
+  const handleWeatherPress = async () => {
+    try {
+      setWeatherLoading(true);
+      setWeatherError("");
+
+      const geoResponse = await fetch(
+        `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(weatherRegion)}&count=1&language=en&format=json`,
+      );
+
+      if (!geoResponse.ok) {
+        throw new Error("Unable to find your region.");
+      }
+
+      const geoData = (await geoResponse.json()) as {
+        results?: Array<{
+          name: string;
+          country?: string;
+          latitude: number;
+          longitude: number;
+        }>;
+      };
+
+      const location = geoData.results?.[0];
+
+      if (!location) {
+        throw new Error(`No weather location found for ${weatherRegion}.`);
+      }
+
+      const weatherResponse = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=auto`,
+      );
+
+      if (!weatherResponse.ok) {
+        throw new Error("Unable to load live weather right now.");
+      }
+
+      const weatherData = (await weatherResponse.json()) as {
+        current?: {
+          temperature_2m: number;
+          relative_humidity_2m?: number;
+          wind_speed_10m?: number;
+          weather_code: number;
+          time: string;
+        };
+      };
+
+      if (!weatherData.current) {
+        throw new Error("Weather data is not available right now.");
+      }
+
+      setWeatherState({
+        locationName: `${location.name}${location.country ? `, ${location.country}` : ""}`,
+        temperature: weatherData.current.temperature_2m,
+        humidity:
+          typeof weatherData.current.relative_humidity_2m === "number"
+            ? weatherData.current.relative_humidity_2m
+            : null,
+        windSpeed:
+          typeof weatherData.current.wind_speed_10m === "number"
+            ? weatherData.current.wind_speed_10m
+            : null,
+        weatherCode: weatherData.current.weather_code,
+        description: getWeatherDescription(weatherData.current.weather_code),
+        updatedAt: weatherData.current.time,
+      });
+    } catch (error) {
+      setWeatherState(null);
+      setWeatherError(
+        error instanceof Error ? error.message : "Unable to load weather.",
+      );
+    } finally {
+      setWeatherLoading(false);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.header}>
+        <Animated.View
+          style={[
+            styles.header,
+            {
+              opacity: cardOpacity,
+              transform: [{ translateY: cardOffset }],
+            },
+          ]}
+        >
           <View>
-            <Text style={styles.greeting}>Good Morning, Farmer</Text>
+            <Text style={styles.greeting}>Good Morning, {greetingName}</Text>
             <Text style={styles.headerSubtitle}>
               Let&apos;s plan today&apos;s crop decisions.
             </Text>
           </View>
           <TouchableOpacity
-            style={styles.avatar}
+            style={[styles.avatar, { backgroundColor: accentColor }]}
             onPress={onProfile}
             activeOpacity={0.8}
           >
             <MaterialCommunityIcons
-              name="bell-outline"
-              size={20}
+              name="account-circle-outline"
+              size={22}
               color="#FFFFFF"
             />
           </TouchableOpacity>
-        </View>
+        </Animated.View>
 
-        <View style={styles.profileCard}>
-          <View style={styles.profileIcon}>
-            <MaterialCommunityIcons name="account" size={30} color="#FFFFFF" />
+        <Animated.View
+          style={[
+            styles.profileCard,
+            { backgroundColor: accentColor },
+            {
+              opacity: cardOpacity,
+              transform: [{ translateY: cardOffset }],
+            },
+          ]}
+        >
+          <View style={[styles.profileIcon, { backgroundColor: accentSoft }]}>
+            <MaterialCommunityIcons
+              name={isFarmer ? "sprout" : "storefront-outline"}
+              size={30}
+              color={accentColor}
+            />
           </View>
           <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>John Farmer</Text>
-            <Text style={styles.profileMeta}>Region: Kandy | Land: 1.8 ha</Text>
+            <Text style={styles.profileName}>
+              {profile?.fullName ?? "John Farmer"}
+            </Text>
+            <View style={styles.roleChip}>
+              <Text style={styles.roleChipText}>{roleLabel}</Text>
+            </View>
+            <Text style={styles.profileMeta}>{profileMeta}</Text>
           </View>
           <View style={styles.dateBox}>
             <Text style={styles.dateLabel}>Today</Text>
-            <Text style={styles.dateValue}>Apr 10, 2026</Text>
+            <Text style={styles.dateValue}>Apr 12, 2026</Text>
           </View>
-        </View>
+        </Animated.View>
 
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         <View style={styles.grid}>
           {actionCards.map((card) => (
-            <View key={card.title} style={styles.actionCard}>
+            <TouchableOpacity
+              key={card.title}
+              style={styles.actionCard}
+              activeOpacity={0.9}
+              onPress={card.id === "weather" ? handleWeatherPress : undefined}
+            >
               <View
                 style={[
                   styles.actionIconWrap,
@@ -110,11 +298,90 @@ export function HomeScreen({ onProfile }: HomeScreenProps) {
               </View>
               <Text style={styles.actionTitle}>{card.title}</Text>
               <Text style={styles.actionDescription}>{card.description}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
 
-        <View style={styles.alertCard}>
+        {weatherLoading || weatherError || weatherState ? (
+          <Animated.View
+            style={[
+              styles.weatherCard,
+              {
+                opacity: cardOpacity,
+                transform: [{ translateY: cardOffset }],
+              },
+            ]}
+          >
+            <View style={styles.weatherHeaderRow}>
+              <View>
+                <Text style={styles.weatherTitle}>Live Weather</Text>
+                <Text style={styles.weatherSubtitle}>{weatherRegion}</Text>
+              </View>
+              <TouchableOpacity
+                onPress={handleWeatherPress}
+                activeOpacity={0.85}
+                style={styles.refreshButton}
+                disabled={weatherLoading}
+              >
+                {weatherLoading ? (
+                  <ActivityIndicator color="#0F7A3A" />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="refresh"
+                    size={18}
+                    color="#0F7A3A"
+                  />
+                )}
+              </TouchableOpacity>
+            </View>
+
+            {weatherError ? (
+              <Text style={styles.weatherError}>{weatherError}</Text>
+            ) : weatherState ? (
+              <View style={styles.weatherContent}>
+                <View style={styles.weatherIconWrap}>
+                  <MaterialCommunityIcons
+                    name={getWeatherIcon(weatherState.weatherCode) as never}
+                    size={34}
+                    color="#0F7A3A"
+                  />
+                </View>
+                <View style={styles.weatherInfo}>
+                  <Text style={styles.weatherLocation}>
+                    {weatherState.locationName}
+                  </Text>
+                  <Text style={styles.weatherTemp}>
+                    {Math.round(weatherState.temperature)}°C
+                  </Text>
+                  <Text style={styles.weatherDescription}>
+                    {weatherState.description}
+                  </Text>
+                  <Text style={styles.weatherMetaLine}>
+                    Humidity: {weatherState.humidity ?? "--"}% | Wind:{" "}
+                    {weatherState.windSpeed ?? "--"} km/h
+                  </Text>
+                  <Text style={styles.weatherUpdated}>
+                    Updated{" "}
+                    {new Date(weatherState.updatedAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </Text>
+                </View>
+              </View>
+            ) : null}
+          </Animated.View>
+        ) : null}
+
+        <Animated.View
+          style={[
+            styles.alertCard,
+            {
+              opacity: cardOpacity,
+              transform: [{ translateY: cardOffset }],
+            },
+          ]}
+        >
           <MaterialCommunityIcons
             name="weather-partly-rainy"
             size={26}
@@ -127,7 +394,7 @@ export function HomeScreen({ onProfile }: HomeScreenProps) {
               land preparation.
             </Text>
           </View>
-        </View>
+        </Animated.View>
 
         <Text style={styles.sectionTitle}>Recent Predictions</Text>
         <FlatList
@@ -151,7 +418,15 @@ export function HomeScreen({ onProfile }: HomeScreenProps) {
         />
       </ScrollView>
 
-      <View style={styles.bottomNav}>
+      <Animated.View
+        style={[
+          styles.bottomNav,
+          {
+            opacity: cardOpacity,
+            transform: [{ translateY: cardOffset }],
+          },
+        ]}
+      >
         <View style={styles.bottomNavInner}>
           <TouchableOpacity style={styles.navItemActive}>
             <MaterialCommunityIcons
@@ -186,7 +461,7 @@ export function HomeScreen({ onProfile }: HomeScreenProps) {
             <Text style={styles.navItemText}>Profile</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </Animated.View>
     </SafeAreaView>
   );
 }
@@ -230,7 +505,6 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   profileCard: {
-    backgroundColor: "#0F7A3A",
     borderRadius: 26,
     padding: 18,
     flexDirection: "row",
@@ -242,21 +516,33 @@ const styles = StyleSheet.create({
     width: 58,
     height: 58,
     borderRadius: 29,
-    backgroundColor: "rgba(255,255,255,0.18)",
     alignItems: "center",
     justifyContent: "center",
   },
   profileInfo: {
     flex: 1,
+    gap: 6,
   },
   profileName: {
     color: "#FFFFFF",
     fontWeight: "800",
     fontSize: 18,
   },
+  roleChip: {
+    alignSelf: "flex-start",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    backgroundColor: "rgba(255,255,255,0.16)",
+  },
+  roleChipText: {
+    color: "#FFFFFF",
+    fontSize: 11,
+    fontWeight: "700",
+  },
   profileMeta: {
     color: "rgba(255,255,255,0.82)",
-    marginTop: 4,
+    lineHeight: 18,
   },
   dateBox: {
     alignItems: "flex-end",
@@ -281,7 +567,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
     gap: 12,
-    marginBottom: 20,
+    marginBottom: 16,
   },
   actionCard: {
     width: "48%",
@@ -314,6 +600,83 @@ const styles = StyleSheet.create({
     marginTop: 6,
     lineHeight: 19,
     fontSize: 12,
+  },
+  weatherCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 24,
+    padding: 18,
+    marginBottom: 20,
+    shadowColor: "#0F172A",
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 4,
+  },
+  weatherHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 12,
+  },
+  weatherTitle: {
+    color: "#0F172A",
+    fontWeight: "800",
+    fontSize: 16,
+  },
+  weatherSubtitle: {
+    color: "#64748B",
+    marginTop: 4,
+  },
+  refreshButton: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#DCFCE7",
+  },
+  weatherContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 14,
+  },
+  weatherIconWrap: {
+    width: 64,
+    height: 64,
+    borderRadius: 20,
+    backgroundColor: "#EEFDF3",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  weatherInfo: {
+    flex: 1,
+    gap: 4,
+  },
+  weatherLocation: {
+    color: "#0F172A",
+    fontWeight: "800",
+    fontSize: 14,
+  },
+  weatherTemp: {
+    color: "#0F7A3A",
+    fontSize: 28,
+    fontWeight: "900",
+  },
+  weatherDescription: {
+    color: "#334155",
+    fontWeight: "700",
+  },
+  weatherMetaLine: {
+    color: "#64748B",
+    fontSize: 12,
+  },
+  weatherUpdated: {
+    color: "#94A3B8",
+    fontSize: 11,
+  },
+  weatherError: {
+    color: "#B91C1C",
+    fontWeight: "600",
   },
   alertCard: {
     backgroundColor: "#2563EB",

@@ -1,6 +1,8 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
+    Animated,
+    Easing,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -10,35 +12,146 @@ import {
     View,
 } from "react-native";
 
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+
+import { getFirebaseAuth } from "../../lib/firebase";
+
 type Role = "farmer" | "buyer";
+
+type SignupDetails = {
+  fullName: string;
+  email: string;
+  region: string;
+};
 
 type SignUpScreenProps = {
   onLogin: () => void;
-  onSignUp: (role: Role) => void;
+  onSignUp: (role: Role, details: SignupDetails) => void;
 };
 
 export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [region, setRegion] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [step, setStep] = useState<1 | 2>(1);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const stepOpacity = useRef(new Animated.Value(0)).current;
+  const stepOffset = useRef(new Animated.Value(12)).current;
+
+  useEffect(() => {
+    stepOpacity.setValue(0);
+    stepOffset.setValue(12);
+
+    Animated.parallel([
+      Animated.timing(stepOpacity, {
+        toValue: 1,
+        duration: 500,
+        easing: Easing.bezier(0.16, 1, 0.3, 1),
+        useNativeDriver: true,
+      }),
+      Animated.timing(stepOffset, {
+        toValue: 0,
+        duration: 500,
+        easing: Easing.bezier(0.16, 1, 0.3, 1),
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [step, stepOpacity, stepOffset]);
 
   const handleContinue = () => {
-    if (selectedRole) {
-      setStep(2);
+    setStep(2);
+  };
+
+  const handleCreateAccount = async () => {
+    const trimmedEmail = email.trim();
+
+    if (!selectedRole) {
+      setErrorMessage("Select Farmer or Buyer first.");
+      return;
+    }
+
+    if (!fullName.trim() || !trimmedEmail || !password.trim()) {
+      setErrorMessage("Enter your full name, email, and password.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match.");
+      return;
+    }
+
+    if (!agreedToTerms) {
+      setErrorMessage("Please accept the terms to continue.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setErrorMessage("");
+
+      const credential = await createUserWithEmailAndPassword(
+        getFirebaseAuth(),
+        trimmedEmail,
+        password,
+      );
+
+      await updateProfile(credential.user, {
+        displayName: fullName.trim(),
+      });
+
+      onSignUp(selectedRole, {
+        fullName: fullName.trim(),
+        email: trimmedEmail,
+        region: region.trim(),
+      });
+    } catch (error) {
+      const code =
+        typeof error === "object" && error && "code" in error
+          ? String((error as { code?: string }).code)
+          : "";
+
+      if (code === "auth/email-already-in-use") {
+        setErrorMessage("This email is already registered.");
+      } else if (code === "auth/invalid-email") {
+        setErrorMessage("Enter a valid email address.");
+      } else if (code === "auth/weak-password") {
+        setErrorMessage("Use a stronger password.");
+      } else {
+        setErrorMessage(
+          error instanceof Error ? error.message : "Sign up failed.",
+        );
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.backgroundLeafOne} />
+      <View style={styles.backgroundLeafTwo} />
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         {step === 1 ? (
           <>
-            <View style={styles.heroCard}>
+            <Animated.View
+              style={[
+                styles.heroCard,
+                {
+                  opacity: stepOpacity,
+                  transform: [{ translateY: stepOffset }],
+                },
+              ]}
+            >
               <View style={styles.badge}>
                 <MaterialCommunityIcons
                   name="account-plus-outline"
@@ -50,9 +163,17 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
               <Text style={styles.subtitle}>
                 Select Farmer or Buyer to create a personalized experience.
               </Text>
-            </View>
+            </Animated.View>
 
-            <View style={styles.formCard}>
+            <Animated.View
+              style={[
+                styles.formCard,
+                {
+                  opacity: stepOpacity,
+                  transform: [{ translateY: stepOffset }],
+                },
+              ]}
+            >
               <TouchableOpacity
                 onPress={() => setSelectedRole("farmer")}
                 style={[
@@ -115,11 +236,7 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
               <TouchableOpacity
                 onPress={handleContinue}
                 activeOpacity={0.9}
-                disabled={!selectedRole}
-                style={[
-                  styles.primaryButton,
-                  !selectedRole && styles.primaryButtonDisabled,
-                ]}
+                style={styles.primaryButton}
               >
                 <Text style={styles.primaryButtonText}>Continue</Text>
               </TouchableOpacity>
@@ -130,11 +247,19 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
                   Login
                 </Text>
               </Text>
-            </View>
+            </Animated.View>
           </>
         ) : (
           <>
-            <View style={styles.heroCard}>
+            <Animated.View
+              style={[
+                styles.heroCard,
+                {
+                  opacity: stepOpacity,
+                  transform: [{ translateY: stepOffset }],
+                },
+              ]}
+            >
               <View style={styles.badge}>
                 <MaterialCommunityIcons
                   name="account-plus-outline"
@@ -147,9 +272,21 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
                 Join as a <Text style={styles.roleInline}>{selectedRole}</Text>{" "}
                 and start managing smarter.
               </Text>
-            </View>
+            </Animated.View>
 
-            <View style={styles.formCard}>
+            <Animated.View
+              style={[
+                styles.formCard,
+                {
+                  opacity: stepOpacity,
+                  transform: [{ translateY: stepOffset }],
+                },
+              ]}
+            >
+              {errorMessage ? (
+                <Text style={styles.errorText}>{errorMessage}</Text>
+              ) : null}
+
               <View style={styles.inputGroup}>
                 <MaterialCommunityIcons
                   name="account-outline"
@@ -159,6 +296,8 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
                 <TextInput
                   placeholder="Full Name"
                   placeholderTextColor="#9CA3AF"
+                  value={fullName}
+                  onChangeText={setFullName}
                   style={styles.input}
                 />
               </View>
@@ -170,10 +309,14 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
                   color="#6B7280"
                 />
                 <TextInput
-                  placeholder="Email or Phone"
+                  placeholder="Email"
                   placeholderTextColor="#9CA3AF"
+                  value={email}
+                  onChangeText={setEmail}
                   style={styles.input}
                   keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
                 />
               </View>
 
@@ -186,6 +329,8 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
                 <TextInput
                   placeholder="Password"
                   placeholderTextColor="#9CA3AF"
+                  value={password}
+                  onChangeText={setPassword}
                   secureTextEntry={!showPassword}
                   style={[styles.input, styles.passwordInput]}
                 />
@@ -210,6 +355,8 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
                 <TextInput
                   placeholder="Confirm Password"
                   placeholderTextColor="#9CA3AF"
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
                   secureTextEntry={!showConfirmPassword}
                   style={[styles.input, styles.passwordInput]}
                 />
@@ -236,6 +383,8 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
                 <TextInput
                   placeholder="Region or District"
                   placeholderTextColor="#9CA3AF"
+                  value={region}
+                  onChangeText={setRegion}
                   style={styles.input}
                 />
               </View>
@@ -264,11 +413,14 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
               </View>
 
               <TouchableOpacity
-                onPress={() => onSignUp(selectedRole as Role)}
+                onPress={handleCreateAccount}
                 activeOpacity={0.9}
                 style={styles.primaryButton}
+                disabled={loading}
               >
-                <Text style={styles.primaryButtonText}>Sign Up</Text>
+                <Text style={styles.primaryButtonText}>
+                  {loading ? "Creating..." : "Sign Up"}
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -277,7 +429,7 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
               >
                 <Text style={styles.backLinkText}>Back to role selection</Text>
               </TouchableOpacity>
-            </View>
+            </Animated.View>
           </>
         )}
       </ScrollView>
@@ -290,6 +442,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F8FAFC",
   },
+  backgroundLeafOne: {
+    position: "absolute",
+    width: 180,
+    height: 180,
+    borderRadius: 180,
+    backgroundColor: "#DCFCE7",
+    opacity: 0.38,
+    top: -40,
+    right: -70,
+  },
+  backgroundLeafTwo: {
+    position: "absolute",
+    width: 160,
+    height: 160,
+    borderRadius: 160,
+    backgroundColor: "#FEF3C7",
+    opacity: 0.32,
+    bottom: -50,
+    left: -60,
+  },
   scrollContent: {
     flexGrow: 1,
     padding: 20,
@@ -297,7 +469,7 @@ const styles = StyleSheet.create({
   },
   heroCard: {
     alignItems: "center",
-    marginBottom: 22,
+    marginBottom: 18,
   },
   badge: {
     width: 84,
@@ -319,6 +491,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#475569",
     lineHeight: 22,
+  },
+  errorText: {
+    color: "#B91C1C",
+    marginBottom: 14,
+    fontWeight: "600",
   },
   formCard: {
     backgroundColor: "#FFFFFF",
@@ -442,11 +619,6 @@ const styles = StyleSheet.create({
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 10 },
     elevation: 4,
-  },
-  primaryButtonDisabled: {
-    backgroundColor: "#CBD5E1",
-    shadowOpacity: 0,
-    elevation: 0,
   },
   primaryButtonText: {
     color: "#FFFFFF",

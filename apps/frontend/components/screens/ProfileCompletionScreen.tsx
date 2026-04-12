@@ -1,50 +1,184 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Switch,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Animated,
+  Easing,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-type Role = "farmer" | "buyer";
+import { createProfile } from "../../lib/spring-api";
+import { ProfileData, Role } from "./profile-types";
 
 type ProfileCompletionScreenProps = {
   role: Role;
-  onComplete: () => void;
+  initialValues?: {
+    fullName?: string;
+    email?: string;
+    region?: string;
+    phoneNumber?: string;
+    address?: string;
+  } | null;
+  onComplete: (profile: ProfileData) => void;
 };
 
 export function ProfileCompletionScreen({
   role,
+  initialValues,
   onComplete,
 }: ProfileCompletionScreenProps) {
-  const [phone, setPhone] = useState("");
-  const [region, setRegion] = useState("");
-
-  const [fullName, setFullName] = useState("");
-  const [nationalId, setNationalId] = useState("");
-  const [landSize, setLandSize] = useState("");
-  const [soilType, setSoilType] = useState("");
-  const [mainCrops, setMainCrops] = useState("");
-  const [hasIrrigation, setHasIrrigation] = useState(false);
-  const [language, setLanguage] = useState("");
-
-  const [businessName, setBusinessName] = useState("");
-  const [contactPerson, setContactPerson] = useState("");
-  const [businessType, setBusinessType] = useState("");
-  const [cropsBought, setCropsBought] = useState("");
-  const [buyingVolume, setBuyingVolume] = useState("");
-  const [hasStorage, setHasStorage] = useState(false);
-  const [hasTransport, setHasTransport] = useState(false);
-
   const isFarmer = role === "farmer";
   const themeColor = isFarmer ? "#16A34A" : "#F59E0B";
   const lightThemeColor = isFarmer ? "#DCFCE7" : "#FEF3C7";
   const iconName = isFarmer ? "sprout" : "storefront-outline";
+
+  const [saving, setSaving] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const [fullName, setFullName] = useState(initialValues?.fullName ?? "");
+  const [email, setEmail] = useState(initialValues?.email ?? "");
+  const [phoneNumber, setPhoneNumber] = useState(
+    initialValues?.phoneNumber ?? "",
+  );
+  const [address, setAddress] = useState(initialValues?.address ?? "");
+  const [region, setRegion] = useState(initialValues?.region ?? "");
+
+  const [farmerType, setFarmerType] = useState("");
+  const [nationalId, setNationalId] = useState("");
+  const [landSize, setLandSize] = useState("");
+  const [experienceYears, setExperienceYears] = useState("");
+  const [hasIrrigation, setHasIrrigation] = useState(false);
+
+  const [buyerType, setBuyerType] = useState("");
+  const [organizationName, setOrganizationName] = useState("");
+  const [preferredCrop, setPreferredCrop] = useState("");
+  const [requiredQuantity, setRequiredQuantity] = useState("");
+  const [notes, setNotes] = useState("");
+  const [hasStorage, setHasStorage] = useState(false);
+  const [hasTransport, setHasTransport] = useState(false);
+  const cardOpacity = useRef(new Animated.Value(0)).current;
+  const cardOffset = useRef(new Animated.Value(12)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(cardOpacity, {
+        toValue: 1,
+        duration: 520,
+        easing: Easing.bezier(0.16, 1, 0.3, 1),
+        useNativeDriver: true,
+      }),
+      Animated.timing(cardOffset, {
+        toValue: 0,
+        duration: 520,
+        easing: Easing.bezier(0.16, 1, 0.3, 1),
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [cardOpacity, cardOffset]);
+
+  const toOptionalNumber = (value: string) => {
+    if (!value.trim()) {
+      return undefined;
+    }
+
+    const parsed = Number(value);
+    return Number.isNaN(parsed) ? undefined : parsed;
+  };
+
+  const submitLabel = useMemo(
+    () => (saving ? "Saving..." : "Complete Profile"),
+    [saving],
+  );
+
+  const handleSubmit = async () => {
+    try {
+      setSaving(true);
+      setErrorMessage("");
+
+      if (isFarmer) {
+        const result = await createProfile("farmer", {
+          fullName,
+          phoneNumber,
+          email,
+          address,
+          region,
+          nationalId: nationalId || undefined,
+          farmerType: farmerType || (hasIrrigation ? "irrigated" : "general"),
+          totalLandArea: toOptionalNumber(landSize),
+          experienceYears: toOptionalNumber(experienceYears),
+        });
+
+        onComplete({
+          role: "farmer",
+          id: result.id,
+          farmerCode: result.farmerCode,
+          fullName,
+          phoneNumber,
+          email,
+          address,
+          region,
+          nationalId: nationalId || undefined,
+          farmerType: farmerType || (hasIrrigation ? "irrigated" : "general"),
+          totalLandArea: toOptionalNumber(landSize),
+          experienceYears: toOptionalNumber(experienceYears),
+          hasIrrigation,
+        });
+      } else {
+        const buyerNotes = [
+          notes,
+          hasStorage ? "Storage available" : "",
+          hasTransport ? "Transport available" : "",
+        ]
+          .filter(Boolean)
+          .join(", ")
+          .trim();
+
+        const result = await createProfile("buyer", {
+          fullName,
+          phoneNumber,
+          email,
+          address,
+          region,
+          buyerType: buyerType || "general",
+          organizationName: organizationName || undefined,
+          preferredCrop: preferredCrop || undefined,
+          requiredQuantity: toOptionalNumber(requiredQuantity),
+          notes: buyerNotes || undefined,
+        });
+
+        onComplete({
+          role: "buyer",
+          id: result.id,
+          buyerCode: result.buyerCode,
+          fullName,
+          phoneNumber,
+          email,
+          address,
+          region,
+          buyerType: buyerType || "general",
+          organizationName: organizationName || undefined,
+          preferredCrop: preferredCrop || undefined,
+          requiredQuantity: toOptionalNumber(requiredQuantity),
+          notes: buyerNotes || undefined,
+          hasStorage,
+          hasTransport,
+        });
+      }
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Failed to save profile",
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -53,7 +187,15 @@ export function ProfileCompletionScreen({
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.heroCard}>
+        <Animated.View
+          style={[
+            styles.heroCard,
+            {
+              opacity: cardOpacity,
+              transform: [{ translateY: cardOffset }],
+            },
+          ]}
+        >
           <View style={[styles.badge, { backgroundColor: lightThemeColor }]}>
             <MaterialCommunityIcons
               name={iconName as never}
@@ -61,14 +203,32 @@ export function ProfileCompletionScreen({
               color={themeColor}
             />
           </View>
+          <View style={styles.roleChip}>
+            <Text style={[styles.roleChipText, { color: themeColor }]}>
+              {isFarmer ? "Farmer Profile" : "Buyer Profile"}
+            </Text>
+          </View>
           <Text style={styles.title}>Complete Your Profile</Text>
           <Text style={styles.subtitle}>
-            Tell us more about your {isFarmer ? "farm" : "business"} to get the
-            best experience.
+            Tell us more about your {isFarmer ? "farm" : "business"} so we can
+            save it in Firebase through Spring.
           </Text>
-        </View>
+          {initialValues ? (
+            <Text style={styles.prefillText}>
+              Signup details are already carried forward.
+            </Text>
+          ) : null}
+        </Animated.View>
 
-        <View style={styles.formCard}>
+        <Animated.View
+          style={[
+            styles.formCard,
+            {
+              opacity: cardOpacity,
+              transform: [{ translateY: cardOffset }],
+            },
+          ]}
+        >
           <View style={styles.sectionHeader}>
             <View
               style={[styles.sectionIcon, { backgroundColor: lightThemeColor }]}
@@ -87,296 +247,307 @@ export function ProfileCompletionScreen({
             </View>
           </View>
 
-          {isFarmer ? (
-            <View style={styles.fieldsWrap}>
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="account-outline"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="Full Name"
-                  placeholderTextColor="#9CA3AF"
-                  value={fullName}
-                  onChangeText={setFullName}
-                  style={styles.input}
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="phone-outline"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="Phone Number"
-                  placeholderTextColor="#9CA3AF"
-                  value={phone}
-                  onChangeText={setPhone}
-                  style={styles.input}
-                  keyboardType="phone-pad"
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="card-account-details-outline"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="National ID or Farmer ID"
-                  placeholderTextColor="#9CA3AF"
-                  value={nationalId}
-                  onChangeText={setNationalId}
-                  style={styles.input}
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="map-marker-outline"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="Region or District"
-                  placeholderTextColor="#9CA3AF"
-                  value={region}
-                  onChangeText={setRegion}
-                  style={styles.input}
-                />
-              </View>
-              <View style={styles.row}>
-                <View style={[styles.inputGroup, styles.halfInputGroup]}>
-                  <MaterialCommunityIcons
-                    name="ruler-square"
-                    size={20}
-                    color="#6B7280"
-                  />
-                  <TextInput
-                    placeholder="Land Size"
-                    placeholderTextColor="#9CA3AF"
-                    value={landSize}
-                    onChangeText={setLandSize}
-                    style={styles.input}
-                  />
-                </View>
-                <View style={[styles.inputGroup, styles.halfInputGroup]}>
-                  <MaterialCommunityIcons
-                    name="leaf"
-                    size={20}
-                    color="#6B7280"
-                  />
-                  <TextInput
-                    placeholder="Soil Type"
-                    placeholderTextColor="#9CA3AF"
-                    value={soilType}
-                    onChangeText={setSoilType}
-                    style={styles.input}
-                  />
-                </View>
-              </View>
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="sprout"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="Main Crops"
-                  placeholderTextColor="#9CA3AF"
-                  value={mainCrops}
-                  onChangeText={setMainCrops}
-                  style={styles.input}
-                />
-              </View>
-              <View style={styles.rowCenter}>
-                <View style={styles.inlineInfo}>
-                  <MaterialCommunityIcons
-                    name="water-outline"
-                    size={20}
-                    color="#2563EB"
-                  />
-                  <Text style={styles.inlineLabel}>Irrigation Available</Text>
-                </View>
-                <Switch
-                  value={hasIrrigation}
-                  onValueChange={setHasIrrigation}
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="translate"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="Preferred Language"
-                  placeholderTextColor="#9CA3AF"
-                  value={language}
-                  onChangeText={setLanguage}
-                  style={styles.input}
-                />
-              </View>
+          <View style={styles.fieldsWrap}>
+            <View style={styles.inputGroup}>
+              <MaterialCommunityIcons
+                name="account-outline"
+                size={20}
+                color="#64748B"
+              />
+              <TextInput
+                placeholder="Full Name"
+                placeholderTextColor="#9CA3AF"
+                value={fullName}
+                onChangeText={setFullName}
+                style={styles.input}
+              />
             </View>
-          ) : (
-            <View style={styles.fieldsWrap}>
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="office-building-outline"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="Business Name"
-                  placeholderTextColor="#9CA3AF"
-                  value={businessName}
-                  onChangeText={setBusinessName}
-                  style={styles.input}
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="account-outline"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="Contact Person Name"
-                  placeholderTextColor="#9CA3AF"
-                  value={contactPerson}
-                  onChangeText={setContactPerson}
-                  style={styles.input}
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="phone-outline"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="Phone Number"
-                  placeholderTextColor="#9CA3AF"
-                  value={phone}
-                  onChangeText={setPhone}
-                  style={styles.input}
-                  keyboardType="phone-pad"
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="map-marker-outline"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="Region or District"
-                  placeholderTextColor="#9CA3AF"
-                  value={region}
-                  onChangeText={setRegion}
-                  style={styles.input}
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="briefcase-outline"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="Business Type"
-                  placeholderTextColor="#9CA3AF"
-                  value={businessType}
-                  onChangeText={setBusinessType}
-                  style={styles.input}
-                />
-              </View>
-              <View style={styles.row}>
-                <View style={[styles.inputGroup, styles.halfInputGroup]}>
+
+            <View style={styles.inputGroup}>
+              <MaterialCommunityIcons
+                name="email-outline"
+                size={20}
+                color="#64748B"
+              />
+              <TextInput
+                placeholder="Email"
+                placeholderTextColor="#9CA3AF"
+                value={email}
+                onChangeText={setEmail}
+                style={styles.input}
+                keyboardType="email-address"
+              />
+            </View>
+
+            <View style={styles.inputGroup}>
+              <MaterialCommunityIcons
+                name="phone-outline"
+                size={20}
+                color="#64748B"
+              />
+              <TextInput
+                placeholder="Phone Number"
+                placeholderTextColor="#9CA3AF"
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                style={styles.input}
+                keyboardType="phone-pad"
+              />
+            </View>
+
+            <View style={styles.inputGroup}>
+              <MaterialCommunityIcons
+                name="home-outline"
+                size={20}
+                color="#64748B"
+              />
+              <TextInput
+                placeholder="Address"
+                placeholderTextColor="#9CA3AF"
+                value={address}
+                onChangeText={setAddress}
+                style={styles.input}
+              />
+            </View>
+
+            <View style={styles.inputGroup}>
+              <MaterialCommunityIcons
+                name="map-marker-outline"
+                size={20}
+                color="#64748B"
+              />
+              <TextInput
+                placeholder="Region or District"
+                placeholderTextColor="#9CA3AF"
+                value={region}
+                onChangeText={setRegion}
+                style={styles.input}
+              />
+            </View>
+
+            {isFarmer ? (
+              <>
+                <View style={styles.inputGroup}>
                   <MaterialCommunityIcons
-                    name="leaf"
+                    name="card-account-details-outline"
                     size={20}
-                    color="#6B7280"
+                    color="#64748B"
                   />
                   <TextInput
-                    placeholder="Crops Bought"
+                    placeholder="National ID or Farmer ID"
                     placeholderTextColor="#9CA3AF"
-                    value={cropsBought}
-                    onChangeText={setCropsBought}
+                    value={nationalId}
+                    onChangeText={setNationalId}
                     style={styles.input}
                   />
                 </View>
-                <View style={[styles.inputGroup, styles.halfInputGroup]}>
+
+                <View style={styles.inputGroup}>
+                  <MaterialCommunityIcons
+                    name="account-tie-outline"
+                    size={20}
+                    color="#64748B"
+                  />
+                  <TextInput
+                    placeholder="Farmer Type"
+                    placeholderTextColor="#9CA3AF"
+                    value={farmerType}
+                    onChangeText={setFarmerType}
+                    style={styles.input}
+                  />
+                </View>
+
+                <View style={styles.row}>
+                  <View style={[styles.inputGroup, styles.halfInputGroup]}>
+                    <MaterialCommunityIcons
+                      name="ruler-square"
+                      size={20}
+                      color="#64748B"
+                    />
+                    <TextInput
+                      placeholder="Land Size (ha)"
+                      placeholderTextColor="#9CA3AF"
+                      value={landSize}
+                      onChangeText={setLandSize}
+                      style={styles.input}
+                      keyboardType="numeric"
+                    />
+                  </View>
+                  <View style={[styles.inputGroup, styles.halfInputGroup]}>
+                    <MaterialCommunityIcons
+                      name="calendar-account-outline"
+                      size={20}
+                      color="#64748B"
+                    />
+                    <TextInput
+                      placeholder="Experience (years)"
+                      placeholderTextColor="#9CA3AF"
+                      value={experienceYears}
+                      onChangeText={setExperienceYears}
+                      style={styles.input}
+                      keyboardType="numeric"
+                    />
+                  </View>
+                </View>
+
+                <View style={styles.rowCenter}>
+                  <View style={styles.inlineInfo}>
+                    <MaterialCommunityIcons
+                      name="water-outline"
+                      size={20}
+                      color="#2563EB"
+                    />
+                    <Text style={styles.inlineLabel}>Irrigation Available</Text>
+                  </View>
+                  <Switch
+                    value={hasIrrigation}
+                    onValueChange={setHasIrrigation}
+                  />
+                </View>
+              </>
+            ) : (
+              <>
+                <View style={styles.inputGroup}>
+                  <MaterialCommunityIcons
+                    name="office-building-outline"
+                    size={20}
+                    color="#64748B"
+                  />
+                  <TextInput
+                    placeholder="Organization Name"
+                    placeholderTextColor="#9CA3AF"
+                    value={organizationName}
+                    onChangeText={setOrganizationName}
+                    style={styles.input}
+                  />
+                </View>
+
+                <View style={styles.inputGroup}>
+                  <MaterialCommunityIcons
+                    name="briefcase-outline"
+                    size={20}
+                    color="#64748B"
+                  />
+                  <TextInput
+                    placeholder="Buyer Type"
+                    placeholderTextColor="#9CA3AF"
+                    value={buyerType}
+                    onChangeText={setBuyerType}
+                    style={styles.input}
+                  />
+                </View>
+
+                <View style={styles.inputGroup}>
+                  <MaterialCommunityIcons
+                    name="leaf"
+                    size={20}
+                    color="#64748B"
+                  />
+                  <TextInput
+                    placeholder="Preferred Crop"
+                    placeholderTextColor="#9CA3AF"
+                    value={preferredCrop}
+                    onChangeText={setPreferredCrop}
+                    style={styles.input}
+                  />
+                </View>
+
+                <View style={styles.inputGroup}>
                   <MaterialCommunityIcons
                     name="scale-balance"
                     size={20}
-                    color="#6B7280"
+                    color="#64748B"
                   />
                   <TextInput
-                    placeholder="Buying Volume"
+                    placeholder="Required Quantity"
                     placeholderTextColor="#9CA3AF"
-                    value={buyingVolume}
-                    onChangeText={setBuyingVolume}
+                    value={requiredQuantity}
+                    onChangeText={setRequiredQuantity}
+                    style={styles.input}
+                    keyboardType="numeric"
+                  />
+                </View>
+
+                <View style={styles.row}>
+                  <TouchableOpacity
+                    style={[
+                      styles.toggleCard,
+                      hasStorage && styles.toggleCardActive,
+                    ]}
+                    onPress={() => setHasStorage((value) => !value)}
+                  >
+                    <MaterialCommunityIcons
+                      name="warehouse"
+                      size={22}
+                      color={hasStorage ? themeColor : "#94A3B8"}
+                    />
+                    <Text
+                      style={[
+                        styles.toggleText,
+                        hasStorage && styles.toggleTextActive,
+                      ]}
+                    >
+                      Storage Available
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.toggleCard,
+                      hasTransport && styles.toggleCardActive,
+                    ]}
+                    onPress={() => setHasTransport((value) => !value)}
+                  >
+                    <MaterialCommunityIcons
+                      name="truck-outline"
+                      size={22}
+                      color={hasTransport ? themeColor : "#94A3B8"}
+                    />
+                    <Text
+                      style={[
+                        styles.toggleText,
+                        hasTransport && styles.toggleTextActive,
+                      ]}
+                    >
+                      Transport Available
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.inputGroup}>
+                  <MaterialCommunityIcons
+                    name="note-text-outline"
+                    size={20}
+                    color="#64748B"
+                  />
+                  <TextInput
+                    placeholder="Notes"
+                    placeholderTextColor="#9CA3AF"
+                    value={notes}
+                    onChangeText={setNotes}
                     style={styles.input}
                   />
                 </View>
-              </View>
-              <View style={styles.row}>
-                <TouchableOpacity
-                  style={[
-                    styles.toggleCard,
-                    hasStorage && styles.toggleCardActive,
-                  ]}
-                  onPress={() => setHasStorage((value) => !value)}
-                >
-                  <MaterialCommunityIcons
-                    name="warehouse"
-                    size={22}
-                    color={hasStorage ? themeColor : "#94A3B8"}
-                  />
-                  <Text
-                    style={[
-                      styles.toggleText,
-                      hasStorage && styles.toggleTextActive,
-                    ]}
-                  >
-                    Storage Available
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[
-                    styles.toggleCard,
-                    hasTransport && styles.toggleCardActive,
-                  ]}
-                  onPress={() => setHasTransport((value) => !value)}
-                >
-                  <MaterialCommunityIcons
-                    name="truck-outline"
-                    size={22}
-                    color={hasTransport ? themeColor : "#94A3B8"}
-                  />
-                  <Text
-                    style={[
-                      styles.toggleText,
-                      hasTransport && styles.toggleTextActive,
-                    ]}
-                  >
-                    Transport Available
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
+              </>
+            )}
+          </View>
+
+          {errorMessage ? (
+            <Text style={styles.errorText}>{errorMessage}</Text>
+          ) : null}
 
           <TouchableOpacity
-            onPress={onComplete}
+            onPress={handleSubmit}
             activeOpacity={0.9}
             style={[styles.primaryButton, { backgroundColor: themeColor }]}
+            disabled={saving}
           >
-            <Text style={styles.primaryButtonText}>Complete Profile</Text>
+            {saving ? (
+              <ActivityIndicator color="#FFFFFF" />
+            ) : (
+              <Text style={styles.primaryButtonText}>{submitLabel}</Text>
+            )}
           </TouchableOpacity>
-        </View>
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -404,8 +575,17 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   heroCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 28,
+    padding: 20,
     alignItems: "center",
     marginBottom: 18,
+    shadowColor: "#0F172A",
+    shadowOpacity: 0.08,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: 12 },
+    elevation: 6,
+    marginTop: 4,
   },
   badge: {
     width: 84,
@@ -415,17 +595,37 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 16,
   },
+  roleChip: {
+    alignSelf: "center",
+    borderRadius: 999,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: "#F8FAFC",
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    marginBottom: 10,
+  },
+  roleChipText: {
+    fontSize: 12,
+    fontWeight: "700",
+  },
   title: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: "#0F172A",
     textAlign: "center",
   },
   subtitle: {
     marginTop: 10,
     textAlign: "center",
-    color: "rgba(255,255,255,0.85)",
+    color: "#64748B",
     lineHeight: 22,
+  },
+  prefillText: {
+    marginTop: 12,
+    textAlign: "center",
+    color: "#0F7A3A",
+    fontWeight: "700",
   },
   formCard: {
     backgroundColor: "#FFFFFF",
@@ -436,6 +636,7 @@ const styles = StyleSheet.create({
     shadowRadius: 24,
     shadowOffset: { width: 0, height: 12 },
     elevation: 6,
+    marginTop: 4,
   },
   sectionHeader: {
     flexDirection: "row",
@@ -534,7 +735,7 @@ const styles = StyleSheet.create({
     height: 54,
     alignItems: "center",
     justifyContent: "center",
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.22,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 10 },
     elevation: 4,
@@ -543,5 +744,13 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "800",
+  },
+  errorText: {
+    color: "#B91C1C",
+    fontSize: 12,
+    marginTop: 12,
+    marginBottom: 6,
+    textAlign: "center",
+    fontWeight: "600",
   },
 });

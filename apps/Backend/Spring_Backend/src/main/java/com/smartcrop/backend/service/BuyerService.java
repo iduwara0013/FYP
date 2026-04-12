@@ -63,6 +63,36 @@ public class BuyerService {
         }).toList();
     }
 
+    public Map<String, Object> getBuyerById(String buyerId) throws Exception {
+        DocumentSnapshot document = firestore.collection(BUYER_COLLECTION).document(buyerId).get().get();
+
+        if (!document.exists()) {
+            return null;
+        }
+
+        Map<String, Object> buyer = new HashMap<>(document.getData());
+        buyer.put("id", document.getId());
+        return buyer;
+    }
+
+    public Map<String, Object> getBuyerByEmail(String email) throws Exception {
+        QuerySnapshot snapshot = firestore.collection(BUYER_COLLECTION)
+            .whereEqualTo("email", email)
+            .limit(1)
+            .get()
+            .get();
+
+        if (snapshot.isEmpty()) {
+            return null;
+        }
+
+        DocumentSnapshot document = snapshot.getDocuments().get(0);
+        Map<String, Object> buyer = new HashMap<>(document.getData());
+        buyer.put("id", document.getId());
+        buyer.put("role", "buyer");
+        return buyer;
+    }
+
     private String generateBuyerCode() throws Exception {
         int year = LocalDate.now().getYear();
         DocumentReference counterDocument = firestore.collection(COUNTERS_COLLECTION).document("buyer_code_" + year);

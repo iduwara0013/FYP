@@ -1,13 +1,15 @@
-import React from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React, { useEffect, useRef } from "react";
 import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Animated,
+    Easing,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 type ForgotPasswordScreenProps = {
@@ -17,28 +19,84 @@ type ForgotPasswordScreenProps = {
 export function ForgotPasswordScreen({
   onBackToLogin,
 }: ForgotPasswordScreenProps) {
+  const cardOpacity = useRef(new Animated.Value(0)).current;
+  const cardOffset = useRef(new Animated.Value(12)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(cardOpacity, {
+        toValue: 1,
+        duration: 520,
+        easing: Easing.bezier(0.16, 1, 0.3, 1),
+        useNativeDriver: true,
+      }),
+      Animated.timing(cardOffset, {
+        toValue: 0,
+        duration: 520,
+        easing: Easing.bezier(0.16, 1, 0.3, 1),
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [cardOpacity, cardOffset]);
+
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.backgroundGlowOne} />
+      <View style={styles.backgroundGlowTwo} />
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <TouchableOpacity onPress={onBackToLogin} style={styles.backRow}>
-          <MaterialCommunityIcons name="arrow-left" size={20} color="#334155" />
-          <Text style={styles.backText}>Back</Text>
-        </TouchableOpacity>
+        <Animated.View
+          style={{
+            opacity: cardOpacity,
+            transform: [{ translateY: cardOffset }],
+          }}
+        >
+          <TouchableOpacity onPress={onBackToLogin} style={styles.backRow}>
+            <MaterialCommunityIcons
+              name="arrow-left"
+              size={20}
+              color="#334155"
+            />
+            <Text style={styles.backText}>Back</Text>
+          </TouchableOpacity>
+        </Animated.View>
 
-        <View style={styles.iconWrap}>
+        <Animated.View
+          style={[
+            styles.iconWrap,
+            {
+              opacity: cardOpacity,
+              transform: [{ translateY: cardOffset }],
+            },
+          ]}
+        >
           <MaterialCommunityIcons name="lock-reset" size={36} color="#0F7A3A" />
-        </View>
+        </Animated.View>
 
-        <Text style={styles.title}>Reset Password</Text>
-        <Text style={styles.subtitle}>
-          Enter your email address and we&apos;ll send you a password reset
-          link.
-        </Text>
+        <Animated.View
+          style={{
+            opacity: cardOpacity,
+            transform: [{ translateY: cardOffset }],
+          }}
+        >
+          <Text style={styles.title}>Reset Password</Text>
+          <Text style={styles.subtitle}>
+            Enter your email address and we&apos;ll send you a password reset
+            link.
+          </Text>
+        </Animated.View>
 
-        <View style={styles.formCard}>
+        <Animated.View
+          style={[
+            styles.formCard,
+            {
+              opacity: cardOpacity,
+              transform: [{ translateY: cardOffset }],
+            },
+          ]}
+        >
           <View style={styles.inputGroup}>
             <MaterialCommunityIcons
               name="email-outline"
@@ -61,7 +119,7 @@ export function ForgotPasswordScreen({
               Remember your password? Back to Login
             </Text>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -71,6 +129,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F8FAFC",
+  },
+  backgroundGlowOne: {
+    position: "absolute",
+    width: 200,
+    height: 200,
+    borderRadius: 200,
+    backgroundColor: "#DCFCE7",
+    opacity: 0.35,
+    top: -60,
+    right: -60,
+  },
+  backgroundGlowTwo: {
+    position: "absolute",
+    width: 160,
+    height: 160,
+    borderRadius: 160,
+    backgroundColor: "#FEF3C7",
+    opacity: 0.28,
+    bottom: -40,
+    left: -60,
   },
   scrollContent: {
     flexGrow: 1,

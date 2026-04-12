@@ -74,6 +74,24 @@ public class FarmerService {
         return farmer;
     }
 
+    public Map<String, Object> getFarmerByEmail(String email) throws Exception {
+        QuerySnapshot snapshot = firestore.collection(FARMER_COLLECTION)
+            .whereEqualTo("email", email)
+            .limit(1)
+            .get()
+            .get();
+
+        if (snapshot.isEmpty()) {
+            return null;
+        }
+
+        DocumentSnapshot document = snapshot.getDocuments().get(0);
+        Map<String, Object> farmer = new HashMap<>(document.getData());
+        farmer.put("id", document.getId());
+        farmer.put("role", "farmer");
+        return farmer;
+    }
+
     private String generateFarmerCode() throws Exception {
         int year = LocalDate.now().getYear();
         DocumentReference counterDocument = firestore.collection(COUNTERS_COLLECTION).document("farmer_code_" + year);

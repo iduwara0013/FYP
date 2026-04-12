@@ -1,13 +1,13 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useEffect, useRef } from "react";
 import {
-  Animated,
-  Easing,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
+    Animated,
+    Easing,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    View,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 type LoadingScreenProps = {
   onLoadComplete: () => void;
@@ -57,18 +57,21 @@ export function LoadingScreen({ onLoadComplete }: LoadingScreenProps) {
     <SafeAreaView style={styles.container}>
       <View style={styles.backgroundGlowOne} />
       <View style={styles.backgroundGlowTwo} />
+      <View style={styles.backgroundGlowThree} />
 
       <View style={styles.content}>
         <Animated.View
           style={[styles.logoRing, { transform: [{ scale }], opacity }]}
         >
-          <MaterialCommunityIcons name="sprout" size={64} color="#F9FAFB" />
+          <MaterialCommunityIcons name="sprout" size={66} color="#F9FAFB" />
         </Animated.View>
 
+        <View style={styles.leafMark}>
+          <MaterialCommunityIcons name="leaf" size={18} color="#FBBF24" />
+        </View>
+
         <Text style={styles.title}>Smart Crop Forecasting</Text>
-        <Text style={styles.subtitle}>
-          Loading your farm intelligence dashboard...
-        </Text>
+        <Text style={styles.subtitle}>Loading...</Text>
 
         <View style={styles.loaderRow}>
           <View style={styles.dot} />
@@ -108,6 +111,16 @@ const styles = StyleSheet.create({
     bottom: -80,
     right: -70,
   },
+  backgroundGlowThree: {
+    position: "absolute",
+    width: 140,
+    height: 140,
+    borderRadius: 140,
+    backgroundColor: "#FFFFFF",
+    opacity: 0.06,
+    top: 120,
+    right: 30,
+  },
   content: {
     alignItems: "center",
     justifyContent: "center",
@@ -124,9 +137,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 26,
   },
+  leafMark: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.16)",
+    backgroundColor: "rgba(255,255,255,0.08)",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 18,
+  },
   title: {
     color: "#FFFFFF",
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: "800",
     textAlign: "center",
     letterSpacing: 0.2,
@@ -141,7 +165,7 @@ const styles = StyleSheet.create({
   loaderRow: {
     flexDirection: "row",
     gap: 10,
-    marginTop: 28,
+    marginTop: 26,
   },
   dot: {
     width: 10,

@@ -6,27 +6,47 @@ import { HomeScreen } from "@/components/screens/HomeScreen";
 import { LoadingScreen } from "@/components/screens/LoadingScreen";
 import { LoginScreen } from "@/components/screens/LoginScreen";
 import { ProfileCompletionScreen } from "@/components/screens/ProfileCompletionScreen";
+import { ProfileViewScreen } from "@/components/screens/ProfileViewScreen";
 import { SignUpScreen } from "@/components/screens/SignUpScreen";
+import {
+    ProfileData,
+    Role,
+    SignupDetails,
+} from "@/components/screens/profile-types";
+import { getProfileByEmail } from "@/lib/spring-api";
 
-type Screen = "loading" | "login" | "forgot-password" | "signup" | "home";
-type ExtendedScreen = Screen | "profile";
-type Role = "farmer" | "buyer";
+type Screen =
+  | "loading"
+  | "login"
+  | "forgot-password"
+  | "signup"
+  | "profile"
+  | "profile-view"
+  | "home";
 
 export default function EntryScreen() {
-  const [currentScreen, setCurrentScreen] = useState<ExtendedScreen>("loading");
+  const [currentScreen, setCurrentScreen] = useState<Screen>("loading");
   const [userRole, setUserRole] = useState<Role | null>(null);
+  const [signupDetails, setSignupDetails] = useState<SignupDetails | null>(
+    null,
+  );
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setCurrentScreen("login"), 2400);
     return () => clearTimeout(timer);
   }, []);
 
-  const handleSignUp = (role: Role) => {
+  const handleSignUp = (role: Role, details: SignupDetails) => {
     setUserRole(role);
+    setSignupDetails(details);
+    setProfileData(null);
     setCurrentScreen("profile");
   };
 
-  const handleLogin = () => {
+  const handleLogin = async (email: string) => {
+    const profile = await getProfileByEmail(email);
+    setProfileData(profile);
     setCurrentScreen("home");
   };
 
@@ -58,18 +78,27 @@ export default function EntryScreen() {
       {currentScreen === "profile" && userRole && (
         <ProfileCompletionScreen
           role={userRole}
-          onComplete={() => setCurrentScreen("home")}
+          initialValues={signupDetails}
+          onComplete={(profile) => {
+            setProfileData(profile);
+            setCurrentScreen("home");
+          }}
+        />
+      )}
+
+      {currentScreen === "profile-view" && profileData && (
+        <ProfileViewScreen
+          profile={profileData}
+          onBackToHome={() => setCurrentScreen("home")}
         />
       )}
 
       {currentScreen === "home" && (
         <HomeScreen
-          onProfile={() => {
-            if (!userRole) {
-              setUserRole("farmer");
-            }
-            setCurrentScreen("profile");
-          }}
+          profile={profileData}
+          onProfile={() =>
+            setCurrentScreen(profileData ? "profile-view" : "profile")
+          }
         />
       )}
     </View>
