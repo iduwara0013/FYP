@@ -199,3 +199,42 @@ export async function getProfileByEmail(email: string) {
     }
   }
 }
+
+export type LiveMarketPriceEntry = {
+  rowNumber: number;
+  cropName: string;
+  prices: string[];
+  displayPrice: string;
+  rawText: string;
+  [key: string]: unknown;
+};
+
+export type LiveMarketPriceBulletin = {
+  label: string;
+  date: string;
+  url: string;
+  success?: boolean;
+  message?: string;
+  error?: string;
+  lineCount?: number;
+  entries?: LiveMarketPriceEntry[];
+};
+
+export type LiveMarketPriceResponse = {
+  sourceUrl: string;
+  pageTitle: string;
+  fetchedAt: string;
+  bulletinUrl?: string;
+  bulletinDate?: string | null;
+  bulletinLabel?: string;
+  bulletins?: LiveMarketPriceBulletin[];
+  lineCount: number;
+  success: boolean;
+  message?: string;
+  error?: string;
+  entries: LiveMarketPriceEntry[];
+};
+
+export async function getLiveMarketPrices() {
+  return getJson<LiveMarketPriceResponse>("/api/market-prices/live");
+}

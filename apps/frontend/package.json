@@ -4,6 +4,7 @@
   "private": true,
   "main": "./index.js",
   "dependencies": {
-    "react-native": "^0.81.5"
+    "react-native": "^0.81.5",
+    "babel-plugin-module-resolver": "^5.0.2"
   }
 }

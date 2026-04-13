@@ -1,2 +1,6 @@
+com\smartcrop\backend\controller\FirestoreCollectionControllerTest.class
+com\smartcrop\backend\service\BuyerServiceTest.class
+com\smartcrop\backend\service\FarmerServiceTest.class
 com\smartcrop\backend\service\FirestoreCollectionServiceTest.class
+com\smartcrop\backend\controller\BuyerControllerTest.class
 com\smartcrop\backend\controller\FarmerControllerTest.class

@@ -5,6 +5,7 @@ import { ForgotPasswordScreen } from "@/components/screens/ForgotPasswordScreen"
 import { HomeScreen } from "@/components/screens/HomeScreen";
 import { LoadingScreen } from "@/components/screens/LoadingScreen";
 import { LoginScreen } from "@/components/screens/LoginScreen";
+import { MarketPricesScreen } from "@/components/screens/MarketPricesScreen";
 import { ProfileCompletionScreen } from "@/components/screens/ProfileCompletionScreen";
 import { ProfileViewScreen } from "@/components/screens/ProfileViewScreen";
 import { SignUpScreen } from "@/components/screens/SignUpScreen";
@@ -22,6 +23,7 @@ type Screen =
   | "signup"
   | "profile"
   | "profile-view"
+  | "market-prices"
   | "home";
 
 export default function EntryScreen() {
@@ -96,10 +98,15 @@ export default function EntryScreen() {
       {currentScreen === "home" && (
         <HomeScreen
           profile={profileData}
+          onMarketPrices={() => setCurrentScreen("market-prices")}
           onProfile={() =>
             setCurrentScreen(profileData ? "profile-view" : "profile")
           }
         />
+      )}
+
+      {currentScreen === "market-prices" && (
+        <MarketPricesScreen onBackToHome={() => setCurrentScreen("home")} />
       )}
     </View>
   );

@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     ActivityIndicator,
     Animated,
@@ -44,7 +44,7 @@ const actionCards = [
     id: "market",
     icon: "currency-usd",
     title: "Market Prices",
-    description: "Latest crop market rates",
+    description: "Open the latest HARTI PDF bulletin",
     background: "#FFEDD5",
     iconColor: "#EA580C",
   },
@@ -60,6 +60,22 @@ type WeatherState = {
   updatedAt: string;
 };
 
+type MarketEntry = {
+  tableIndex: number;
+  summary: string;
+  values: string[];
+  [key: string]: unknown;
+};
+
+type MarketState = {
+  sourceUrl: string;
+  pageTitle: string;
+  fetchedAt: string;
+  tableCount: number;
+  success: boolean;
+  entries: MarketEntry[];
+};
+
 const recentPredictions = [
   { crop: "Rice", confidence: "94%", status: "Excellent", accent: "#16A34A" },
   { crop: "Wheat", confidence: "87%", status: "Good", accent: "#2563EB" },
@@ -69,6 +85,7 @@ const recentPredictions = [
 type HomeScreenProps = {
   profile?: ProfileData | null;
   onProfile?: () => void;
+  onMarketPrices?: () => void;
 };
 
 function getWeatherDescription(code: number) {
@@ -96,7 +113,11 @@ function getWeatherIcon(code: number) {
   return "weather-partly-cloudy";
 }
 
-export function HomeScreen({ profile, onProfile }: HomeScreenProps) {
+export function HomeScreen({
+  profile,
+  onProfile,
+  onMarketPrices,
+}: HomeScreenProps) {
   const isFarmer = profile?.role !== "buyer";
   const accentColor = isFarmer ? "#0F7A3A" : "#C47F00";
   const accentSoft = isFarmer ? "#DCFCE7" : "#FEF3C7";
@@ -134,7 +155,7 @@ export function HomeScreen({ profile, onProfile }: HomeScreenProps) {
     ]).start();
   }, [cardOpacity, cardOffset]);
 
-  const handleWeatherPress = async () => {
+  const handleWeatherPress = useCallback(async () => {
     try {
       setWeatherLoading(true);
       setWeatherError("");
@@ -207,7 +228,11 @@ export function HomeScreen({ profile, onProfile }: HomeScreenProps) {
     } finally {
       setWeatherLoading(false);
     }
-  };
+  }, [weatherRegion]);
+
+  useEffect(() => {
+    void handleWeatherPress();
+  }, [handleWeatherPress]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -282,7 +307,13 @@ export function HomeScreen({ profile, onProfile }: HomeScreenProps) {
               key={card.title}
               style={styles.actionCard}
               activeOpacity={0.9}
-              onPress={card.id === "weather" ? handleWeatherPress : undefined}
+              onPress={
+                card.id === "weather"
+                  ? handleWeatherPress
+                  : card.id === "market"
+                    ? onMarketPrices
+                    : undefined
+              }
             >
               <View
                 style={[
@@ -675,6 +706,65 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
   weatherError: {
+    color: "#B91C1C",
+    fontWeight: "600",
+  },
+  marketCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 24,
+    padding: 18,
+    marginBottom: 20,
+    shadowColor: "#0F172A",
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 4,
+  },
+  marketHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 12,
+  },
+  marketTitle: {
+    color: "#0F172A",
+    fontWeight: "800",
+    fontSize: 16,
+  },
+  marketSubtitle: {
+    color: "#64748B",
+    marginTop: 4,
+  },
+  marketBody: {
+    gap: 10,
+  },
+  marketMeta: {
+    color: "#475569",
+    fontSize: 12,
+    lineHeight: 18,
+  },
+  marketList: {
+    gap: 10,
+  },
+  marketItem: {
+    borderRadius: 16,
+    backgroundColor: "#FFF7ED",
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: "#FED7AA",
+  },
+  marketCrop: {
+    color: "#9A3412",
+    fontWeight: "700",
+    fontSize: 13,
+  },
+  marketDetail: {
+    marginTop: 4,
+    color: "#C2410C",
+    fontSize: 11,
+  },
+  marketError: {
     color: "#B91C1C",
     fontWeight: "600",
   },

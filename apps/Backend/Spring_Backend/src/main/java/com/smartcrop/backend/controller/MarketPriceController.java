@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.smartcrop.backend.dto.MarketPriceRequest;
 import com.smartcrop.backend.service.FirestoreCollectionService;
+import com.smartcrop.backend.service.HartiPriceService;
 
 import jakarta.validation.Valid;
 
@@ -22,9 +23,11 @@ import jakarta.validation.Valid;
 public class MarketPriceController {
 
     private final FirestoreCollectionService collectionService;
+    private final HartiPriceService hartiPriceService;
 
-    public MarketPriceController(FirestoreCollectionService collectionService) {
+    public MarketPriceController(FirestoreCollectionService collectionService, HartiPriceService hartiPriceService) {
         this.collectionService = collectionService;
+        this.hartiPriceService = hartiPriceService;
     }
 
     @PostMapping
@@ -48,5 +51,10 @@ public class MarketPriceController {
     @GetMapping
     public ResponseEntity<List<Map<String, Object>>> getMarketPrices() throws Exception {
         return ResponseEntity.ok(collectionService.getDocuments("market_prices"));
+    }
+
+    @GetMapping("/live")
+    public ResponseEntity<Map<String, Object>> getLiveMarketPrices() throws Exception {
+        return ResponseEntity.ok(hartiPriceService.fetchLivePrices());
     }
 }
