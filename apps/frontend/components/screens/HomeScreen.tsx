@@ -1,16 +1,16 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-    ActivityIndicator,
-    Animated,
-    Easing,
-    FlatList,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Animated,
+  Easing,
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { ProfileData } from "./profile-types";
@@ -86,7 +86,16 @@ type HomeScreenProps = {
   profile?: ProfileData | null;
   onProfile?: () => void;
   onMarketPrices?: () => void;
+  onWeatherUpdate?: () => void;
+  onYieldPrediction?: () => void;
 };
+
+function getGreeting(date: Date) {
+  const hour = date.getHours();
+  if (hour < 12) return "Good Morning";
+  if (hour < 17) return "Good Afternoon";
+  return "Good Evening";
+}
 
 function getWeatherDescription(code: number) {
   if (code === 0) return "Clear sky";
@@ -117,6 +126,8 @@ export function HomeScreen({
   profile,
   onProfile,
   onMarketPrices,
+  onWeatherUpdate,
+  onYieldPrediction,
 }: HomeScreenProps) {
   const isFarmer = profile?.role !== "buyer";
   const accentColor = isFarmer ? "#0F7A3A" : "#C47F00";
@@ -129,6 +140,7 @@ export function HomeScreen({
   const [weatherLoading, setWeatherLoading] = useState(false);
   const [weatherError, setWeatherError] = useState("");
   const [weatherState, setWeatherState] = useState<WeatherState | null>(null);
+  const [now, setNow] = useState(new Date());
 
   const profileMeta = isFarmer
     ? profile
@@ -155,6 +167,11 @@ export function HomeScreen({
     ]).start();
   }, [cardOpacity, cardOffset]);
 
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const handleWeatherPress = useCallback(async () => {
     try {
       setWeatherLoading(true);
@@ -169,12 +186,12 @@ export function HomeScreen({
       }
 
       const geoData = (await geoResponse.json()) as {
-        results?: Array<{
+        results?: {
           name: string;
           country?: string;
           latitude: number;
           longitude: number;
-        }>;
+        }[];
       };
 
       const location = geoData.results?.[0];
@@ -250,7 +267,9 @@ export function HomeScreen({
           ]}
         >
           <View>
-            <Text style={styles.greeting}>Good Morning, {greetingName}</Text>
+            <Text style={styles.greeting}>
+              {getGreeting(now)}, {greetingName}
+            </Text>
             <Text style={styles.headerSubtitle}>
               Let&apos;s plan today&apos;s crop decisions.
             </Text>
@@ -296,7 +315,20 @@ export function HomeScreen({
           </View>
           <View style={styles.dateBox}>
             <Text style={styles.dateLabel}>Today</Text>
-            <Text style={styles.dateValue}>Apr 12, 2026</Text>
+            <Text style={styles.dateValue}>
+              {now.toLocaleDateString([], {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </Text>
+            <Text style={styles.dateTimeValue}>
+              {now.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              })}
+            </Text>
           </View>
         </Animated.View>
 
@@ -309,10 +341,12 @@ export function HomeScreen({
               activeOpacity={0.9}
               onPress={
                 card.id === "weather"
-                  ? handleWeatherPress
-                  : card.id === "market"
-                    ? onMarketPrices
-                    : undefined
+                  ? (onWeatherUpdate ?? handleWeatherPress)
+                  : card.id === "yield"
+                    ? onYieldPrediction
+                    : card.id === "market"
+                      ? onMarketPrices
+                      : undefined
               }
             >
               <View
@@ -366,41 +400,60 @@ export function HomeScreen({
               </TouchableOpacity>
             </View>
 
-            {weatherError ? (
-              <Text style={styles.weatherError}>{weatherError}</Text>
-            ) : weatherState ? (
-              <View style={styles.weatherContent}>
-                <View style={styles.weatherIconWrap}>
-                  <MaterialCommunityIcons
-                    name={getWeatherIcon(weatherState.weatherCode) as never}
-                    size={34}
-                    color="#0F7A3A"
-                  />
+            <TouchableOpacity
+              onPress={onWeatherUpdate ?? handleWeatherPress}
+              activeOpacity={0.75}
+              style={styles.weatherBodyPressable}
+            >
+              {weatherError ? (
+                <Text style={styles.weatherError}>{weatherError}</Text>
+              ) : weatherState ? (
+                <View style={styles.weatherContent}>
+                  <View style={styles.weatherIconWrap}>
+                    <MaterialCommunityIcons
+                      name={getWeatherIcon(weatherState.weatherCode) as never}
+                      size={34}
+                      color="#0F7A3A"
+                    />
+                  </View>
+                  <View style={styles.weatherInfo}>
+                    <Text style={styles.weatherLocation}>
+                      {weatherState.locationName}
+                    </Text>
+                    <Text style={styles.weatherTemp}>
+                      {Math.round(weatherState.temperature)}°C
+                    </Text>
+                    <Text style={styles.weatherDescription}>
+                      {weatherState.description}
+                    </Text>
+                    <Text style={styles.weatherMetaLine}>
+                      Humidity: {weatherState.humidity ?? "--"}% | Wind:{" "}
+                      {weatherState.windSpeed ?? "--"} km/h
+                    </Text>
+                    <Text style={styles.weatherUpdated}>
+                      Updated{" "}
+                      {new Date(weatherState.updatedAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </Text>
+                  </View>
                 </View>
-                <View style={styles.weatherInfo}>
-                  <Text style={styles.weatherLocation}>
-                    {weatherState.locationName}
-                  </Text>
-                  <Text style={styles.weatherTemp}>
-                    {Math.round(weatherState.temperature)}°C
-                  </Text>
-                  <Text style={styles.weatherDescription}>
-                    {weatherState.description}
-                  </Text>
-                  <Text style={styles.weatherMetaLine}>
-                    Humidity: {weatherState.humidity ?? "--"}% | Wind:{" "}
-                    {weatherState.windSpeed ?? "--"} km/h
-                  </Text>
-                  <Text style={styles.weatherUpdated}>
-                    Updated{" "}
-                    {new Date(weatherState.updatedAt).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </Text>
-                </View>
+              ) : null}
+
+              <View style={styles.viewDetailsRow}>
+                <Text style={styles.viewDetailsText}>
+                  {weatherError
+                    ? "View weather screen"
+                    : "View full weather details"}
+                </Text>
+                <MaterialCommunityIcons
+                  name="chevron-right"
+                  size={18}
+                  color="#2563EB"
+                />
               </View>
-            ) : null}
+            </TouchableOpacity>
           </Animated.View>
         ) : null}
 
@@ -587,6 +640,12 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginTop: 4,
   },
+  dateTimeValue: {
+    color: "rgba(255,255,255,0.9)",
+    fontWeight: "600",
+    marginTop: 2,
+    fontSize: 13,
+  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "800",
@@ -704,6 +763,23 @@ const styles = StyleSheet.create({
   weatherUpdated: {
     color: "#94A3B8",
     fontSize: 11,
+  },
+  weatherBodyPressable: {
+    borderRadius: 16,
+  },
+  viewDetailsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    marginTop: 12,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: "#E2E8F0",
+  },
+  viewDetailsText: {
+    color: "#2563EB",
+    fontWeight: "700",
+    fontSize: 13,
   },
   weatherError: {
     color: "#B91C1C",

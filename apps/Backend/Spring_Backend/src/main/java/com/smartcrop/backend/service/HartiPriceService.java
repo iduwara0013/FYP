@@ -16,6 +16,9 @@ import java.util.regex.Pattern;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,9 +41,9 @@ public class HartiPriceService {
 
     private static final String SOURCE_URL = "https://www.harti.gov.lk/daily-price.php";
     private static final Pattern PRICE_PATTERN = Pattern.compile("(?<!\\d)(?:\\d{1,3}(?:,\\d{3})*|\\d+)(?:\\.\\d+)?");
-    private static final LocalDate LATEST_BULLETIN_DATE = LocalDate.of(2026, 4, 9);
     private static final DateTimeFormatter BULLETIN_FOLDER_FORMAT = DateTimeFormatter.ofPattern("MMMM", Locale.ENGLISH);
     private static final DateTimeFormatter BULLETIN_FILE_FORMAT = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+    private static final Pattern BULLETIN_DATE_PATTERN = Pattern.compile("\\((\\d{4}\\.\\d{2}\\.\\d{2})\\)");
 
     public Map<String, Object> fetchLivePrices() {
         Map<String, Object> response = new LinkedHashMap<>();
@@ -84,10 +87,18 @@ public class HartiPriceService {
     }
 
     private List<BulletinSource> buildBulletinSources() {
+        List<BulletinSource> scrapedSources = scrapeBulletinSources();
+
+        if (!scrapedSources.isEmpty()) {
+            return scrapedSources;
+        }
+
+        // Fallback: guess URLs from the last 10 days if the page cannot be scraped.
         List<BulletinSource> sources = new ArrayList<>();
+        LocalDate today = LocalDate.now();
 
         for (int offset = 0; offset < 10; offset++) {
-            LocalDate bulletinDate = LATEST_BULLETIN_DATE.minusDays(offset);
+            LocalDate bulletinDate = today.minusDays(offset);
             String bulletinDateText = bulletinDate.toString();
             String year = String.valueOf(bulletinDate.getYear());
             String monthFolder = bulletinDate.format(BULLETIN_FOLDER_FORMAT);
@@ -107,6 +118,66 @@ public class HartiPriceService {
         }
 
         return sources;
+    }
+
+    private List<BulletinSource> scrapeBulletinSources() {
+        List<BulletinSource> sources = new ArrayList<>();
+
+        try {
+            Document document = Jsoup.connect(SOURCE_URL)
+                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+                .timeout(30000)
+                .followRedirects(true)
+                .get();
+
+            Elements links = document.select("a[href$=.pdf]");
+            int index = 0;
+
+            for (Element link : links) {
+                String href = link.attr("href");
+                if (href == null || href.isBlank()) {
+                    continue;
+                }
+
+                String absoluteUrl = href.startsWith("http")
+                    ? href
+                    : "https://www.harti.gov.lk/" + href.replaceFirst("^/", "");
+
+                String bulletinDateText = extractBulletinDate(absoluteUrl);
+                if (bulletinDateText == null) {
+                    continue;
+                }
+
+                sources.add(new BulletinSource(
+                    index == 0 ? "Latest bulletin" : "Previous bulletin",
+                    bulletinDateText,
+                    absoluteUrl
+                ));
+
+                index++;
+                if (index >= 10) {
+                    break;
+                }
+            }
+        } catch (Exception exception) {
+            // Return empty list so the caller falls back to date guessing.
+        }
+
+        return sources;
+    }
+
+    private String extractBulletinDate(String url) {
+        Matcher matcher = BULLETIN_DATE_PATTERN.matcher(url);
+        if (!matcher.find()) {
+            return null;
+        }
+
+        String fileDate = matcher.group(1);
+        try {
+            return LocalDate.parse(fileDate, BULLETIN_FILE_FORMAT).toString();
+        } catch (Exception exception) {
+            return null;
+        }
     }
 
     private BulletinResult readBulletin(BulletinSource bulletinSource) {

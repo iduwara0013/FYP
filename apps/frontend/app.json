@@ -37,6 +37,12 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location to show live weather for your area."
+        }
       ]
     ],
     "experiments": {

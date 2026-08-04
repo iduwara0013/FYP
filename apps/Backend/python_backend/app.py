@@ -10,6 +10,14 @@ from flask import Flask, jsonify, request
 import tkinter as tk
 from tkinter import messagebox, ttk
 
+from src.services.prediction_service import (
+    CROPS,
+    DISTRICTS,
+    IRRIGATION,
+    REGIONS,
+    SEASONS,
+    predict_farm,
+)
 from src.services.yield_prediction import FEATURE_COLUMNS, predict_yield
 
 app = Flask(__name__)
@@ -63,6 +71,49 @@ def predict_yield_route():
         return jsonify({"error": str(error)}), 500
 
     return jsonify({"predicted_yield": round(prediction, 2), "unit": "ton/ha"})
+
+
+@app.get("/prediction-options")
+def prediction_options():
+    return jsonify(
+        {
+            "crops": CROPS,
+            "regions": REGIONS,
+            "districts": DISTRICTS,
+            "seasons": SEASONS,
+            "irrigation": IRRIGATION,
+        }
+    )
+
+
+@app.post("/predict-farm")
+def predict_farm_route():
+    payload = request.get_json(silent=True) or {}
+    required = ["land_area_ha", "crop", "season", "region", "district", "irrigation"]
+    missing_fields = [field for field in required if field not in payload]
+
+    if missing_fields:
+        return jsonify({"error": "Missing required fields", "missing_fields": missing_fields}), 400
+
+    try:
+        result = predict_farm(
+            land_area_ha=float(payload["land_area_ha"]),
+            crop=payload["crop"],
+            season=payload["season"],
+            region=payload["region"],
+            district=payload["district"],
+            irrigation=payload["irrigation"],
+            fertilizer_kg=(
+                float(payload["fertilizer_kg"]) if payload.get("fertilizer_kg") else None
+            ),
+            rainfall_mm=float(payload.get("rainfall_mm", 150.0)),
+            farmer_experience_yrs=int(payload.get("farmer_experience_yrs", 10)),
+            year=int(payload.get("year", 2026)),
+        )
+    except Exception as error:
+        return jsonify({"error": str(error)}), 500
+
+    return jsonify(result)
 
 
 @app.get("/farmers")

@@ -9,10 +9,12 @@ import { MarketPricesScreen } from "@/components/screens/MarketPricesScreen";
 import { ProfileCompletionScreen } from "@/components/screens/ProfileCompletionScreen";
 import { ProfileViewScreen } from "@/components/screens/ProfileViewScreen";
 import { SignUpScreen } from "@/components/screens/SignUpScreen";
+import { WeatherScreen } from "@/components/screens/WeatherScreen";
+import { YieldPredictionScreen } from "@/components/screens/YieldPredictionScreen";
 import {
-    ProfileData,
-    Role,
-    SignupDetails,
+  ProfileData,
+  Role,
+  SignupDetails,
 } from "@/components/screens/profile-types";
 import { getProfileByEmail } from "@/lib/spring-api";
 
@@ -24,6 +26,8 @@ type Screen =
   | "profile"
   | "profile-view"
   | "market-prices"
+  | "weather"
+  | "yield-prediction"
   | "home";
 
 export default function EntryScreen() {
@@ -99,9 +103,25 @@ export default function EntryScreen() {
         <HomeScreen
           profile={profileData}
           onMarketPrices={() => setCurrentScreen("market-prices")}
+          onWeatherUpdate={() => setCurrentScreen("weather")}
+          onYieldPrediction={() => setCurrentScreen("yield-prediction")}
           onProfile={() =>
             setCurrentScreen(profileData ? "profile-view" : "profile")
           }
+        />
+      )}
+
+      {currentScreen === "weather" && (
+        <WeatherScreen
+          region={profileData?.region?.trim() || "Kandy"}
+          onBackToHome={() => setCurrentScreen("home")}
+        />
+      )}
+
+      {currentScreen === "yield-prediction" && (
+        <YieldPredictionScreen
+          profile={profileData}
+          onBackToHome={() => setCurrentScreen("home")}
         />
       )}
 

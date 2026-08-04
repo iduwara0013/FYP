@@ -70,7 +70,12 @@ public class BuyerService {
             return null;
         }
 
-        Map<String, Object> buyer = new HashMap<>(document.getData());
+        Map<String, Object> data = document.getData();
+        if (data == null) {
+            data = Map.of();
+        }
+
+        Map<String, Object> buyer = new HashMap<>(data);
         buyer.put("id", document.getId());
         return buyer;
     }
@@ -108,10 +113,11 @@ public class BuyerService {
                 }
             }
 
-            transaction.set(counterDocument, Map.of(
+            Map<String, Object> counterData = Map.of(
                 "year", year,
                 "sequence", nextSequence
-            ));
+            );
+            transaction.set(counterDocument, counterData);
 
             return nextSequence;
         }).get();

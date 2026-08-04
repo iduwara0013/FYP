@@ -31,7 +31,6 @@ com\smartcrop\backend\service\FarmerService.class
 com\smartcrop\backend\dto\BuyerRequest.class
 com\smartcrop\backend\dto\LandPlotRequest.class
 com\smartcrop\backend\dto\MarketPriceRequest.class
-com\smartcrop\backend\service\HartiPriceService$PdfSource.class
 com\smartcrop\backend\service\YieldPredictionService.class
 com\smartcrop\backend\dto\DemandRecordRequest.class
 com\smartcrop\backend\controller\MarketPriceController.class
