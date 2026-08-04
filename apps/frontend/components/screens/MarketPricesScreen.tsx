@@ -1,72 +1,306 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-    ActivityIndicator,
-    Linking,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Linking,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import {
-    getLiveMarketPrices,
-    type LiveMarketPriceBulletin,
-    type LiveMarketPriceEntry,
-    type LiveMarketPriceResponse,
+  getLiveMarketPrices,
+  type LiveMarketPriceBulletin,
+  type LiveMarketPriceEntry,
+  type LiveMarketPriceResponse,
 } from "../../lib/spring-api";
+import { CategoryAccordion } from "../market/CategoryAccordion";
+import { EmptyState } from "../market/EmptyState";
+import { LoadingSkeleton } from "../market/LoadingSkeleton";
+import { MarketHeader } from "../market/MarketHeader";
+import { MarketSelector } from "../market/MarketSelector";
+import { MarketSummaryCard } from "../market/MarketSummaryCard";
+import { ProductBottomSheet } from "../market/ProductBottomSheet";
+import { SearchBar } from "../market/SearchBar";
+import { buildReportSections } from "../market/reportGroups";
+import { colors, radius, shadow, spacing } from "../market/theme";
+import type { CategoryKey, ParsedEntry } from "../market/types";
+
+/* ------------------------------------------------------------------ */
+/* Markets & categories                                                */
+/* ------------------------------------------------------------------ */
 
 const comparisonMarkets = [
-  {
-    key: "pettah",
-    name: "Pettah",
-  },
+  { key: "pettah", name: "Pettah", tint: "#2E7D32", soft: "#E8F5E9" },
   {
     key: "marandagahamula",
     name: "Marandagahamula",
+    tint: "#0E7490",
+    soft: "#ECFEFF",
   },
 ] as const;
 
-function isBeansRow(entry: LiveMarketPriceEntry) {
-  return /beans|peliyagoda/i.test(`${entry.cropName} ${entry.rawText}`);
+type MarketMeta = (typeof comparisonMarkets)[number];
+
+const categoryMeta: Record<
+  CategoryKey,
+  { label: string; icon: keyof typeof MaterialCommunityIcons.glyphMap }
+> = {
+  grains: { label: "Rice & grains", icon: "grain" },
+  vegetables: { label: "Vegetables", icon: "carrot" },
+  fruits: { label: "Fruits", icon: "fruit-cherries" },
+  other: { label: "Other items", icon: "basket-outline" },
+};
+
+const filterChips = [
+  { key: "all", label: "All" },
+  { key: "grains", label: "Rice & grains" },
+  { key: "vegetables", label: "Vegetables" },
+  { key: "fruits", label: "Fruits" },
+] as const;
+
+type FilterKey = (typeof filterChips)[number]["key"];
+
+const sortChips = [
+  { key: "default", label: "Bulletin order", icon: "sort-variant" },
+  { key: "priceHigh", label: "Highest price", icon: "cash-multiple" },
+  { key: "name", label: "A – Z", icon: "sort-alphabetical-ascending" },
+] as const;
+
+type SortKey = (typeof sortChips)[number]["key"];
+
+const FRUIT_PATTERN =
+  /(banana|ambula|kolikuttu|seeni|anamalu|papaya|passion|pine\s*apple|pineapple|mango|wood\s*apple|woodapple|avocado|orange|lime|guava|rambutan|mangosteen|melon|grape|apple|beli|anoda|nelli|dates)/i;
+
+const VEGETABLE_PATTERN =
+  /(beans|carrot|leek|beet\s*root|raddish|radish|cabbage|tomato|ladies\s*finger|brinjal|capsicum|pumpkin|cucumber|gourd|drum\s*stick|drumstick|luffa|ash\s*plantain|chilli|chillie|sweet\s*potato|manioc|egg\s*plant|eggplant|potato|onion|knol\s*khol|dambala|thibbatu|murunga|kohila|mukunuwenna|kankun|nivithi|gotukola|leaves|spinach|ginger|garlic)/i;
+
+const GRAIN_PATTERN =
+  /(rice|paddy|samba|nadu|kekulu|maize|green\s*gram|black\s*gram|cow\s*pea|cowpea|soya|kurakkan|millet|dhal|dal|gram|sesame|ground\s*nut|groundnut|peanut|coconut|flour|sugar|wheat)/i;
+
+function detectCategory(cropName: string): CategoryKey {
+  const name = cropName.trim();
+  if (GRAIN_PATTERN.test(name)) return "grains";
+  if (VEGETABLE_PATTERN.test(name)) return "vegetables";
+  if (FRUIT_PATTERN.test(name)) return "fruits";
+  return "other";
 }
 
-function isOrangeRow(entry: LiveMarketPriceEntry) {
-  return /^orange\b/i.test(entry.cropName.trim());
+/* ------------------------------------------------------------------ */
+/* Price parsing – turns raw PDF text into accurate numbers            */
+/* ------------------------------------------------------------------ */
+
+type PriceCell = {
+  isRange: boolean;
+  signed: boolean;
+  min: number | null;
+  max: number | null;
+  value: number | null;
+};
+
+type MarketQuote = {
+  market: MarketMeta;
+  min: number | null;
+  max: number | null;
+  average: number | null;
+  change: number | null;
+  averageIsEstimated: boolean;
+  hasData: boolean;
+};
+
+const CELL_PATTERN =
+  /(\d[\d,]*(?:\.\d+)?)\s*(?:-|–|—|to)\s*(\d[\d,]*(?:\.\d+)?)|([+-]?\d[\d,]*(?:\.\d+)?)/g;
+
+function toNumber(raw?: string | null): number | null {
+  if (!raw) return null;
+  const parsed = Number(raw.replace(/,/g, ""));
+  return Number.isFinite(parsed) ? parsed : null;
 }
 
-function isSecondTableStartRow(entry: LiveMarketPriceEntry) {
-  return /^(beans?|carrot|leeks?|beet\s*root|raddish|cabbage|tomato|ladies\s*fingers|brinjals|capsicum|pumpkin|cucumber|bitter\s*gourd|snake\s*gourd|drumstick|luffa|long\s*beans|ash\s*plantains|green\s*chillies|lime|sweet\s*potato|manioc|eggplant|potato|banana|ambula|kolikuttu|seeni|anamalu|papaya|passion\s*fruits?|pineapple|mango|woodapple|avocado|orange)\b/i.test(
-    entry.cropName.trim(),
-  );
+function extractCells(entry: LiveMarketPriceEntry): PriceCell[] {
+  const raw = entry.rawText?.trim();
+  const source =
+    raw && raw.length > 0
+      ? raw
+      : `${entry.cropName} ${(entry.prices ?? []).join(" ")}`;
+
+  // Drop the crop name so letters/numbers inside it never count as a price.
+  const cropIndex = source.indexOf(entry.cropName);
+  const numericPart =
+    cropIndex >= 0
+      ? source.slice(cropIndex + entry.cropName.length)
+      : source.replace(/^[^\d+-]*/, "");
+
+  const cells: PriceCell[] = [];
+  const matches = numericPart.matchAll(CELL_PATTERN);
+
+  for (const match of matches) {
+    if (match[1] && match[2]) {
+      cells.push({
+        isRange: true,
+        signed: false,
+        min: toNumber(match[1]),
+        max: toNumber(match[2]),
+        value: null,
+      });
+      continue;
+    }
+
+    const single = match[3];
+    if (!single) continue;
+
+    cells.push({
+      isRange: false,
+      signed: /^[+-]/.test(single),
+      min: null,
+      max: null,
+      value: toNumber(single),
+    });
+  }
+
+  if (cells.length > 0) {
+    return cells;
+  }
+
+  // Last resort: use the already-extracted price strings from the API.
+  return (entry.prices ?? [])
+    .map((price) => toNumber(price))
+    .filter((value): value is number => value !== null)
+    .map((value) => ({
+      isRange: false,
+      signed: false,
+      min: null,
+      max: null,
+      value,
+    }));
 }
 
-function splitEntriesByWordLayout(entries: LiveMarketPriceEntry[]) {
-  const secondTableStartIndex = entries.findIndex(isSecondTableStartRow);
+function buildQuote(cells: PriceCell[], market: MarketMeta): MarketQuote {
+  const range = cells.find((cell) => cell.isRange);
+  const plain = cells
+    .filter((cell) => !cell.isRange && !cell.signed)
+    .map((cell) => cell.value)
+    .filter((value): value is number => value !== null);
+  const signed = cells
+    .filter((cell) => !cell.isRange && cell.signed)
+    .map((cell) => cell.value)
+    .filter((value): value is number => value !== null);
 
-  if (secondTableStartIndex === -1) {
-    return {
-      firstTableEntries: entries,
-      secondTableEntries: [],
-    };
+  let min = range?.min ?? null;
+  let max = range?.max ?? null;
+  let leftover = plain;
+
+  if (!range) {
+    if (plain.length >= 3) {
+      // e.g. "min max average"
+      min = Math.min(plain[0], plain[1]);
+      max = Math.max(plain[0], plain[1]);
+      leftover = plain.slice(2);
+    } else if (plain.length === 2) {
+      min = Math.min(plain[0], plain[1]);
+      max = Math.max(plain[0], plain[1]);
+      leftover = [];
+    } else {
+      leftover = plain;
+    }
+  }
+
+  let average = leftover.length > 0 ? leftover[0] : null;
+  let averageIsEstimated = false;
+
+  if (average === null && min !== null && max !== null) {
+    average = (min + max) / 2;
+    averageIsEstimated = true;
+  }
+
+  if (average !== null && min === null && max === null) {
+    // Only a single figure was published for this market.
+    min = average;
+    max = average;
+    averageIsEstimated = false;
+  }
+
+  if (min !== null && max !== null && min > max) {
+    const swap = min;
+    min = max;
+    max = swap;
   }
 
   return {
-    firstTableEntries: entries.slice(0, secondTableStartIndex),
-    secondTableEntries: entries.slice(secondTableStartIndex),
+    market,
+    min,
+    max,
+    average,
+    change: signed.length > 0 ? signed[0] : null,
+    averageIsEstimated,
+    hasData: average !== null || min !== null,
   };
 }
 
-function splitEntryValues(entry: LiveMarketPriceEntry) {
-  const range = entry.prices[0] ?? entry.displayPrice ?? "-";
-  const average = entry.prices[1] ?? entry.prices[0] ?? "-";
-  const change = entry.prices[2] ?? "-";
+function parseEntry(
+  entry: LiveMarketPriceEntry,
+  bulletinKey: string,
+): ParsedEntry {
+  const cells = extractCells(entry);
+  const half = cells.length > 1 ? Math.ceil(cells.length / 2) : cells.length;
 
-  return { range, average, change };
+  const groups: PriceCell[][] = [cells.slice(0, half), cells.slice(half)];
+
+  const quotes = comparisonMarkets.map((market, index) =>
+    buildQuote(groups[index] ?? [], market),
+  );
+
+  const withData = quotes.filter((quote) => quote.average !== null);
+  const bestQuote =
+    withData.length > 0
+      ? withData.reduce((best, quote) =>
+          (quote.average ?? 0) > (best.average ?? 0) ? quote : best,
+        )
+      : null;
+
+  let gapValue: number | null = null;
+  let gapPercent: number | null = null;
+
+  if (withData.length === 2) {
+    const [first, second] = withData;
+    const high = Math.max(first.average ?? 0, second.average ?? 0);
+    const low = Math.min(first.average ?? 0, second.average ?? 0);
+    gapValue = high - low;
+    gapPercent = low > 0 ? (gapValue / low) * 100 : null;
+  }
+
+  return {
+    id: `${bulletinKey}-${entry.rowNumber}-${entry.cropName}`,
+    rowNumber: entry.rowNumber,
+    cropName: entry.cropName.replace(/\s+/g, " ").trim(),
+    category: detectCategory(entry.cropName),
+    quotes,
+    bestQuote,
+    gapValue,
+    gapPercent,
+    topAverage: bestQuote?.average ?? null,
+    rawText: entry.rawText ?? "",
+    searchText: `${entry.cropName} ${entry.displayPrice ?? ""} ${
+      entry.rawText ?? ""
+    }`.toLowerCase(),
+  };
 }
+
+/* ------------------------------------------------------------------ */
+/* Formatting helpers                                                  */
+/* ------------------------------------------------------------------ */
+
+function formatCompactMoney(value: number | null): string {
+  if (value === null) return "—";
+  const [whole] = value.toFixed(2).split(".");
+  return whole.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+/* ------------------------------------------------------------------ */
+/* Screen                                                              */
+/* ------------------------------------------------------------------ */
 
 type MarketPricesScreenProps = {
   onBackToHome: () => void;
@@ -82,6 +316,11 @@ export function MarketPricesScreen({ onBackToHome }: MarketPricesScreenProps) {
   const [marketData, setMarketData] = useState<LiveMarketPriceResponse | null>(
     null,
   );
+  const [activeFilter, setActiveFilter] = useState<FilterKey>("all");
+  const [activeSort, setActiveSort] = useState<SortKey>("default");
+  const [expandedSectionIds, setExpandedSectionIds] = useState<string[]>([]);
+  const [selectedEntry, setSelectedEntry] = useState<ParsedEntry | null>(null);
+  const [sheetVisible, setSheetVisible] = useState(false);
 
   const loadMarketPrices = useCallback(async () => {
     try {
@@ -143,35 +382,90 @@ export function MarketPricesScreen({ onBackToHome }: MarketPricesScreenProps) {
     return selectedBulletin?.entries ?? marketData?.entries ?? [];
   }, [marketData?.entries, selectedBulletin]);
 
-  const filteredEntries = useMemo(() => {
+  const parsedEntries = useMemo(() => {
+    const bulletinKey = selectedBulletin?.date ?? "bulletin";
+    return selectedEntries.map((entry) => parseEntry(entry, bulletinKey));
+  }, [selectedBulletin?.date, selectedEntries]);
+
+  const visibleEntries = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
 
-    if (!normalizedQuery) {
-      return selectedEntries;
+    const filtered = parsedEntries.filter((entry) => {
+      const matchesQuery =
+        !normalizedQuery || entry.searchText.includes(normalizedQuery);
+      const matchesCategory =
+        activeFilter === "all" || entry.category === activeFilter;
+      return matchesQuery && matchesCategory;
+    });
+
+    const sorted = [...filtered];
+
+    if (activeSort === "priceHigh") {
+      sorted.sort((a, b) => (b.topAverage ?? -1) - (a.topAverage ?? -1));
+    } else if (activeSort === "name") {
+      sorted.sort((a, b) => a.cropName.localeCompare(b.cropName));
+    } else {
+      sorted.sort((a, b) => a.rowNumber - b.rowNumber);
     }
 
-    return selectedEntries.filter((entry) => {
-      const haystack = [
-        entry.cropName,
-        entry.displayPrice,
-        entry.rawText,
-        ...(entry.prices ?? []),
-      ]
-        .join(" ")
-        .toLowerCase();
+    return sorted;
+  }, [activeFilter, activeSort, parsedEntries, searchQuery]);
 
-      return haystack.includes(normalizedQuery);
-    });
-  }, [searchQuery, selectedEntries]);
-
-  const { firstTableEntries, secondTableEntries } = useMemo(
-    () => splitEntriesByWordLayout(filteredEntries),
-    [filteredEntries],
+  // Pure UI grouping that reconstructs the report hierarchy:
+  // Market -> Category (Rice, Imported Rice, ...) -> Products.
+  const reportSections = useMemo(
+    () => buildReportSections(visibleEntries),
+    [visibleEntries],
   );
 
-  const spotlightEntry = useMemo(() => {
-    return firstTableEntries[0] ?? null;
-  }, [firstTableEntries]);
+  const summary = useMemo(() => {
+    const averages = visibleEntries
+      .map((entry) => entry.topAverage)
+      .filter((value): value is number => value !== null);
+
+    const highest = visibleEntries.reduce<ParsedEntry | null>((best, entry) => {
+      if (entry.topAverage === null) return best;
+      if (!best || (best.topAverage ?? 0) < entry.topAverage) return entry;
+      return best;
+    }, null);
+
+    const cheapest = visibleEntries.reduce<ParsedEntry | null>(
+      (best, entry) => {
+        if (entry.topAverage === null) return best;
+        if (!best || (best.topAverage ?? 0) > entry.topAverage) return entry;
+        return best;
+      },
+      null,
+    );
+
+    const widestGap = visibleEntries.reduce<ParsedEntry | null>(
+      (best, entry) => {
+        if (entry.gapPercent === null) return best;
+        if (!best || (best.gapPercent ?? 0) < entry.gapPercent) return entry;
+        return best;
+      },
+      null,
+    );
+
+    return {
+      count: visibleEntries.length,
+      averagePrice:
+        averages.length > 0
+          ? averages.reduce((sum, value) => sum + value, 0) / averages.length
+          : null,
+      highest,
+      cheapest,
+      widestGap,
+    };
+  }, [visibleEntries]);
+
+  const toggleSection = useCallback((id: string) => {
+    setExpandedSectionIds((current) =>
+      current.includes(id)
+        ? current.filter((value) => value !== id)
+        : [...current, id],
+    );
+  }, []);
 
   const openPdf = useCallback(async (url?: string) => {
     if (!url) {
@@ -185,394 +479,274 @@ export function MarketPricesScreen({ onBackToHome }: MarketPricesScreenProps) {
     }
   }, []);
 
-  const renderTableRow = (item: LiveMarketPriceEntry, keyPrefix: string) => {
-    const highlighted = isBeansRow(item);
-    const values = splitEntryValues(item);
+  const handleSelectEntry = useCallback((entry: ParsedEntry) => {
+    setSelectedEntry(entry);
+    setSheetVisible(true);
+  }, []);
 
-    return (
-      <View
-        key={`${selectedBulletin?.date ?? "bulletin"}-${keyPrefix}-${item.rowNumber}`}
-        style={[styles.tableRow, highlighted && styles.tableRowHighlighted]}
-      >
-        <View style={styles.itemCell}>
-          <Text style={styles.itemName}>{item.cropName}</Text>
-        </View>
+  const handleCloseSheet = useCallback(() => {
+    setSheetVisible(false);
+    setSelectedEntry(null);
+  }, []);
 
-        {comparisonMarkets.map((market) => (
-          <View
-            key={`${selectedBulletin?.date ?? "bulletin"}-${keyPrefix}-${item.rowNumber}-${market.key}`}
-            style={styles.marketGroup}
-          >
-            <View style={styles.marketColumn}>
-              <Text style={styles.marketCellText}>{values.range}</Text>
-            </View>
-            <View style={styles.marketColumn}>
-              <Text style={styles.marketCellText}>{values.average}</Text>
-            </View>
-            <View style={styles.marketColumn}>
-              <Text style={styles.marketCellText}>{values.change}</Text>
-            </View>
-          </View>
-        ))}
-      </View>
-    );
-  };
+  const handleSelectDate = useCallback((date: string) => {
+    setSelectedBulletinDate(date);
+    setSelectedEntry(null);
+    setSheetVisible(false);
+  }, []);
+
+  const bulletinDates = useMemo(
+    () =>
+      bulletins.map((bulletin) => bulletin.date).filter(Boolean) as string[],
+    [bulletins],
+  );
+
+  const selectedCategoryMeta = selectedEntry
+    ? categoryMeta[selectedEntry.category]
+    : null;
+
+  const lastUpdated = marketData?.fetchedAt
+    ? new Date(marketData.fetchedAt).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : null;
+
+  /* Market summary values are derived from the best quote of the highest-priced product in the visible set. */
+  const marketSummary = useMemo(() => {
+    const reference = summary.highest;
+    if (!reference?.bestQuote) {
+      return {
+        rangeLow: null,
+        rangeHigh: null,
+        averageToday: null,
+        averagePrevious: null,
+        change: null,
+      };
+    }
+    const quote = reference.bestQuote;
+    return {
+      rangeLow: quote.min ?? null,
+      rangeHigh: quote.max ?? null,
+      averageToday: quote.average ?? null,
+      averagePrevious:
+        quote.average !== null && quote.change !== null
+          ? quote.average - quote.change
+          : null,
+      change: quote.change ?? null,
+    };
+  }, [summary.highest]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.topBlob} />
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.headerRow}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={onBackToHome}
-            activeOpacity={0.85}
-          >
-            <MaterialCommunityIcons
-              name="arrow-left"
-              size={22}
-              color="#0F172A"
-            />
-            <Text style={styles.backButtonText}>Home</Text>
-          </TouchableOpacity>
-          <View style={styles.headerIconWrap}>
-            <MaterialCommunityIcons
-              name="currency-usd"
-              size={22}
-              color="#B45309"
-            />
-          </View>
-        </View>
-
-        <Text style={styles.title}>Market Prices</Text>
-        <Text style={styles.subtitle}>
-          A cleaner HARTI bulletin view with the first report table up front and
-          a complete crop list below.
-        </Text>
-
-        <View style={styles.heroCard}>
-          <View style={styles.heroTopRow}>
-            <View style={styles.heroTitleWrap}>
-              <Text style={styles.heroLabel}>Selected bulletin</Text>
-              <Text style={styles.heroTitle} numberOfLines={2}>
-                {selectedBulletin?.date ??
-                  marketData?.bulletinDate ??
-                  "Latest available PDF"}
-              </Text>
-            </View>
-            {loading ? (
-              <ActivityIndicator color="#C47F00" />
-            ) : (
-              <TouchableOpacity
-                style={styles.refreshButton}
-                onPress={loadMarketPrices}
-                activeOpacity={0.85}
-              >
-                <MaterialCommunityIcons
-                  name="refresh"
-                  size={18}
-                  color="#C47F00"
-                />
-              </TouchableOpacity>
-            )}
-          </View>
-
-          <View style={styles.heroMetaRow}>
-            <View style={styles.metaPill}>
-              <Text style={styles.metaPillText}>
-                {marketData?.bulletins?.length ?? 0} days
-              </Text>
-            </View>
-            <View style={styles.metaPill}>
-              <Text style={styles.metaPillText}>
-                {selectedBulletin?.success
-                  ? "Read successfully"
-                  : "Unread or empty"}
-              </Text>
-            </View>
-          </View>
-
-          <Text style={styles.summaryMeta}>
-            Source: {marketData?.sourceUrl ?? "harti.gov.lk"}
-          </Text>
-          {marketData?.fetchedAt ? (
-            <Text style={styles.summaryMeta}>
-              Updated:{" "}
-              {new Date(marketData.fetchedAt).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </Text>
-          ) : null}
-
-          <TouchableOpacity
-            style={styles.pdfButton}
-            onPress={() =>
-              openPdf(selectedBulletin?.url ?? marketData?.bulletinUrl)
-            }
-            activeOpacity={0.85}
-          >
-            <MaterialCommunityIcons
-              name="file-pdf-box"
-              size={20}
-              color="#FFFFFF"
-            />
-            <Text style={styles.pdfButtonText}>Open selected PDF</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.searchCard}>
-          <MaterialCommunityIcons name="magnify" size={20} color="#B45309" />
-          <TextInput
-            placeholder="Search crop name"
-            placeholderTextColor="#94A3B8"
-            style={styles.searchInput}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-          {searchQuery ? (
-            <TouchableOpacity onPress={() => setSearchQuery("")}>
-              <MaterialCommunityIcons
-                name="close-circle"
-                size={20}
-                color="#B45309"
-              />
-            </TouchableOpacity>
-          ) : null}
-        </View>
-
-        <View style={styles.archiveHeader}>
-          <View>
-            <Text style={styles.sectionTitle}>10-day PDF archive</Text>
-            <Text style={styles.sectionSubTitle}>
-              Tap a day to switch the bulletin and view its extracted prices.
-            </Text>
-          </View>
-        </View>
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.archiveRow}
-        >
-          {bulletins.map((bulletin) => {
-            const isSelected = bulletin.date === selectedBulletin?.date;
-            return (
-              <TouchableOpacity
-                key={`${bulletin.date}-${bulletin.url}`}
-                style={[
-                  styles.archiveCard,
-                  isSelected && styles.archiveCardSelected,
-                ]}
-                activeOpacity={0.86}
-                onPress={() => setSelectedBulletinDate(bulletin.date)}
-              >
-                <View style={styles.archiveCardTopRow}>
-                  <Text
-                    style={[
-                      styles.archiveDate,
-                      isSelected && styles.archiveDateSelected,
-                    ]}
-                  >
-                    {bulletin.date}
-                  </Text>
-                  <View
-                    style={[
-                      styles.archiveDot,
-                      bulletin.success
-                        ? styles.archiveDotSuccess
-                        : styles.archiveDotMuted,
-                    ]}
-                  />
-                </View>
-                <Text
-                  style={[
-                    styles.archiveLabel,
-                    isSelected && styles.archiveLabelSelected,
-                  ]}
-                  numberOfLines={1}
-                >
-                  {bulletin.label}
-                </Text>
-                <Text style={styles.archiveCount}>
-                  {bulletin.lineCount ?? 0} rows
-                </Text>
-                <Text style={styles.archiveMeta} numberOfLines={2}>
-                  {bulletin.message ??
-                    (bulletin.success ? "Readable PDF" : "Not readable")}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
+        <MarketHeader
+          onBackToHome={onBackToHome}
+          lastUpdated={lastUpdated}
+          onRefresh={loadMarketPrices}
+          refreshing={loading}
+        />
 
         {error ? (
           <View style={styles.errorCard}>
             <MaterialCommunityIcons
               name="alert-circle-outline"
-              size={22}
-              color="#B45309"
+              size={20}
+              color={colors.danger}
             />
             <Text style={styles.errorText}>{error}</Text>
           </View>
         ) : null}
 
         {loading ? (
-          <View style={styles.loadingCard}>
-            <ActivityIndicator size="large" color="#C47F00" />
-            <Text style={styles.loadingText}>
-              Reading the latest bulletin PDF...
-            </Text>
-          </View>
-        ) : firstTableEntries.length ? (
-          <View style={styles.entriesWrap}>
-            <View style={styles.entriesHeader}>
-              <View>
-                <Text style={styles.sectionTitle}>First table</Text>
-                <Text style={styles.sectionSubTitle}>
-                  {firstTableEntries.length} rows shown for the rice and staple
-                  price section.
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={styles.smallPdfButton}
-                onPress={() => openPdf(selectedBulletin?.url)}
-                activeOpacity={0.85}
-              >
-                <MaterialCommunityIcons
-                  name="open-in-new"
-                  size={16}
-                  color="#B45309"
-                />
-              </TouchableOpacity>
+          <LoadingSkeleton />
+        ) : (
+          <>
+            <SearchBar
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              placeholder="Search crops..."
+            />
+
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Markets</Text>
             </View>
 
-            {spotlightEntry ? (
-              <View style={styles.spotlightCard}>
-                <View style={styles.spotlightTopRow}>
-                  <View>
-                    <Text style={styles.spotlightLabel}>Spotlight row</Text>
-                    <Text style={styles.spotlightTitle}>
-                      {spotlightEntry.cropName}
-                    </Text>
-                  </View>
-                  <View style={styles.spotlightChip}>
-                    <Text style={styles.spotlightChipText}>Beans</Text>
-                  </View>
-                </View>
-                <Text style={styles.spotlightMeta} numberOfLines={2}>
-                  Table-style view matching the first bulletin screenshot, with
-                  the original row order preserved.
-                </Text>
-              </View>
-            ) : null}
+            <MarketSelector
+              markets={comparisonMarkets.map((market) => market.name)}
+              selected={comparisonMarkets[0].name}
+              onSelect={() => {}}
+            />
+
+            <View style={styles.summarySpacing}>
+              <MarketSummaryCard
+                marketName={comparisonMarkets[0].name}
+                rangeLow={marketSummary.rangeLow}
+                rangeHigh={marketSummary.rangeHigh}
+                averageToday={marketSummary.averageToday}
+                averagePrevious={marketSummary.averagePrevious}
+                change={marketSummary.change}
+                updatedLabel={selectedBulletin?.date ?? "Latest bulletin"}
+              />
+            </View>
+
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Categories</Text>
+            </View>
 
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.tableScrollContent}
+              contentContainerStyle={styles.filterRow}
             >
-              <View style={styles.reportTable}>
-                <View style={styles.tableHeaderRow}>
-                  <View style={styles.itemHeaderCell}>
-                    <Text style={styles.tableHeaderText}>Item</Text>
-                  </View>
-                  {comparisonMarkets.map((market) => (
-                    <View
-                      key={`${selectedBulletin?.date ?? "bulletin"}-${market.key}`}
-                      style={styles.marketHeaderGroup}
+              {filterChips.map((chip) => {
+                const active = chip.key === activeFilter;
+                return (
+                  <TouchableOpacity
+                    key={chip.key}
+                    style={[
+                      styles.filterChip,
+                      active && styles.filterChipActive,
+                    ]}
+                    activeOpacity={0.8}
+                    onPress={() => setActiveFilter(chip.key)}
+                  >
+                    <Text
+                      style={[
+                        styles.filterChipText,
+                        active && styles.filterChipTextActive,
+                      ]}
                     >
-                      <Text style={styles.marketHeaderTitle}>
-                        {market.name}
-                      </Text>
-                      <View style={styles.marketHeaderSubRow}>
-                        <Text style={styles.marketHeaderSubText}>Range</Text>
-                        <Text style={styles.marketHeaderSubText}>Average</Text>
-                        <Text style={styles.marketHeaderSubText}>Change *</Text>
-                      </View>
-                    </View>
-                  ))}
-                </View>
-
-                <View style={styles.tableBody}>
-                  {firstTableEntries.map((item) =>
-                    renderTableRow(item, "table-1"),
-                  )}
-                </View>
-              </View>
+                      {chip.label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
             </ScrollView>
 
-            {secondTableEntries.length ? (
-              <View style={styles.entriesHeader}>
-                <View>
-                  <Text style={styles.sectionTitle}>Second table</Text>
-                  <Text style={styles.sectionSubTitle}>
-                    Vegetable and fruit prices shown as the second table in the
-                    document.
-                  </Text>
-                </View>
+            <View style={styles.sortRow}>
+              {sortChips.map((chip) => {
+                const active = chip.key === activeSort;
+                return (
+                  <TouchableOpacity
+                    key={chip.key}
+                    style={[styles.sortChip, active && styles.sortChipActive]}
+                    activeOpacity={0.8}
+                    onPress={() => setActiveSort(chip.key)}
+                  >
+                    <MaterialCommunityIcons
+                      name={chip.icon}
+                      size={13}
+                      color={active ? colors.white : colors.textSecondary}
+                    />
+                    <Text
+                      style={[
+                        styles.sortChipText,
+                        active && styles.sortChipTextActive,
+                      ]}
+                    >
+                      {chip.label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+
+            {visibleEntries.length === 0 ? (
+              <EmptyState
+                title="No crops found"
+                message="Try a different search or category filter."
+              />
+            ) : (
+              <View style={styles.accordionList}>
+                {reportSections.map((section) => (
+                  <CategoryAccordion
+                    key={section.id}
+                    section={section}
+                    expanded={expandedSectionIds.includes(section.id)}
+                    onToggle={() => toggleSection(section.id)}
+                    onSelectProduct={handleSelectEntry}
+                  />
+                ))}
               </View>
-            ) : null}
+            )}
 
-            {secondTableEntries.length ? (
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.tableScrollContent}
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Bulletin Archive</Text>
+            </View>
+
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.archiveRow}
+            >
+              {bulletinDates.map((date) => {
+                const isActive = date === selectedBulletinDate;
+                return (
+                  <TouchableOpacity
+                    key={date}
+                    style={[
+                      styles.archiveChip,
+                      isActive && styles.archiveChipActive,
+                    ]}
+                    activeOpacity={0.8}
+                    onPress={() => handleSelectDate(date)}
+                  >
+                    <Text
+                      style={[
+                        styles.archiveChipText,
+                        isActive && styles.archiveChipTextActive,
+                      ]}
+                    >
+                      {date}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+
+            <View style={styles.pdfRow}>
+              <View style={styles.pdfInfo}>
+                <MaterialCommunityIcons
+                  name="file-pdf-box"
+                  size={18}
+                  color={colors.primary}
+                />
+                <Text style={styles.pdfText}>
+                  {selectedBulletin?.date ?? "Latest bulletin"}
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={styles.pdfButton}
+                onPress={() =>
+                  openPdf(selectedBulletin?.url ?? marketData?.bulletinUrl)
+                }
+                activeOpacity={0.8}
               >
-                <View style={styles.reportTable}>
-                  <View style={styles.tableHeaderRow}>
-                    <View style={styles.itemHeaderCell}>
-                      <Text style={styles.tableHeaderText}>Variety</Text>
-                    </View>
-                    {comparisonMarkets.map((market) => (
-                      <View
-                        key={`${selectedBulletin?.date ?? "bulletin"}-second-${market.key}`}
-                        style={styles.marketHeaderGroup}
-                      >
-                        <Text style={styles.marketHeaderTitle}>
-                          {market.name}
-                        </Text>
-                        <View style={styles.marketHeaderSubRow}>
-                          <Text style={styles.marketHeaderSubText}>Range</Text>
-                          <Text style={styles.marketHeaderSubText}>
-                            Average
-                          </Text>
-                          <Text style={styles.marketHeaderSubText}>
-                            Change *
-                          </Text>
-                        </View>
-                      </View>
-                    ))}
-                  </View>
+                <Text style={styles.pdfButtonText}>Open PDF</Text>
+              </TouchableOpacity>
+            </View>
 
-                  <View style={styles.tableBody}>
-                    {secondTableEntries.map((item) =>
-                      renderTableRow(item, "table-2"),
-                    )}
-                  </View>
-                </View>
-              </ScrollView>
-            ) : null}
-          </View>
-        ) : (
-          <View style={styles.emptyCard}>
-            <MaterialCommunityIcons
-              name="receipt-text-outline"
-              size={28}
-              color="#64748B"
-            />
-            <Text style={styles.emptyTitle}>No matching crop found</Text>
-            <Text style={styles.emptyText}>
-              Try a different crop name or select another bulletin from the
-              archive above.
+            <Text style={styles.footerMeta}>
+              Source: {marketData?.sourceUrl ?? "harti.gov.lk"}
             </Text>
-          </View>
+          </>
         )}
       </ScrollView>
+
+      <ProductBottomSheet
+        visible={sheetVisible}
+        entry={selectedEntry}
+        categoryIcon={selectedCategoryMeta?.icon ?? "sprout"}
+        categoryLabel={selectedCategoryMeta?.label ?? "Crop"}
+        bulletinDates={bulletinDates}
+        selectedDate={selectedBulletinDate}
+        onSelectDate={handleSelectDate}
+        onClose={handleCloseSheet}
+      />
     </SafeAreaView>
   );
 }
@@ -580,625 +754,157 @@ export function MarketPricesScreen({ onBackToHome }: MarketPricesScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF8EF",
-  },
-  topBlob: {
-    position: "absolute",
-    top: -90,
-    left: -55,
-    width: 220,
-    height: 220,
-    borderRadius: 110,
-    backgroundColor: "rgba(245, 158, 11, 0.12)",
+    backgroundColor: colors.background,
   },
   scrollContent: {
-    paddingHorizontal: 18,
-    paddingTop: 16,
-    paddingBottom: 42,
-  },
-  headerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 18,
-  },
-  backButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 999,
-    backgroundColor: "rgba(255, 255, 255, 0.82)",
-    borderWidth: 1,
-    borderColor: "rgba(180, 83, 9, 0.14)",
-  },
-  backButtonText: {
-    color: "#0F172A",
-    fontWeight: "700",
-  },
-  headerIconWrap: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#FEF3C7",
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: "800",
-    color: "#0F172A",
-    marginBottom: 8,
-  },
-  subtitle: {
-    color: "#475569",
-    lineHeight: 22,
-    marginBottom: 16,
-  },
-  heroCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 26,
-    padding: 18,
-    borderWidth: 1,
-    borderColor: "rgba(245, 158, 11, 0.18)",
-    shadowColor: "#000",
-    shadowOpacity: 0.07,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 4,
-    marginBottom: 14,
-  },
-  heroTopRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-    gap: 12,
-    marginBottom: 14,
-  },
-  heroTitleWrap: {
-    flex: 1,
-  },
-  heroLabel: {
-    fontSize: 12,
-    textTransform: "uppercase",
-    letterSpacing: 1,
-    color: "#B45309",
-    marginBottom: 6,
-    fontWeight: "800",
-  },
-  heroTitle: {
-    fontSize: 22,
-    fontWeight: "800",
-    color: "#111827",
-  },
-  refreshButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#FFF7ED",
-  },
-  heroMetaRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-    marginBottom: 14,
-  },
-  metaPill: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 999,
-    backgroundColor: "#FFF7ED",
-  },
-  metaPillText: {
-    color: "#9A3412",
-    fontWeight: "700",
-    fontSize: 12,
-  },
-  summaryMeta: {
-    color: "#64748B",
-    marginBottom: 4,
-  },
-  pdfButton: {
-    marginTop: 16,
-    backgroundColor: "#C47F00",
-    borderRadius: 16,
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-  },
-  pdfButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "800",
-    fontSize: 15,
-  },
-  searchCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: "rgba(245, 158, 11, 0.16)",
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    marginBottom: 18,
-  },
-  searchInput: {
-    flex: 1,
-    color: "#0F172A",
-    fontSize: 15,
-    paddingVertical: 0,
-  },
-  archiveHeader: {
-    marginBottom: 10,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: "800",
-    color: "#0F172A",
-    marginBottom: 2,
-  },
-  sectionSubTitle: {
-    color: "#64748B",
-    lineHeight: 20,
-  },
-  archiveRow: {
-    gap: 12,
-    paddingVertical: 8,
-    paddingBottom: 2,
-  },
-  archiveCard: {
-    width: 165,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 20,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: "rgba(148, 163, 184, 0.16)",
-  },
-  archiveCardSelected: {
-    borderColor: "rgba(196, 127, 0, 0.6)",
-    backgroundColor: "#FFF8E8",
-    shadowColor: "#000",
-    shadowOpacity: 0.07,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 3,
-  },
-  archiveCardTopRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 8,
-  },
-  archiveDate: {
-    fontSize: 12,
-    fontWeight: "800",
-    color: "#334155",
-  },
-  archiveDateSelected: {
-    color: "#9A3412",
-  },
-  archiveDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-  },
-  archiveDotSuccess: {
-    backgroundColor: "#16A34A",
-  },
-  archiveDotMuted: {
-    backgroundColor: "#94A3B8",
-  },
-  archiveLabel: {
-    marginTop: 10,
-    fontSize: 15,
-    fontWeight: "800",
-    color: "#0F172A",
-  },
-  archiveLabelSelected: {
-    color: "#7C2D12",
-  },
-  archiveCount: {
-    marginTop: 6,
-    color: "#9A3412",
-    fontSize: 12,
-    fontWeight: "700",
-  },
-  archiveMeta: {
-    marginTop: 8,
-    color: "#64748B",
-    fontSize: 12,
-    lineHeight: 17,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.xxl,
   },
   errorCard: {
-    backgroundColor: "#FFF7ED",
-    borderRadius: 18,
-    padding: 14,
     flexDirection: "row",
-    gap: 10,
     alignItems: "flex-start",
-    borderWidth: 1,
-    borderColor: "rgba(180, 83, 9, 0.18)",
-    marginTop: 14,
-    marginBottom: 16,
+    gap: spacing.sm,
+    backgroundColor: colors.dangerSoft,
+    borderRadius: radius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.lg,
   },
   errorText: {
     flex: 1,
-    color: "#9A3412",
-    lineHeight: 20,
+    color: "#991B1B",
+    fontSize: 13,
+    lineHeight: 18,
   },
-  loadingCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 20,
-    paddingVertical: 28,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 12,
+  sectionHeader: {
+    marginTop: spacing.xl,
+    marginBottom: spacing.md,
   },
-  loadingText: {
-    marginTop: 12,
-    color: "#64748B",
-  },
-  entriesWrap: {
-    marginTop: 18,
-    gap: 12,
-  },
-  entriesHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 10,
-  },
-  smallPdfButton: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#FFF7ED",
-  },
-  spotlightCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 22,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: "rgba(196, 127, 0, 0.18)",
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 3,
-  },
-  spotlightTopRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-    gap: 12,
-  },
-  spotlightLabel: {
-    color: "#B45309",
-    fontSize: 12,
-    fontWeight: "800",
-    textTransform: "uppercase",
-    letterSpacing: 1,
-  },
-  spotlightTitle: {
-    marginTop: 4,
+  sectionTitle: {
     fontSize: 18,
     fontWeight: "800",
-    color: "#0F172A",
+    color: colors.text,
   },
-  spotlightChip: {
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 999,
-    backgroundColor: "#FEF3C7",
+  summarySpacing: {
+    marginTop: spacing.md,
   },
-  spotlightChipText: {
-    color: "#92400E",
-    fontSize: 12,
-    fontWeight: "700",
+  filterRow: {
+    gap: spacing.sm,
+    paddingVertical: spacing.xs,
   },
-  spotlightMeta: {
-    marginTop: 10,
-    color: "#64748B",
-    lineHeight: 20,
-  },
-  tableScrollContent: {
-    paddingBottom: 2,
-  },
-  reportTable: {
-    minWidth: 840,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 20,
+  filterChip: {
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm + 2,
+    borderRadius: radius.pill,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: "rgba(148, 163, 184, 0.18)",
-    overflow: "hidden",
+    borderColor: colors.border,
   },
-  tableHeaderRow: {
-    flexDirection: "row",
-    backgroundColor: "#FFF7ED",
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(148, 163, 184, 0.2)",
+  filterChipActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
   },
-  varietyHeaderCell: {
-    width: 180,
-  },
-  tableHeaderCell: {
-    justifyContent: "center",
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderRightWidth: 1,
-    borderRightColor: "rgba(148, 163, 184, 0.18)",
-  },
-  tableHeaderText: {
-    color: "#0F172A",
-    fontSize: 14,
-    fontWeight: "800",
-  },
-  tableHeaderGroup: {
-    width: 104,
-    paddingHorizontal: 8,
-    paddingVertical: 8,
-    alignItems: "center",
-    borderRightWidth: 1,
-    borderRightColor: "rgba(148, 163, 184, 0.18)",
-    gap: 3,
-  },
-  tableHeaderDate: {
-    color: "#0F172A",
-    fontSize: 11,
-    fontWeight: "800",
-  },
-  tableHeaderMarket: {
-    color: "#334155",
-    fontSize: 11,
-    textAlign: "center",
-    lineHeight: 14,
-  },
-  tableBody: {
-    backgroundColor: "#FFFFFF",
-  },
-  itemHeaderCell: {
-    width: 160,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRightWidth: 1,
-    borderRightColor: "rgba(15, 23, 42, 0.14)",
-  },
-  marketHeaderGroup: {
-    flex: 1,
-    minWidth: 320,
-    borderRightWidth: 1,
-    borderRightColor: "rgba(15, 23, 42, 0.14)",
-  },
-  marketHeaderTitle: {
-    textAlign: "center",
-    fontSize: 14,
-    fontWeight: "800",
-    color: "#0F172A",
-    paddingVertical: 6,
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(15, 23, 42, 0.14)",
-  },
-  marketHeaderSubRow: {
-    flexDirection: "row",
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(15, 23, 42, 0.14)",
-  },
-  marketHeaderSubText: {
-    flex: 1,
-    textAlign: "center",
-    paddingVertical: 7,
-    fontSize: 11,
-    fontWeight: "700",
-    color: "#334155",
-    borderRightWidth: 1,
-    borderRightColor: "rgba(15, 23, 42, 0.14)",
-  },
-  tableRow: {
-    flexDirection: "row",
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(148, 163, 184, 0.14)",
-  },
-  tableRowHighlighted: {
-    backgroundColor: "rgba(196, 127, 0, 0.08)",
-  },
-  itemCell: {
-    width: 160,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    borderRightWidth: 1,
-    borderRightColor: "rgba(148, 163, 184, 0.14)",
-    justifyContent: "center",
-  },
-  itemName: {
-    color: "#0F172A",
+  filterChipText: {
     fontSize: 13,
     fontWeight: "700",
-    lineHeight: 17,
+    color: colors.textSecondary,
   },
-  marketGroup: {
-    flex: 1,
-    minWidth: 320,
-    flexDirection: "row",
-    borderRightWidth: 1,
-    borderRightColor: "rgba(148, 163, 184, 0.14)",
+  filterChipTextActive: {
+    color: colors.white,
   },
-  marketColumn: {
-    flex: 1,
-    minHeight: 44,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 8,
-    borderRightWidth: 1,
-    borderRightColor: "rgba(148, 163, 184, 0.14)",
-  },
-  marketCellText: {
-    color: "#111827",
-    fontSize: 13,
-    fontWeight: "700",
-    textAlign: "center",
-  },
-  fullListCard: {
-    marginTop: 16,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 20,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: "rgba(148, 163, 184, 0.18)",
-  },
-  simpleTable: {
-    marginTop: 12,
-    borderRadius: 16,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "rgba(148, 163, 184, 0.18)",
-  },
-  simpleTableHeader: {
-    flexDirection: "row",
-    backgroundColor: "#FFF7ED",
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(148, 163, 184, 0.18)",
-  },
-  simpleHeaderText: {
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    color: "#0F172A",
-    fontSize: 13,
-    fontWeight: "800",
-  },
-  simpleTableRow: {
-    flexDirection: "row",
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(148, 163, 184, 0.14)",
-  },
-  simpleCropCol: {
-    width: 220,
-    borderRightWidth: 1,
-    borderRightColor: "rgba(148, 163, 184, 0.14)",
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-  },
-  simpleCropTitle: {
-    color: "#0F172A",
-    fontSize: 14,
-    fontWeight: "800",
-  },
-  simpleCropMeta: {
-    marginTop: 4,
-    color: "#64748B",
-    fontSize: 11,
-    fontWeight: "600",
-  },
-  simpleValuesWrap: {
-    flex: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-  },
-  simpleValuesText: {
-    color: "#111827",
-    fontSize: 13,
-    fontWeight: "700",
-  },
-  simpleRawText: {
-    marginTop: 4,
-    color: "#64748B",
-    fontSize: 11,
-    lineHeight: 16,
-  },
-  entryCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 22,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: "rgba(100, 116, 139, 0.12)",
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 3,
-  },
-  entryHeader: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-    marginBottom: 10,
-    gap: 12,
-  },
-  entryHeaderTextWrap: {
-    flex: 1,
-    gap: 4,
-  },
-  entryIndex: {
-    fontSize: 12,
-    fontWeight: "800",
-    color: "#B45309",
-  },
-  entryCrop: {
-    fontSize: 17,
-    fontWeight: "800",
-    color: "#0F172A",
-  },
-  priceBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 999,
-    backgroundColor: "#FEF3C7",
-  },
-  priceBadgeText: {
-    color: "#92400E",
-    fontSize: 12,
-    fontWeight: "700",
-  },
-  priceRow: {
+  sortRow: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8,
-    marginBottom: 10,
+    gap: spacing.sm,
+    marginTop: spacing.md,
+    marginBottom: spacing.lg,
   },
-  priceChip: {
-    paddingHorizontal: 10,
-    paddingVertical: 7,
-    borderRadius: 999,
-    backgroundColor: "#FFF7ED",
-  },
-  priceChipText: {
-    color: "#C2410C",
-    fontWeight: "800",
-  },
-  rawText: {
-    color: "#64748B",
-    lineHeight: 20,
-  },
-  emptyCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 20,
-    padding: 20,
+  sortChip: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    marginTop: 14,
+    gap: 5,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.pill,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: "rgba(100, 116, 139, 0.12)",
+    borderColor: colors.border,
   },
-  emptyTitle: {
-    marginTop: 12,
-    fontSize: 18,
+  sortChipActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  sortChipText: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.textSecondary,
+  },
+  sortChipTextActive: {
+    color: colors.white,
+  },
+  accordionList: {
+    gap: spacing.md,
+  },
+  archiveRow: {
+    gap: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  archiveChip: {
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm + 2,
+    borderRadius: radius.pill,
+    backgroundColor: colors.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  archiveChipActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  archiveChipText: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.textSecondary,
+  },
+  archiveChipTextActive: {
+    color: colors.white,
+  },
+  pdfRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: colors.card,
+    borderRadius: radius.lg,
+    padding: spacing.lg,
+    marginTop: spacing.lg,
+    ...shadow.soft,
+  },
+  pdfInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    flex: 1,
+  },
+  pdfText: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: colors.text,
+  },
+  pdfButton: {
+    backgroundColor: colors.primary,
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm + 2,
+  },
+  pdfButtonText: {
+    color: colors.white,
+    fontSize: 13,
     fontWeight: "800",
-    color: "#0F172A",
   },
-  emptyText: {
-    marginTop: 8,
+  footerMeta: {
+    marginTop: spacing.lg,
+    fontSize: 11,
+    color: colors.textMuted,
     textAlign: "center",
-    color: "#64748B",
-    lineHeight: 21,
   },
 });

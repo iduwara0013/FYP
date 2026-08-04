@@ -1872,15 +1872,6 @@
         "hash": "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA=="
       }
     },
-    "npm:debug@4.3.1": {
-      "type": "npm",
-      "name": "npm:debug@4.3.1",
-      "data": {
-        "version": "4.3.1",
-        "packageName": "debug",
-        "hash": "sha512-doEwdvm4PCeK4K3RQN2ZC2BYUBaxwLARCqZmMjtF8a51J2Rb0xpVloFRnCODwqjpwnAoao4pelN8l3RJdv3gRQ=="
-      }
-    },
     "npm:@expo/devtools": {
       "type": "npm",
       "name": "npm:@expo/devtools",
@@ -1935,6 +1926,15 @@
         "hash": "sha512-h+DEnpVvxmfVefa4jFbCf5HdH5YMDXRsmKflpf1pILZWRFlTbJpxeU55nJl4Smt5HQaGzg1o6RHFPJaOqnmBDg=="
       }
     },
+    "npm:brace-expansion@2.1.0": {
+      "type": "npm",
+      "name": "npm:brace-expansion@2.1.0",
+      "data": {
+        "version": "2.1.0",
+        "packageName": "brace-expansion",
+        "hash": "sha512-TN1kCZAgdgweJhWWpgKYrQaMNHcDULHkWwQIspdtjV4Y5aurRdZpjAqn6yX3FPqTA9ngHCc4hJxMAMgGfve85w=="
+      }
+    },
     "npm:brace-expansion": {
       "type": "npm",
       "name": "npm:brace-expansion",
@@ -1969,6 +1969,15 @@
         "version": "5.1.9",
         "packageName": "minimatch",
         "hash": "sha512-7o1wEA2RyMP7Iu7GNba9vc0RWWGACJOCZBJX2GJWip0ikV+wcOsgVuY9uE8CPiyQhkGFSlhuSkZPavN7u1c2Fw=="
+      }
+    },
+    "npm:minimatch@8.0.7": {
+      "type": "npm",
+      "name": "npm:minimatch@8.0.7",
+      "data": {
+        "version": "8.0.7",
+        "packageName": "minimatch",
+        "hash": "sha512-V+1uQNdzybxa14e/p00HZnQNNcTjnRJjDxg2V8wtkjFctq4M7hXFws4oekyTP0Jebeq7QYtpFyOeBAjc88zvYg=="
       }
     },
     "npm:minimatch": {
@@ -2128,27 +2137,27 @@
       "type": "npm",
       "name": "npm:@firebase/ai",
       "data": {
-        "version": "2.9.0",
+        "version": "2.11.0",
         "packageName": "@firebase/ai",
-        "hash": "sha512-NPvBBuvdGo9x3esnABAucFYmqbBmXvyTMimBq2PCuLZbdANZoHzGlx7vfzbwNDaEtCBq4RGGNMliLIv6bZ+PtA=="
+        "hash": "sha512-+oqOne/h5J51LezazR+VyzKe3AK455W29JXnb4jOeVvQhC7FymledN5+XE+w5vEcMhRQ6n1f62fdGs4A44X32A=="
       }
     },
     "npm:@firebase/analytics": {
       "type": "npm",
       "name": "npm:@firebase/analytics",
       "data": {
-        "version": "0.10.20",
+        "version": "0.10.21",
         "packageName": "@firebase/analytics",
-        "hash": "sha512-adGTNVUWH5q66tI/OQuKLSN6mamPpfYhj0radlH2xt+3eL6NFPtXoOs+ulvs+UsmK27vNFx5FjRDfWk+TyduHg=="
+        "hash": "sha512-j2y2q65BlgLGB5Pwjhv/Jopw2X/TBTzvAtI5z/DSp56U4wBj7LfhBfzbdCtFPges+Wz0g55GdoawXibOH5jGng=="
       }
     },
     "npm:@firebase/analytics-compat": {
       "type": "npm",
       "name": "npm:@firebase/analytics-compat",
       "data": {
-        "version": "0.2.26",
+        "version": "0.2.27",
         "packageName": "@firebase/analytics-compat",
-        "hash": "sha512-0j2ruLOoVSwwcXAF53AMoniJKnkwiTjGVfic5LDzqiRkR13vb5j6TXMeix787zbLeQtN/m1883Yv1TxI0gItbA=="
+        "hash": "sha512-ZObpYpAxL6JfgH7GnvlDD0sbzGZ0o4nijV8skatV9ZX49hJtCYbFqaEcPYptT94rgX1KUoKEderC7/fa7hybtw=="
       }
     },
     "npm:@firebase/analytics-types": {
@@ -2164,27 +2173,27 @@
       "type": "npm",
       "name": "npm:@firebase/app",
       "data": {
-        "version": "0.14.9",
+        "version": "0.14.11",
         "packageName": "@firebase/app",
-        "hash": "sha512-3gtUX0e584MYkKBQMgSECMvE1Dwzg+eONefDQ0wxVSe5YMBsZwdN5pL7UapwWBlV8+i8QCztF9TP947tEjZAGA=="
+        "hash": "sha512-yxADFW35LYkP8oSGobGsYIrI42I+GPCvKTNHx4meT9Yq3C950IVz1eANoBk822I9tbKv1wyv9P4Bv1G5TpucFw=="
       }
     },
     "npm:@firebase/app-check": {
       "type": "npm",
       "name": "npm:@firebase/app-check",
       "data": {
-        "version": "0.11.1",
+        "version": "0.11.2",
         "packageName": "@firebase/app-check",
-        "hash": "sha512-gmKfwQ2k8aUQlOyRshc+fOQLq0OwUmibIZvpuY1RDNu2ho0aTMlwxOuEiJeYOs7AxzhSx7gnXPFNsXCFbnvXUQ=="
+        "hash": "sha512-jcXQVMHAQ5AEKzVD5C7s5fmAYeFOuN6lAJeNTgZK2B9aLnofWaJt8u1A8Idm8gpsBBYSaY3cVyeH5SWMOVPBLQ=="
       }
     },
     "npm:@firebase/app-check-compat": {
       "type": "npm",
       "name": "npm:@firebase/app-check-compat",
       "data": {
-        "version": "0.4.1",
+        "version": "0.4.2",
         "packageName": "@firebase/app-check-compat",
-        "hash": "sha512-yjSvSl5B1u4CirnxhzirN1uiTRCRfx+/qtfbyeyI+8Cx8Cw1RWAIO/OqytPSVwLYbJJ1vEC3EHfxazRaMoWKaA=="
+        "hash": "sha512-M91NhxqbSkI0ChkJWy69blC+rPr6HEgaeRllddSaU1pQ/7IiegeCQM9pPDIgvWnwnBSzKhUHpe6ro/jhJ+cvzw=="
       }
     },
     "npm:@firebase/app-check-interop-types": {
@@ -2209,36 +2218,54 @@
       "type": "npm",
       "name": "npm:@firebase/app-compat",
       "data": {
-        "version": "0.5.9",
+        "version": "0.5.11",
         "packageName": "@firebase/app-compat",
-        "hash": "sha512-e5LzqjO69/N2z7XcJeuMzIp4wWnW696dQeaHAUpQvGk89gIWHAIvG6W+mA3UotGW6jBoqdppEJ9DnuwbcBByug=="
+        "hash": "sha512-KaACDjXkK5VLpI01vEs592R7/8s5DjFdIXfKoR385ly1SmK3Tu+jMHCIB4MsiY5jsez6v7VlEX/3rJ90dVkHyA=="
       }
     },
     "npm:@firebase/app-types": {
       "type": "npm",
       "name": "npm:@firebase/app-types",
       "data": {
-        "version": "0.9.3",
+        "version": "0.9.4",
         "packageName": "@firebase/app-types",
-        "hash": "sha512-kRVpIl4vVGJ4baogMDINbyrIOtOxqhkZQg4jTq3l8Lw6WSk0xfpEYzezFu+Kl4ve4fbPl79dvwRtaFqAC/ucCw=="
+        "hash": "sha512-crX9TA5SVYZwLPG7/R16IsH8FLlgkPXjJUVhsVpHVDSqJiq3D/NuFTM5ctxGTExXAOeIn//69tQw47CPerM8MQ=="
+      }
+    },
+    "npm:idb@7.1.1": {
+      "type": "npm",
+      "name": "npm:idb@7.1.1",
+      "data": {
+        "version": "7.1.1",
+        "packageName": "idb",
+        "hash": "sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ=="
+      }
+    },
+    "npm:idb": {
+      "type": "npm",
+      "name": "npm:idb",
+      "data": {
+        "version": "8.0.3",
+        "packageName": "idb",
+        "hash": "sha512-LtwtVyVYO5BqRvcsKuB2iUMnHwPVByPCXFXOpuU96IZPPoPN6xjOGxZQ74pgSVVLQWtUOYgyeL4GE98BY5D3wg=="
       }
     },
     "npm:@firebase/auth": {
       "type": "npm",
       "name": "npm:@firebase/auth",
       "data": {
-        "version": "1.12.1",
+        "version": "1.13.0",
         "packageName": "@firebase/auth",
-        "hash": "sha512-nXKj7d5bMBlnq6XpcQQpmnSVwEeHBkoVbY/+Wk0P1ebLSICoH4XPtvKOFlXKfIHmcS84mLQ99fk3njlDGKSDtw=="
+        "hash": "sha512-mKkSLNym3UbnnZ06dAmtqzp5EpPGCANGCZDJbkoR135aoUdKG6Aizwcnp29RzsQpwH0nmy5nay17Sfbsh9oY8A=="
       }
     },
     "npm:@firebase/auth-compat": {
       "type": "npm",
       "name": "npm:@firebase/auth-compat",
       "data": {
-        "version": "0.6.3",
+        "version": "0.6.5",
         "packageName": "@firebase/auth-compat",
-        "hash": "sha512-nHOkupcYuGVxI1AJJ/OBhLPaRokbP14Gq4nkkoVvf1yvuREEWqdnrYB/CdsSnPxHMAnn5wJIKngxBF9jNX7s/Q=="
+        "hash": "sha512-IfVsafZ3QiXbsydXTP/XMI0wVYbJLI1rkb8Qqf03/h5FnL+upbbPOb+6Yj3RpcX+Y1iP5Uh18lxTHlXfbiyAow=="
       }
     },
     "npm:@firebase/auth-interop-types": {
@@ -2263,63 +2290,63 @@
       "type": "npm",
       "name": "npm:@firebase/component",
       "data": {
-        "version": "0.7.1",
+        "version": "0.7.2",
         "packageName": "@firebase/component",
-        "hash": "sha512-mFzsm7CLHR60o08S23iLUY8m/i6kLpOK87wdEFPLhdlCahaxKmWOwSVGiWoENYSmFJJoDhrR3gKSCxz7ENdIww=="
+        "hash": "sha512-iyVDGc6Vjx7Rm0cAdccLH/NG6fADsgJak/XW9IA2lPf8AjIlsemOpFGKczYyPHxm4rnKdR8z6sK4+KEC7NwmEg=="
       }
     },
     "npm:@firebase/data-connect": {
       "type": "npm",
       "name": "npm:@firebase/data-connect",
       "data": {
-        "version": "0.4.0",
+        "version": "0.6.0",
         "packageName": "@firebase/data-connect",
-        "hash": "sha512-vLXM6WHNIR3VtEeYNUb/5GTsUOyl3Of4iWNZHBe1i9f88sYFnxybJNWVBjvJ7flhCyF8UdxGpzWcUnv6F5vGfg=="
+        "hash": "sha512-OiugPRcdlhqXF97oR9CjVObILmsWU0dFUS0gXNYEe4bDfpW8pZmQ5GqhIPPtLWbT/0W2lMJJD7VILFMk+xuHPg=="
       }
     },
     "npm:@firebase/database": {
       "type": "npm",
       "name": "npm:@firebase/database",
       "data": {
-        "version": "1.1.1",
+        "version": "1.1.2",
         "packageName": "@firebase/database",
-        "hash": "sha512-LwIXe8+mVHY5LBPulWECOOIEXDiatyECp/BOlu0gOhe+WOcKjWHROaCbLlkFTgHMY7RHr5MOxkLP/tltWAH3dA=="
+        "hash": "sha512-lP96CMjMPy/+d1d9qaaHjHHdzdwvEOuyyLq9ehX89e2XMKwS1jHNzYBO+42bdSumuj5ukPbmnFtViZu8YOMT+w=="
       }
     },
     "npm:@firebase/database-compat": {
       "type": "npm",
       "name": "npm:@firebase/database-compat",
       "data": {
-        "version": "2.1.1",
+        "version": "2.1.3",
         "packageName": "@firebase/database-compat",
-        "hash": "sha512-heAEVZ9Z8c8PnBUcmGh91JHX0cXcVa1yESW/xkLuwaX7idRFyLiN8sl73KXpR8ZArGoPXVQDanBnk6SQiekRCQ=="
+        "hash": "sha512-GMyfWjD8mehjg/QpNkY/tl9G/MoeugPeg91n9D0atggxbWuKF/2KhVPHZDH+XmoP0EKYqMWYTtKxBsaBaNKLYQ=="
       }
     },
     "npm:@firebase/database-types": {
       "type": "npm",
       "name": "npm:@firebase/database-types",
       "data": {
-        "version": "1.0.17",
+        "version": "1.0.19",
         "packageName": "@firebase/database-types",
-        "hash": "sha512-4eWaM5fW3qEIHjGzfi3cf0Jpqi1xQsAdT6rSDE1RZPrWu8oGjgrq6ybMjobtyHQFgwGCykBm4YM89qDzc+uG/w=="
+        "hash": "sha512-FqewjUZmV9LqFfuEnmgdcUpiOUz7qwLXxnm/H8BcMFEzQXtd1yyUDm8ex5VRad2nuTE+ahOuCjUAM/cyDncO+g=="
       }
     },
     "npm:@firebase/firestore": {
       "type": "npm",
       "name": "npm:@firebase/firestore",
       "data": {
-        "version": "4.12.0",
+        "version": "4.14.0",
         "packageName": "@firebase/firestore",
-        "hash": "sha512-PM47OyiiAAoAMB8kkq4Je14mTciaRoAPDd3ng3Ckqz9i2TX9D9LfxIRcNzP/OxzNV4uBKRq6lXoOggkJBQR3Gw=="
+        "hash": "sha512-bZc6YOjRkMBVA16527tgzi6iN9n//xRB3Mmx/R+Gr6UAP/+xrIKOejQIcn1hh+tCzNT8jO0jI+kWox5J4tB/qQ=="
       }
     },
     "npm:@firebase/firestore-compat": {
       "type": "npm",
       "name": "npm:@firebase/firestore-compat",
       "data": {
-        "version": "0.4.6",
+        "version": "0.4.8",
         "packageName": "@firebase/firestore-compat",
-        "hash": "sha512-NgVyR4hHHN2FvSNQOtbgBOuVsEdD/in30d9FKbEvvITiAChrBN2nBstmhfjI4EOTnHaP8zigwvkNYFI9yKGAkQ=="
+        "hash": "sha512-WK9NJRpnosGD2nuyjdr7K+Ht7AxRYJlTF62myI4rRA7ibJOosbecvjacR5oirJ7s1BgNS6qzcBw7n4fD3a5w1w=="
       }
     },
     "npm:@firebase/firestore-types": {
@@ -2335,18 +2362,18 @@
       "type": "npm",
       "name": "npm:@firebase/functions",
       "data": {
-        "version": "0.13.2",
+        "version": "0.13.3",
         "packageName": "@firebase/functions",
-        "hash": "sha512-tHduUD+DeokM3NB1QbHCvEMoL16e8Z8JSkmuVA4ROoJKPxHn8ibnecHPO2e3nVCJR1D9OjuKvxz4gksfq92/ZQ=="
+        "hash": "sha512-csO7ckK3SSs+NUZW1nms9EK7ckHe/1QOjiP8uAkCYa7ND18s44vjE9g3KxEeIUpyEPqZaX1EhJuFyZjHigAcYw=="
       }
     },
     "npm:@firebase/functions-compat": {
       "type": "npm",
       "name": "npm:@firebase/functions-compat",
       "data": {
-        "version": "0.4.2",
+        "version": "0.4.3",
         "packageName": "@firebase/functions-compat",
-        "hash": "sha512-YNxgnezvZDkqxqXa6cT7/oTeD4WXbxgIP7qZp4LFnathQv5o2omM6EoIhXiT9Ie5AoQDcIhG9Y3/dj+DFJGaGQ=="
+        "hash": "sha512-BxkEwWgx1of0tKaao/r2VR6WBLk/RAiyztatiONPrPE8gkitFkOnOCxf8i9cUyA5hX5RGt5H30uNn25Q6QNEmQ=="
       }
     },
     "npm:@firebase/functions-types": {
@@ -2362,18 +2389,18 @@
       "type": "npm",
       "name": "npm:@firebase/installations",
       "data": {
-        "version": "0.6.20",
+        "version": "0.6.21",
         "packageName": "@firebase/installations",
-        "hash": "sha512-LOzvR7XHPbhS0YB5ANXhqXB5qZlntPpwU/4KFwhSNpXNsGk/sBQ9g5hepi0y0/MfenJLe2v7t644iGOOElQaHQ=="
+        "hash": "sha512-xGFGTeICJZ5vhrmmDukeczIcFULFXybojML2+QSDFoKj5A7zbGN7KzFGSKNhDkIxpjzsYG9IleJyUebuAcmqWA=="
       }
     },
     "npm:@firebase/installations-compat": {
       "type": "npm",
       "name": "npm:@firebase/installations-compat",
       "data": {
-        "version": "0.2.20",
+        "version": "0.2.21",
         "packageName": "@firebase/installations-compat",
-        "hash": "sha512-9C9pL/DIEGucmoPj8PlZTnztbX3nhNj5RTYVpUM7wQq/UlHywaYv99969JU/WHLvi9ptzIogXYS9d1eZ6XFe9g=="
+        "hash": "sha512-zahIUkaVKbR8zmTeBHkdfaVl6JGWlhVoSjF7CVH33nFqD3SlPEpEEegn2GNT5iAfsVdtlCyJJ9GW4YKjq+RJKQ=="
       }
     },
     "npm:@firebase/installations-types": {
@@ -2398,18 +2425,18 @@
       "type": "npm",
       "name": "npm:@firebase/messaging",
       "data": {
-        "version": "0.12.24",
+        "version": "0.12.25",
         "packageName": "@firebase/messaging",
-        "hash": "sha512-UtKoubegAhHyehcB7iQjvQ8OVITThPbbWk3g2/2ze42PrQr6oe6OmCElYQkBrE5RDCeMTNucXejbdulrQ2XwVg=="
+        "hash": "sha512-7RhDwoDHlOK1/ou0/LeubxmjcngsTjDdrY/ssg2vwAVpUuVAhQzQvuCAOYxcX5wNC1zCgQ54AP1vdngBwbCmOQ=="
       }
     },
     "npm:@firebase/messaging-compat": {
       "type": "npm",
       "name": "npm:@firebase/messaging-compat",
       "data": {
-        "version": "0.2.24",
+        "version": "0.2.25",
         "packageName": "@firebase/messaging-compat",
-        "hash": "sha512-wXH8FrKbJvFuFe6v98TBhAtvgknxKIZtGM/wCVsfpOGmaAE80bD8tBxztl+uochjnFb9plihkd6mC4y7sZXSpA=="
+        "hash": "sha512-eoOQqGLtRlseTdiemTN44LlHZpltK5gnhq8XVUuLgtIOG+odtDzrz2UoTpcJWSzaJQVxNLb/x9f39tHdDM4N4w=="
       }
     },
     "npm:@firebase/messaging-interop-types": {
@@ -2425,18 +2452,18 @@
       "type": "npm",
       "name": "npm:@firebase/performance",
       "data": {
-        "version": "0.7.10",
+        "version": "0.7.11",
         "packageName": "@firebase/performance",
-        "hash": "sha512-8nRFld+Ntzp5cLKzZuG9g+kBaSn8Ks9dmn87UQGNFDygbmR6ebd8WawauEXiJjMj1n70ypkvAOdE+lzeyfXtGA=="
+        "hash": "sha512-V3uAhrz7IYJuji+OgT3qYTGKxpek/TViXti9OSsUJ4AexZ3jQjYH5Yrn7JvBxk8MGiSLsC872hh+BxQiPZsm7g=="
       }
     },
     "npm:@firebase/performance-compat": {
       "type": "npm",
       "name": "npm:@firebase/performance-compat",
       "data": {
-        "version": "0.2.23",
+        "version": "0.2.24",
         "packageName": "@firebase/performance-compat",
-        "hash": "sha512-c7qOAGBUAOpIuUlHu1axWcrCVtIYKPMhH0lMnoCDWnPwn1HcPuPUBVTWETbC7UWw71RMJF8DpirfWXzMWJQfgA=="
+        "hash": "sha512-YRlejH8wLt7ThWao+HXoKUHUrZKGYq+otxkPS+8nuE5PeN1cBXX7NAJl9ueuUkBwMIrnKdnDqL/voHXxDAAt3g=="
       }
     },
     "npm:@firebase/performance-types": {
@@ -2452,18 +2479,18 @@
       "type": "npm",
       "name": "npm:@firebase/remote-config",
       "data": {
-        "version": "0.8.1",
+        "version": "0.8.2",
         "packageName": "@firebase/remote-config",
-        "hash": "sha512-L86TReBnPiiJOWd7k9iaiE9f7rHtMpjAoYN0fH2ey2ZRzsOChHV0s5sYf1+IIUYzplzsE46pjlmAUNkRRKwHSQ=="
+        "hash": "sha512-5EXqOThV4upjK9D38d/qOSVwOqRhemlaOFk9vCkMNNALeIlwr+4pLjtLNo4qoY8etQmU/1q4aIATE9N8PFqg0g=="
       }
     },
     "npm:@firebase/remote-config-compat": {
       "type": "npm",
       "name": "npm:@firebase/remote-config-compat",
       "data": {
-        "version": "0.2.22",
+        "version": "0.2.23",
         "packageName": "@firebase/remote-config-compat",
-        "hash": "sha512-uW/eNKKtRBot2gnCC5mnoy5Voo2wMzZuQ7dwqqGHU176fO9zFgMwKiRzk+aaC99NLrFk1KOmr0ZVheD+zdJmjQ=="
+        "hash": "sha512-4+KqRRHEUUmKT6tFmnpWATOsaFfmSuBs1jXH8JzVtMLEYqq/WS9IDM92OdefFDSrAA2xGd0WN004z8mKeIIscw=="
       }
     },
     "npm:@firebase/remote-config-types": {
@@ -2479,18 +2506,18 @@
       "type": "npm",
       "name": "npm:@firebase/storage",
       "data": {
-        "version": "0.14.1",
+        "version": "0.14.2",
         "packageName": "@firebase/storage",
-        "hash": "sha512-uIpYgBBsv1vIET+5xV20XT7wwqV+H4GFp6PBzfmLUcEgguS4SWNFof56Z3uOC2lNDh0KDda1UflYq2VwD9Nefw=="
+        "hash": "sha512-o/culaTeJ8GRpKXRJov21rux/n9dRaSOWLebyatFP2sqEdCxQPjVA1H9Z2fzYwQxMIU0JVmC7SPPmU11v7L6vQ=="
       }
     },
     "npm:@firebase/storage-compat": {
       "type": "npm",
       "name": "npm:@firebase/storage-compat",
       "data": {
-        "version": "0.4.1",
+        "version": "0.4.2",
         "packageName": "@firebase/storage-compat",
-        "hash": "sha512-bgl3FHHfXAmBgzIK/Fps6Xyv2HiAQlSTov07CBL+RGGhrC5YIk4lruS8JVIC+UkujRdYvnf8cpQFGn2RCilJ/A=="
+        "hash": "sha512-R+aB38wxCH5zjIO/xu9KznI7fgiPuZAG98uVm1NcidHyyupGgIDLKigGmRGBZMnxibe/m2oxNKoZpfEbUX2aQQ=="
       }
     },
     "npm:@firebase/storage-types": {
@@ -2506,9 +2533,9 @@
       "type": "npm",
       "name": "npm:@firebase/util",
       "data": {
-        "version": "1.14.0",
+        "version": "1.15.0",
         "packageName": "@firebase/util",
-        "hash": "sha512-/gnejm7MKkVIXnSJGpc9L2CvvvzJvtDPeAEq5jAwgVlf/PeNxot+THx/bpD20wQ8uL5sz0xqgXy1nisOYMU+mw=="
+        "hash": "sha512-AmWf3cHAOMbrCPG4xdPKQaj5iHnyYfyLKZxwz+Xf55bqKbpAmcYifB4jQinT2W9XhDRHISOoPyBOariJpCG6FA=="
       }
     },
     "npm:@firebase/webchannel-wrapper": {
@@ -2781,6 +2808,15 @@
         "hash": "sha512-78/PXT1wlLLDgTzDs7sjq9hzz0vXD+zn+7wypEe4fXQxCmdmqfGsEPQxmiCSQI3ajFV91bVSsvNtrJRiW6nGng=="
       }
     },
+    "npm:find-up@3.0.0": {
+      "type": "npm",
+      "name": "npm:find-up@3.0.0",
+      "data": {
+        "version": "3.0.0",
+        "packageName": "find-up",
+        "hash": "sha512-1yD6RmLI1XBfxugvORwlck6f75tYL+iR0jqwsOrOxMZyGYqUuDhJ0l4AXdO1iX/FTs9cBAMEk1gWSEx1kSbylg=="
+      }
+    },
     "npm:js-yaml@3.14.2": {
       "type": "npm",
       "name": "npm:js-yaml@3.14.2",
@@ -2817,6 +2853,15 @@
         "hash": "sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw=="
       }
     },
+    "npm:locate-path@3.0.0": {
+      "type": "npm",
+      "name": "npm:locate-path@3.0.0",
+      "data": {
+        "version": "3.0.0",
+        "packageName": "locate-path",
+        "hash": "sha512-7AO748wWnIhNqAuaty2ZWHkQHRSNfPVIsPIfwEOWO22AmaoVrWavlOcMR5nzTLNYvp36X220/maaRsrec1G65A=="
+      }
+    },
     "npm:p-limit@2.3.0": {
       "type": "npm",
       "name": "npm:p-limit@2.3.0",
@@ -2851,6 +2896,15 @@
         "version": "5.0.0",
         "packageName": "p-locate",
         "hash": "sha512-LaNjtRWUBY++zB5nE/NwcaoMylSPk+S+ZHNB1TzdbMJMny6dynpAGt7X/tl/QYq3TIeE6nxHppbo2LGymrG5Pw=="
+      }
+    },
+    "npm:p-locate@3.0.0": {
+      "type": "npm",
+      "name": "npm:p-locate@3.0.0",
+      "data": {
+        "version": "3.0.0",
+        "packageName": "p-locate",
+        "hash": "sha512-x+12w/To+4GFfgJhBEpiDcLozRJGegY+Ei7/z0tSLkMmxGZNybVMSfWj9aJn8Z5Fc7dBUNJOOVgPv2H7IwulSQ=="
       }
     },
     "npm:@istanbuljs/schema": {
@@ -3364,6 +3418,15 @@
         "version": "8.1.0",
         "packageName": "glob",
         "hash": "sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ=="
+      }
+    },
+    "npm:glob@9.3.5": {
+      "type": "npm",
+      "name": "npm:glob@9.3.5",
+      "data": {
+        "version": "9.3.5",
+        "packageName": "glob",
+        "hash": "sha512-e1LleDykUz2Iu+MTYdkSsuWX8lvAjAcs0Xef0lNIu0S2wOAzuTxCJtcd9S3cijlwYF18EsU3rzb8jPVobxDh9Q=="
       }
     },
     "npm:glob": {
@@ -4032,15 +4095,6 @@
         "hash": "sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw=="
       }
     },
-    "npm:@nx/docker": {
-      "type": "npm",
-      "name": "npm:@nx/docker",
-      "data": {
-        "version": "22.6.1",
-        "packageName": "@nx/docker",
-        "hash": "sha512-FEPgS466SVtttAGgwYXhi+SUBVZnhTms0GVAmwbXAw3oAjB3HcZAF1OVy8RtHlk0TGckcJb7TL/PiImwIiwRFA=="
-      }
-    },
     "npm:@nx/eslint": {
       "type": "npm",
       "name": "npm:@nx/eslint",
@@ -4147,15 +4201,6 @@
         "version": "22.6.1",
         "packageName": "@nx/module-federation",
         "hash": "sha512-/hrsRjg2alTR0c6Bexia3DPUra5MM/MiyWFep1Z/kksh8RmI+BhAy3E28fEluGjzXjt18smeQii58DENppANXQ=="
-      }
-    },
-    "npm:@nx/node": {
-      "type": "npm",
-      "name": "npm:@nx/node",
-      "data": {
-        "version": "22.6.1",
-        "packageName": "@nx/node",
-        "hash": "sha512-D50rxOcxc+X8MXsOjK3GQNS3uFmnCKOViuHE1CkD7b7gv2xwu/lY6u/O9Tywm6fVqXygMMaF/CiDT+92yqW8Ig=="
       }
     },
     "npm:@nx/nx-darwin-arm64": {
@@ -4570,6 +4615,15 @@
         "version": "1.1.1",
         "packageName": "@radix-ui/react-use-layout-effect",
         "hash": "sha512-RbJRS4UWQFkzHTTwVymMTUv8EqYhOp8dOOviLj2ugtTiXRaRQS7GLGxZTLL1jWhMeoSCf5zmcZkqTl9IiYfXcQ=="
+      }
+    },
+    "npm:@react-native-async-storage/async-storage": {
+      "type": "npm",
+      "name": "npm:@react-native-async-storage/async-storage",
+      "data": {
+        "version": "3.0.2",
+        "packageName": "@react-native-async-storage/async-storage",
+        "hash": "sha512-XP0zDIl+1XoeuQ7f878qXKdl77zLwzLALPpxvNRc7ZtDh9ew36WSvOdQOhFkexMySapFAWxEbZxS8K8J2DU4eg=="
       }
     },
     "npm:@react-native/assets-registry": {
@@ -6669,6 +6723,51 @@
         "hash": "sha512-mplynKqc1C2hTVYxd0PU2xQAc22TI1vShAYGksCCfxbn/dFwnHTNi1bvYsBTkhdUNtGIf5xNOg938rrSSYvS9A=="
       }
     },
+    "npm:babel-plugin-module-resolver": {
+      "type": "npm",
+      "name": "npm:babel-plugin-module-resolver",
+      "data": {
+        "version": "5.0.3",
+        "packageName": "babel-plugin-module-resolver",
+        "hash": "sha512-h8h6H71ZvdLJZxZrYkaeR30BojTaV7O9GfqacY14SNj5CNB8ocL9tydNzTC0JrnNN7vY3eJhwCmkDj7tuEUaqQ=="
+      }
+    },
+    "npm:minipass@4.2.8": {
+      "type": "npm",
+      "name": "npm:minipass@4.2.8",
+      "data": {
+        "version": "4.2.8",
+        "packageName": "minipass",
+        "hash": "sha512-fNzuVyifolSLFL4NzpF+wEF4qrgqaaKX0haXPQEdQ7NKAN+WecoKMHV09YcuL/DHxrUsYQOK3MiuDf7Ip2OXfQ=="
+      }
+    },
+    "npm:minipass": {
+      "type": "npm",
+      "name": "npm:minipass",
+      "data": {
+        "version": "7.1.3",
+        "packageName": "minipass",
+        "hash": "sha512-tEBHqDnIoM/1rXME1zgka9g6Q2lcoCkxHLuc7ODJ5BxbP5d4c2Z5cGgtXAku59200Cx7diuHTOYfSBD8n6mm8A=="
+      }
+    },
+    "npm:reselect@4.1.8": {
+      "type": "npm",
+      "name": "npm:reselect@4.1.8",
+      "data": {
+        "version": "4.1.8",
+        "packageName": "reselect",
+        "hash": "sha512-ab9EmR80F/zQTMNeneUr4cv+jSwPJgIlvEmVwLerwrWVbpLlBuls9XHzIeTFy4cegU2NHBp3va0LKOzU5qFEYQ=="
+      }
+    },
+    "npm:reselect": {
+      "type": "npm",
+      "name": "npm:reselect",
+      "data": {
+        "version": "5.1.1",
+        "packageName": "reselect",
+        "hash": "sha512-K/BG6eIky/SBpzfHZv/dd+9JBFiS4SWV7FIujVyJRux6e45+73RaUHXLmIR1f7WOMaQ0U1km6qwklRQxpJJY0w=="
+      }
+    },
     "npm:babel-plugin-polyfill-corejs2": {
       "type": "npm",
       "name": "npm:babel-plugin-polyfill-corejs2",
@@ -6928,15 +7027,6 @@
         "version": "2.1.3",
         "packageName": "ms",
         "hash": "sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA=="
-      }
-    },
-    "npm:ms@2.1.2": {
-      "type": "npm",
-      "name": "npm:ms@2.1.2",
-      "data": {
-        "version": "2.1.2",
-        "packageName": "ms",
-        "hash": "sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w=="
       }
     },
     "npm:on-finished@2.4.1": {
@@ -8253,6 +8343,24 @@
         "hash": "sha512-/XC/DvniUWTzU7Ypb/cLDhDD4DXqEio4lug1ObD/oQ9Hcx3OVOR8Mkp4u6U4iGoZSJyIQmIk3WVHe/P1NYUXKw=="
       }
     },
+    "npm:eslint-import-resolver-typescript@3.10.1": {
+      "type": "npm",
+      "name": "npm:eslint-import-resolver-typescript@3.10.1",
+      "data": {
+        "version": "3.10.1",
+        "packageName": "eslint-import-resolver-typescript",
+        "hash": "sha512-A1rHYb06zjMGAxdLSkN2fXPBwuSaQ0iO5M/hdyS0Ajj1VBaRp0sPD3dn1FhME3c/JluGFbwSxyCfqdSbtQLAHQ=="
+      }
+    },
+    "npm:eslint-import-resolver-typescript": {
+      "type": "npm",
+      "name": "npm:eslint-import-resolver-typescript",
+      "data": {
+        "version": "4.4.5",
+        "packageName": "eslint-import-resolver-typescript",
+        "hash": "sha512-nbE5XLph6TLtGYcu/U6e6ZVXyKBhbDWK5cLGk76eJ7NdZpwf1P9EFkpt1Z01mNZNrrilsAYWKH6zUkL4reoXbw=="
+      }
+    },
     "npm:globals@16.5.0": {
       "type": "npm",
       "name": "npm:globals@16.5.0",
@@ -8271,6 +8379,15 @@
         "hash": "sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ=="
       }
     },
+    "npm:eslint-import-context": {
+      "type": "npm",
+      "name": "npm:eslint-import-context",
+      "data": {
+        "version": "0.1.9",
+        "packageName": "eslint-import-context",
+        "hash": "sha512-K9Hb+yRaGAGUbwjhFNHvSmmkZs9+zbuoe3kFQ4V1wYjrepUFYM2dZAfNtjbbj3qsPfUfsA68Bx/ICWQMi+C8Eg=="
+      }
+    },
     "npm:eslint-import-resolver-node": {
       "type": "npm",
       "name": "npm:eslint-import-resolver-node",
@@ -8278,15 +8395,6 @@
         "version": "0.3.9",
         "packageName": "eslint-import-resolver-node",
         "hash": "sha512-WFj2isz22JahUv+B788TlO3N6zL3nNJGU8CcZbPZvVEkBPaJdCV4vy5wyghty5ROFbCRnm132v8BScu5/1BQ8g=="
-      }
-    },
-    "npm:eslint-import-resolver-typescript": {
-      "type": "npm",
-      "name": "npm:eslint-import-resolver-typescript",
-      "data": {
-        "version": "3.10.1",
-        "packageName": "eslint-import-resolver-typescript",
-        "hash": "sha512-A1rHYb06zjMGAxdLSkN2fXPBwuSaQ0iO5M/hdyS0Ajj1VBaRp0sPD3dn1FhME3c/JluGFbwSxyCfqdSbtQLAHQ=="
       }
     },
     "npm:eslint-module-utils": {
@@ -8613,6 +8721,15 @@
         "hash": "sha512-YK9M1VrnoH1vLJiQzChZgzDvVimVoriibiDIFLbQMpjYBnvyfUeHJcin/Gx1a+XgupNXy92EQJLgI/9ZuXajYQ=="
       }
     },
+    "npm:expo-linear-gradient": {
+      "type": "npm",
+      "name": "npm:expo-linear-gradient",
+      "data": {
+        "version": "15.0.8",
+        "packageName": "expo-linear-gradient",
+        "hash": "sha512-V2d8Wjn0VzhPHO+rrSBtcl+Fo+jUUccdlmQ6OoL9/XQB7Qk3d9lYrqKDJyccwDxmQT10JdST3Tmf2K52NLc3kw=="
+      }
+    },
     "npm:expo-linking": {
       "type": "npm",
       "name": "npm:expo-linking",
@@ -8620,6 +8737,15 @@
         "version": "8.0.11",
         "packageName": "expo-linking",
         "hash": "sha512-+VSaNL5om3kOp/SSKO5qe6cFgfSIWnnQDSbA7XLs3ECkYzXRquk5unxNS3pg7eK5kNUmQ4kgLI7MhTggAEUBLA=="
+      }
+    },
+    "npm:expo-location": {
+      "type": "npm",
+      "name": "npm:expo-location",
+      "data": {
+        "version": "19.0.8",
+        "packageName": "expo-location",
+        "hash": "sha512-H/FI75VuJ1coodJbbMu82pf+Zjess8X8Xkiv9Bv58ZgPKS/2ztjC1YO1/XMcGz7+s9DrbLuMIw22dFuP4HqneA=="
       }
     },
     "npm:expo-modules-autolinking": {
@@ -8955,6 +9081,15 @@
         "hash": "sha512-8rXg1ZnX7xzy2NGDVkBVaAy+lSlPNwad13BtgSlLuxfIslyt5Vg64U7tFcCt4WS1R0hvtnQybT/IyCkGZ3DpXQ=="
       }
     },
+    "npm:find-babel-config": {
+      "type": "npm",
+      "name": "npm:find-babel-config",
+      "data": {
+        "version": "2.1.2",
+        "packageName": "find-babel-config",
+        "hash": "sha512-ZfZp1rQyp4gyuxqt1ZqjFGVeVBvmpURMqdIWXbPRfB97Bf6BzdK/xSIbylEINzQ0kB5tlDQfn9HkNXXWsqTqLg=="
+      }
+    },
     "npm:find-cache-dir": {
       "type": "npm",
       "name": "npm:find-cache-dir",
@@ -9004,9 +9139,9 @@
       "type": "npm",
       "name": "npm:firebase",
       "data": {
-        "version": "12.10.0",
+        "version": "12.12.0",
         "packageName": "firebase",
-        "hash": "sha512-tAjHnEirksqWpa+NKDUSUMjulOnsTcsPC1X1rQ+gwPtjlhJS572na91CwaBXQJHXharIrfj7sw/okDkXOsphjA=="
+        "hash": "sha512-5Ap+pN5iEJUvBlQEZEmLuUm7Gvu6I5xv1jZ5SiSNyw4jrwlHo+4tmZv3OPPoKfN9eo1kBwyyBvi+pWHIPXwfYw=="
       }
     },
     "npm:flat": {
@@ -9295,15 +9430,6 @@
         "version": "1.1.0",
         "packageName": "get-symbol-description",
         "hash": "sha512-w9UMqWwJxHNOvoNzSJ2oPF5wvYcvP7jUvYzhp67yEhTi17ZDBBC1z9pTdGuzjD+EFIqLSYRweZjqfiPzQ06Ebg=="
-      }
-    },
-    "npm:get-them-args": {
-      "type": "npm",
-      "name": "npm:get-them-args",
-      "data": {
-        "version": "1.3.2",
-        "packageName": "get-them-args",
-        "hash": "sha512-LRn8Jlk+DwZE4GTlDbT3Hikd1wSHgLMme/+7ddlqKd7ldwR6LjJgTVWzBnR01wnYGe4KgrXjg287RaI22UHmAw=="
       }
     },
     "npm:get-tsconfig": {
@@ -9621,15 +9747,6 @@
         "hash": "sha512-soFhflCVWLfRNOPU3iv5Z9VUdT44xFRbzjLsEzSr5AQmgqPMTHdU3PMT1Cf1ssx8fLNJDA1juftYl+PUcv3MqA=="
       }
     },
-    "npm:idb": {
-      "type": "npm",
-      "name": "npm:idb",
-      "data": {
-        "version": "7.1.1",
-        "packageName": "idb",
-        "hash": "sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ=="
-      }
-    },
     "npm:identity-obj-proxy": {
       "type": "npm",
       "name": "npm:identity-obj-proxy",
@@ -9754,15 +9871,6 @@
         "version": "2.2.4",
         "packageName": "invariant",
         "hash": "sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA=="
-      }
-    },
-    "npm:ip-regex": {
-      "type": "npm",
-      "name": "npm:ip-regex",
-      "data": {
-        "version": "4.3.0",
-        "packageName": "ip-regex",
-        "hash": "sha512-B9ZWJxHHOHUhUjCPrMpLD4xEq35bUTClHM1S6CBU5ixQnkZmwipwgc96vAd7AAGM9TGHvJR+Uss+/Ak6UphK+Q=="
       }
     },
     "npm:ipaddr.js": {
@@ -10071,15 +10179,6 @@
         "hash": "sha512-knxG2q4UC3u8stRGyAVJCOdxFmv5DZiRcdlIaAQXAbSfJya+OhopNotLQrstBhququ4ZpuKbDc/8S6mgXgPFPw=="
       }
     },
-    "npm:is-url": {
-      "type": "npm",
-      "name": "npm:is-url",
-      "data": {
-        "version": "1.2.4",
-        "packageName": "is-url",
-        "hash": "sha512-ITvGim8FhRiYe4IQ5uHSkj7pVaPDrCTkNd3yq3cV7iZAcJdHTUMPMEHcqSOy9xZ9qFenQCvi+2wjH9a1nXqHww=="
-      }
-    },
     "npm:is-weakmap": {
       "type": "npm",
       "name": "npm:is-weakmap",
@@ -10123,15 +10222,6 @@
         "version": "2.2.0",
         "packageName": "is-wsl",
         "hash": "sha512-fKzAra0rGJUUBwGBgNkHZuToZcn+TtXHpeCgmkMJMMYx1sQDYaCSyjJBSCa2nH1DGm7s3n1oBnohoVTBaN7Lww=="
-      }
-    },
-    "npm:is2": {
-      "type": "npm",
-      "name": "npm:is2",
-      "data": {
-        "version": "2.0.9",
-        "packageName": "is2",
-        "hash": "sha512-rZkHeBn9Zzq52sd9IUIV3a5mfwBY+o2HePMh0wkGBM4z4qjvy2GwVxQ6nNXSfw6MmVP6gf1QIlWjiOavhM3x5g=="
       }
     },
     "npm:isarray": {
@@ -10564,15 +10654,6 @@
         "version": "4.5.4",
         "packageName": "keyv",
         "hash": "sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw=="
-      }
-    },
-    "npm:kill-port": {
-      "type": "npm",
-      "name": "npm:kill-port",
-      "data": {
-        "version": "1.6.1",
-        "packageName": "kill-port",
-        "hash": "sha512-un0Y55cOM7JKGaLnGja28T38tDDop0AQ8N0KlAdyh+B1nmMoX8AnNmqPNZbS3mUMgiST51DCVqmbFT1gNJpVNw=="
       }
     },
     "npm:kleur": {
@@ -11178,15 +11259,6 @@
         "hash": "sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA=="
       }
     },
-    "npm:minipass": {
-      "type": "npm",
-      "name": "npm:minipass",
-      "data": {
-        "version": "7.1.3",
-        "packageName": "minipass",
-        "hash": "sha512-tEBHqDnIoM/1rXME1zgka9g6Q2lcoCkxHLuc7ODJ5BxbP5d4c2Z5cGgtXAku59200Cx7diuHTOYfSBD8n6mm8A=="
-      }
-    },
     "npm:minizlib": {
       "type": "npm",
       "name": "npm:minizlib",
@@ -11709,6 +11781,15 @@
         "hash": "sha512-ak9Qy5Q7jYb2Wwcey5Fpvg2KoAc/ZIhLSLOSBmRmygPsGwkVVt0fZa0qrtMz+m6tJTAHfZQ8FnmB4MG4LWy7/w=="
       }
     },
+    "npm:path-exists@3.0.0": {
+      "type": "npm",
+      "name": "npm:path-exists@3.0.0",
+      "data": {
+        "version": "3.0.0",
+        "packageName": "path-exists",
+        "hash": "sha512-bpC7GYwiDYQ4wYLe+FA8lhRjhQCMcQGuSgGGqDkg/QerRWw9CmGRT0iSOVRSZJ29NMLZgIzqaljJ63oaL4NIJQ=="
+      }
+    },
     "npm:path-is-absolute": {
       "type": "npm",
       "name": "npm:path-is-absolute",
@@ -11788,6 +11869,15 @@
         "version": "4.2.0",
         "packageName": "pkg-dir",
         "hash": "sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ=="
+      }
+    },
+    "npm:pkg-up": {
+      "type": "npm",
+      "name": "npm:pkg-up",
+      "data": {
+        "version": "3.1.0",
+        "packageName": "pkg-up",
+        "hash": "sha512-nDywThFk1i4BQK4twPQ6TA4RT8bDY96yeuCVBWL3ePARCiEKDRSrNGbFIgUJpLp+XeIR65v8ra7WuJOFUBtkMA=="
       }
     },
     "npm:plist": {
@@ -12456,15 +12546,6 @@
         "hash": "sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ=="
       }
     },
-    "npm:reselect": {
-      "type": "npm",
-      "name": "npm:reselect",
-      "data": {
-        "version": "5.1.1",
-        "packageName": "reselect",
-        "hash": "sha512-K/BG6eIky/SBpzfHZv/dd+9JBFiS4SWV7FIujVyJRux6e45+73RaUHXLmIR1f7WOMaQ0U1km6qwklRQxpJJY0w=="
-      }
-    },
     "npm:resolve-dir": {
       "type": "npm",
       "name": "npm:resolve-dir",
@@ -12753,15 +12834,6 @@
         "hash": "sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A=="
       }
     },
-    "npm:shell-exec": {
-      "type": "npm",
-      "name": "npm:shell-exec",
-      "data": {
-        "version": "1.0.2",
-        "packageName": "shell-exec",
-        "hash": "sha512-jyVd+kU2X+mWKMmGhx4fpWbPsjvD53k9ivqetutVW/BQ+WIZoDoP4d8vUMGezV6saZsiNoW2f9GIhg9Dondohg=="
-      }
-    },
     "npm:shell-quote": {
       "type": "npm",
       "name": "npm:shell-quote",
@@ -12913,6 +12985,15 @@
         "version": "0.0.5",
         "packageName": "stable-hash",
         "hash": "sha512-+L3ccpzibovGXFK+Ap/f8LOS0ahMrHTf3xu7mMLSpEGU0EO9ucaysSylKo9eRDFNhWve/y275iPmIZ4z39a9iA=="
+      }
+    },
+    "npm:stable-hash-x": {
+      "type": "npm",
+      "name": "npm:stable-hash-x",
+      "data": {
+        "version": "0.2.0",
+        "packageName": "stable-hash-x",
+        "hash": "sha512-o3yWv49B/o4QZk5ZcsALc6t0+eCelPc44zZsLtCQnZPDwFpDYSWcDnrv2TtMmMbQ7uKo3J0HTURCqckw23czNQ=="
       }
     },
     "npm:stack-trace": {
@@ -13255,15 +13336,6 @@
         "version": "3.1.1",
         "packageName": "yallist",
         "hash": "sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g=="
-      }
-    },
-    "npm:tcp-port-used": {
-      "type": "npm",
-      "name": "npm:tcp-port-used",
-      "data": {
-        "version": "1.0.2",
-        "packageName": "tcp-port-used",
-        "hash": "sha512-l7ar8lLUD3XS1V2lfoJlCBaeoaWo/2xfYt81hM7VlvR4RrMVFqfmzfhLVk40hAb368uitje5gPtBRL1m/DGvLA=="
       }
     },
     "npm:telnet-client": {
@@ -14401,6 +14473,7 @@
     "node_modules/@firebase/app-check-types": "npm:@firebase/app-check-types",
     "node_modules/@firebase/app-compat": "npm:@firebase/app-compat",
     "node_modules/@firebase/app-types": "npm:@firebase/app-types",
+    "node_modules/@firebase/app/node_modules/idb": "npm:idb@7.1.1",
     "node_modules/@firebase/auth": "npm:@firebase/auth",
     "node_modules/@firebase/auth-compat": "npm:@firebase/auth-compat",
     "node_modules/@firebase/auth-interop-types": "npm:@firebase/auth-interop-types",
@@ -14419,10 +14492,12 @@
     "node_modules/@firebase/installations": "npm:@firebase/installations",
     "node_modules/@firebase/installations-compat": "npm:@firebase/installations-compat",
     "node_modules/@firebase/installations-types": "npm:@firebase/installations-types",
+    "node_modules/@firebase/installations/node_modules/idb": "npm:idb@7.1.1",
     "node_modules/@firebase/logger": "npm:@firebase/logger",
     "node_modules/@firebase/messaging": "npm:@firebase/messaging",
     "node_modules/@firebase/messaging-compat": "npm:@firebase/messaging-compat",
     "node_modules/@firebase/messaging-interop-types": "npm:@firebase/messaging-interop-types",
+    "node_modules/@firebase/messaging/node_modules/idb": "npm:idb@7.1.1",
     "node_modules/@firebase/performance": "npm:@firebase/performance",
     "node_modules/@firebase/performance-compat": "npm:@firebase/performance-compat",
     "node_modules/@firebase/performance-types": "npm:@firebase/performance-types",
@@ -14599,7 +14674,6 @@
     "node_modules/@nx/devkit/node_modules/brace-expansion": "npm:brace-expansion@5.0.5",
     "node_modules/@nx/devkit/node_modules/minimatch": "npm:minimatch@10.2.4",
     "node_modules/@nx/devkit/node_modules/semver": "npm:semver@7.7.4",
-    "node_modules/@nx/docker": "npm:@nx/docker",
     "node_modules/@nx/eslint": "npm:@nx/eslint",
     "node_modules/@nx/eslint/node_modules/semver": "npm:semver@7.7.4",
     "node_modules/@nx/expo": "npm:@nx/expo",
@@ -14622,7 +14696,6 @@
     "node_modules/@nx/js/node_modules/source-map": "npm:source-map@0.6.1",
     "node_modules/@nx/js/node_modules/source-map-support": "npm:source-map-support@0.5.19",
     "node_modules/@nx/module-federation": "npm:@nx/module-federation",
-    "node_modules/@nx/node": "npm:@nx/node",
     "node_modules/@nx/nx-darwin-arm64": "npm:@nx/nx-darwin-arm64",
     "node_modules/@nx/nx-darwin-x64": "npm:@nx/nx-darwin-x64",
     "node_modules/@nx/nx-freebsd-x64": "npm:@nx/nx-freebsd-x64",
@@ -14677,6 +14750,7 @@
     "node_modules/@radix-ui/react-use-effect-event": "npm:@radix-ui/react-use-effect-event",
     "node_modules/@radix-ui/react-use-escape-keydown": "npm:@radix-ui/react-use-escape-keydown",
     "node_modules/@radix-ui/react-use-layout-effect": "npm:@radix-ui/react-use-layout-effect",
+    "node_modules/@react-native-async-storage/async-storage": "npm:@react-native-async-storage/async-storage",
     "node_modules/@react-native/assets-registry": "npm:@react-native/assets-registry",
     "node_modules/@react-native/babel-plugin-codegen": "npm:@react-native/babel-plugin-codegen",
     "node_modules/@react-native/babel-preset": "npm:@react-native/babel-preset",
@@ -14928,6 +15002,15 @@
     "node_modules/babel-plugin-macros": "npm:babel-plugin-macros",
     "node_modules/babel-plugin-macros/node_modules/cosmiconfig": "npm:cosmiconfig@7.1.0",
     "node_modules/babel-plugin-macros/node_modules/yaml": "npm:yaml@1.10.3",
+    "node_modules/babel-plugin-module-resolver": "npm:babel-plugin-module-resolver",
+    "node_modules/babel-plugin-module-resolver/node_modules/brace-expansion": "npm:brace-expansion@2.1.0",
+    "node_modules/babel-plugin-module-resolver/node_modules/glob": "npm:glob@9.3.5",
+    "node_modules/babel-plugin-module-resolver/node_modules/lru-cache": "npm:lru-cache@10.4.3",
+    "node_modules/babel-plugin-module-resolver/node_modules/minimatch": "npm:minimatch@8.0.7",
+    "node_modules/babel-plugin-module-resolver/node_modules/minipass": "npm:minipass@4.2.8",
+    "node_modules/babel-plugin-module-resolver/node_modules/path-scurry": "npm:path-scurry@1.11.1",
+    "node_modules/babel-plugin-module-resolver/node_modules/path-scurry/node_modules/minipass": "npm:minipass",
+    "node_modules/babel-plugin-module-resolver/node_modules/reselect": "npm:reselect@4.1.8",
     "node_modules/babel-plugin-polyfill-corejs2": "npm:babel-plugin-polyfill-corejs2",
     "node_modules/babel-plugin-polyfill-corejs3": "npm:babel-plugin-polyfill-corejs3",
     "node_modules/babel-plugin-polyfill-regenerator": "npm:babel-plugin-polyfill-regenerator",
@@ -15112,7 +15195,9 @@
     "node_modules/escape-string-regexp": "npm:escape-string-regexp",
     "node_modules/eslint": "npm:eslint",
     "node_modules/eslint-config-expo": "npm:eslint-config-expo",
+    "node_modules/eslint-config-expo/node_modules/eslint-import-resolver-typescript": "npm:eslint-import-resolver-typescript@3.10.1",
     "node_modules/eslint-config-expo/node_modules/globals": "npm:globals@16.5.0",
+    "node_modules/eslint-import-context": "npm:eslint-import-context",
     "node_modules/eslint-import-resolver-node": "npm:eslint-import-resolver-node",
     "node_modules/eslint-import-resolver-node/node_modules/debug": "npm:debug@3.2.7",
     "node_modules/eslint-import-resolver-typescript": "npm:eslint-import-resolver-typescript",
@@ -15154,7 +15239,9 @@
     "node_modules/expo-haptics": "npm:expo-haptics",
     "node_modules/expo-image": "npm:expo-image",
     "node_modules/expo-keep-awake": "npm:expo-keep-awake",
+    "node_modules/expo-linear-gradient": "npm:expo-linear-gradient",
     "node_modules/expo-linking": "npm:expo-linking",
+    "node_modules/expo-location": "npm:expo-location",
     "node_modules/expo-modules-autolinking": "npm:expo-modules-autolinking",
     "node_modules/expo-modules-core": "npm:expo-modules-core",
     "node_modules/expo-router": "npm:expo-router",
@@ -15208,6 +15295,7 @@
     "node_modules/finalhandler": "npm:finalhandler",
     "node_modules/finalhandler/node_modules/debug": "npm:debug@2.6.9",
     "node_modules/finalhandler/node_modules/ms": "npm:ms@2.0.0",
+    "node_modules/find-babel-config": "npm:find-babel-config",
     "node_modules/find-cache-dir": "npm:find-cache-dir",
     "node_modules/find-cache-dir/node_modules/make-dir": "npm:make-dir@3.1.0",
     "node_modules/find-file-up": "npm:find-file-up",
@@ -15250,7 +15338,6 @@
     "node_modules/get-proto": "npm:get-proto",
     "node_modules/get-stream": "npm:get-stream",
     "node_modules/get-symbol-description": "npm:get-symbol-description",
-    "node_modules/get-them-args": "npm:get-them-args",
     "node_modules/get-tsconfig": "npm:get-tsconfig",
     "node_modules/getenv": "npm:getenv",
     "node_modules/glob": "npm:glob",
@@ -15310,7 +15397,6 @@
     "node_modules/inline-style-prefixer": "npm:inline-style-prefixer",
     "node_modules/internal-slot": "npm:internal-slot",
     "node_modules/invariant": "npm:invariant",
-    "node_modules/ip-regex": "npm:ip-regex",
     "node_modules/ipaddr.js": "npm:ipaddr.js",
     "node_modules/is-array-buffer": "npm:is-array-buffer",
     "node_modules/is-arrayish": "npm:is-arrayish",
@@ -15347,13 +15433,11 @@
     "node_modules/is-symbol": "npm:is-symbol",
     "node_modules/is-typed-array": "npm:is-typed-array",
     "node_modules/is-unicode-supported": "npm:is-unicode-supported",
-    "node_modules/is-url": "npm:is-url",
     "node_modules/is-weakmap": "npm:is-weakmap",
     "node_modules/is-weakref": "npm:is-weakref",
     "node_modules/is-weakset": "npm:is-weakset",
     "node_modules/is-windows": "npm:is-windows",
     "node_modules/is-wsl": "npm:is-wsl",
-    "node_modules/is2": "npm:is2",
     "node_modules/isarray": "npm:isarray",
     "node_modules/isexe": "npm:isexe",
     "node_modules/isomorphic-ws": "npm:isomorphic-ws",
@@ -15576,7 +15660,6 @@
     "node_modules/jsonfile": "npm:jsonfile",
     "node_modules/jsx-ast-utils": "npm:jsx-ast-utils",
     "node_modules/keyv": "npm:keyv",
-    "node_modules/kill-port": "npm:kill-port",
     "node_modules/kleur": "npm:kleur",
     "node_modules/kuler": "npm:kuler",
     "node_modules/lan-network": "npm:lan-network",
@@ -15773,6 +15856,12 @@
     "node_modules/pkg-dir/node_modules/locate-path": "npm:locate-path@5.0.0",
     "node_modules/pkg-dir/node_modules/p-limit": "npm:p-limit@2.3.0",
     "node_modules/pkg-dir/node_modules/p-locate": "npm:p-locate@4.1.0",
+    "node_modules/pkg-up": "npm:pkg-up",
+    "node_modules/pkg-up/node_modules/find-up": "npm:find-up@3.0.0",
+    "node_modules/pkg-up/node_modules/locate-path": "npm:locate-path@3.0.0",
+    "node_modules/pkg-up/node_modules/p-limit": "npm:p-limit@2.3.0",
+    "node_modules/pkg-up/node_modules/p-locate": "npm:p-locate@3.0.0",
+    "node_modules/pkg-up/node_modules/path-exists": "npm:path-exists@3.0.0",
     "node_modules/plist": "npm:plist",
     "node_modules/pngjs": "npm:pngjs",
     "node_modules/portfinder": "npm:portfinder",
@@ -15916,7 +16005,6 @@
     "node_modules/shallowequal": "npm:shallowequal",
     "node_modules/shebang-command": "npm:shebang-command",
     "node_modules/shebang-regex": "npm:shebang-regex",
-    "node_modules/shell-exec": "npm:shell-exec",
     "node_modules/shell-quote": "npm:shell-quote",
     "node_modules/side-channel": "npm:side-channel",
     "node_modules/side-channel-list": "npm:side-channel-list",
@@ -15938,6 +16026,7 @@
     "node_modules/split-on-first": "npm:split-on-first",
     "node_modules/sprintf-js": "npm:sprintf-js",
     "node_modules/stable-hash": "npm:stable-hash",
+    "node_modules/stable-hash-x": "npm:stable-hash-x",
     "node_modules/stack-trace": "npm:stack-trace",
     "node_modules/stack-utils": "npm:stack-utils",
     "node_modules/stack-utils/node_modules/escape-string-regexp": "npm:escape-string-regexp@2.0.0",
@@ -15986,9 +16075,6 @@
     "node_modules/tar-stream": "npm:tar-stream",
     "node_modules/tar-stream/node_modules/readable-stream": "npm:readable-stream@3.6.2",
     "node_modules/tar/node_modules/yallist": "npm:yallist@5.0.0",
-    "node_modules/tcp-port-used": "npm:tcp-port-used",
-    "node_modules/tcp-port-used/node_modules/debug": "npm:debug@4.3.1",
-    "node_modules/tcp-port-used/node_modules/ms": "npm:ms@2.1.2",
     "node_modules/telnet-client": "npm:telnet-client",
     "node_modules/terminal-link": "npm:terminal-link",
     "node_modules/terser": "npm:terser",

@@ -238,3 +238,53 @@ export type LiveMarketPriceResponse = {
 export async function getLiveMarketPrices() {
   return getJson<LiveMarketPriceResponse>("/api/market-prices/live");
 }
+
+export type BuyerSummary = {
+  id: string;
+  full_name: string;
+  phone_number: string;
+  email: string;
+  address: string;
+  region: string;
+  buyer_type: string;
+  organization_name?: string;
+  preferred_crop?: string;
+  required_quantity?: number;
+  notes?: string;
+  buyer_code: string;
+  created_at?: string;
+  [key: string]: unknown;
+};
+
+export async function getBuyers() {
+  return getJson<BuyerSummary[]>("/api/buyers");
+}
+
+export async function getBuyerById(buyerId: string) {
+  return getJson<BuyerSummary>(`/api/buyers/${encodeURIComponent(buyerId)}`);
+}
+
+export type FarmerSummary = {
+  id: string;
+  full_name: string;
+  phone_number: string;
+  email: string;
+  address: string;
+  region: string;
+  national_id?: string;
+  farmer_type?: string;
+  total_land_area?: number;
+  experience_years?: number;
+  has_irrigation?: boolean;
+  farmer_code: string;
+  created_at?: string;
+  [key: string]: unknown;
+};
+
+export async function getFarmers() {
+  return getJson<FarmerSummary[]>("/api/farmers");
+}
+
+export async function getFarmerById(farmerId: string) {
+  return getJson<FarmerSummary>(`/api/farmers/${encodeURIComponent(farmerId)}`);
+}

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 
+import { BuyerHomeScreen } from "@/components/screens/BuyerHomeScreen";
+import { BuyersScreen } from "@/components/screens/BuyersScreen";
 import { ForgotPasswordScreen } from "@/components/screens/ForgotPasswordScreen";
 import { HomeScreen } from "@/components/screens/HomeScreen";
 import { LoadingScreen } from "@/components/screens/LoadingScreen";
@@ -28,6 +30,7 @@ type Screen =
   | "market-prices"
   | "weather"
   | "yield-prediction"
+  | "buyers"
   | "home";
 
 export default function EntryScreen() {
@@ -53,7 +56,7 @@ export default function EntryScreen() {
   const handleLogin = async (email: string) => {
     const profile = await getProfileByEmail(email);
     setProfileData(profile);
-    setCurrentScreen("home");
+    setCurrentScreen(profile.role === "buyer" ? "buyers" : "home");
   };
 
   return (
@@ -87,7 +90,7 @@ export default function EntryScreen() {
           initialValues={signupDetails}
           onComplete={(profile) => {
             setProfileData(profile);
-            setCurrentScreen("home");
+            setCurrentScreen(profile.role === "buyer" ? "buyers" : "home");
           }}
         />
       )}
@@ -99,16 +102,30 @@ export default function EntryScreen() {
         />
       )}
 
-      {currentScreen === "home" && (
-        <HomeScreen
-          profile={profileData}
-          onMarketPrices={() => setCurrentScreen("market-prices")}
-          onWeatherUpdate={() => setCurrentScreen("weather")}
-          onYieldPrediction={() => setCurrentScreen("yield-prediction")}
-          onProfile={() =>
-            setCurrentScreen(profileData ? "profile-view" : "profile")
-          }
-        />
+      {currentScreen === "home" && profileData && (
+        profileData.role === "buyer" ? (
+          <BuyerHomeScreen
+            profile={profileData}
+            onMarketPrices={() => setCurrentScreen("market-prices")}
+            onWeatherUpdate={() => setCurrentScreen("weather")}
+            onBrowsePeople={() => setCurrentScreen("buyers")}
+            onProfile={() =>
+              setCurrentScreen(profileData ? "profile-view" : "profile")
+            }
+          />
+        ) : (
+          <HomeScreen
+            profile={profileData}
+            onMarketPrices={() => setCurrentScreen("market-prices")}
+            onWeatherUpdate={() => setCurrentScreen("weather")}
+            onBuyers={() => setCurrentScreen("buyers")}
+            onYieldPrediction={() => setCurrentScreen("yield-prediction")}
+            onCropRecommendation={() => setCurrentScreen("yield-prediction")}
+            onProfile={() =>
+              setCurrentScreen(profileData ? "profile-view" : "profile")
+            }
+          />
+        )
       )}
 
       {currentScreen === "weather" && (
@@ -127,6 +144,13 @@ export default function EntryScreen() {
 
       {currentScreen === "market-prices" && (
         <MarketPricesScreen onBackToHome={() => setCurrentScreen("home")} />
+      )}
+
+      {currentScreen === "buyers" && (
+        <BuyersScreen
+          onBackToHome={() => setCurrentScreen("home")}
+          userRegion={profileData?.region}
+        />
       )}
     </View>
   );

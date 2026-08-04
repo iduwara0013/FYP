@@ -23,23 +23,23 @@
     "nonProjectFiles": [
       {
         "file": ".gitignore",
-        "hash": "16038804918140058741"
+        "hash": "3506012039944006538"
       },
       {
         "file": ".vscode/extensions.json",
-        "hash": "46217408025352634"
+        "hash": "16455825213515344365"
       },
       {
         "file": ".vscode/settings.json",
-        "hash": "8218313299435415542"
+        "hash": "8491054166349911709"
       },
       {
         "file": "README.md",
-        "hash": "1168506559928181538"
+        "hash": "11019011362595344833"
       },
       {
         "file": "app.json",
-        "hash": "3553559910386177241"
+        "hash": "15732335268772658184"
       },
       {
         "file": "apps/Backend/README.md",
@@ -47,19 +47,27 @@
       },
       {
         "file": "eslint.config.js",
-        "hash": "1050212160588093330"
+        "hash": "2023422486053701422"
+      },
+      {
+        "file": "harti-probe.json",
+        "hash": "619478650951167079"
       },
       {
         "file": "hooks/use-color-scheme.ts",
-        "hash": "9854634842886202740"
+        "hash": "9161031619590152897"
       },
       {
         "file": "hooks/use-color-scheme.web.ts",
-        "hash": "14806177383020038067"
+        "hash": "2317532335120895825"
       },
       {
         "file": "hooks/use-theme-color.ts",
-        "hash": "1262650047820739010"
+        "hash": "15431612981360460254"
+      },
+      {
+        "file": "index.js",
+        "hash": "2742117502775855831"
       },
       {
         "file": "libs/README.md",
@@ -67,19 +75,19 @@
       },
       {
         "file": "nx.json",
-        "hash": "15501238508177492327"
+        "hash": "18025695706998912021"
       },
       {
         "file": "package-lock.json",
-        "hash": "4821186075710346605"
+        "hash": "13852744168174280115"
       },
       {
         "file": "package.json",
-        "hash": "7296965589058053881"
+        "hash": "10068402471418558227"
       },
       {
         "file": "scripts/reset-project.js",
-        "hash": "912029883397838943"
+        "hash": "11923416602539215937"
       },
       {
         "file": "tsconfig.base.json",
@@ -87,52 +95,38 @@
       },
       {
         "file": "tsconfig.json",
-        "hash": "13453316570448027213"
+        "hash": "2464506555631354884"
       }
     ],
     "projectFileMap": {
-      "python_backend": [
-        {
-          "file": "apps/Backend/python_backend/README.md",
-          "hash": "4273144513629157772"
-        },
-        {
-          "file": "apps/Backend/python_backend/app.py",
-          "hash": "5715155576668820180"
-        },
-        {
-          "file": "apps/Backend/python_backend/project.json",
-          "hash": "13101869080306266961"
-        },
-        {
-          "file": "apps/Backend/python_backend/requirements.txt",
-          "hash": "1055802289278464458"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/models/yield_model.joblib",
-          "hash": "7153977336095513544"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/__pycache__/firebase_service.cpython-313.pyc",
-          "hash": "3607541764718965213"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/__pycache__/yield_prediction.cpython-313.pyc",
-          "hash": "11197955055776819408"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/firebase_service.py",
-          "hash": "12559871288632289273"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/yield_prediction.py",
-          "hash": "15466435499366697269"
-        }
-      ],
       "frontend": [
         {
+          "file": "apps/frontend/.env",
+          "hash": "12829923846317057843"
+        },
+        {
+          "file": "apps/frontend/.env.example",
+          "hash": "16331174520020304813"
+        },
+        {
+          "file": "apps/frontend/.gitignore",
+          "hash": "1316414564126377975"
+        },
+        {
+          "file": "apps/frontend/EntryScreen.tsx",
+          "hash": "5850962484124622923",
+          "deps": [
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/app.json",
+          "hash": "12511447948768751725"
+        },
+        {
           "file": "apps/frontend/app/(tabs)/_layout.tsx",
-          "hash": "2851667513797808631",
+          "hash": "8543605135166621015",
           "deps": [
             "npm:expo-router",
             "npm:react"
@@ -140,7 +134,7 @@
         },
         {
           "file": "apps/frontend/app/(tabs)/explore.tsx",
-          "hash": "15019459809040828822",
+          "hash": "3114117556691560049",
           "deps": [
             "npm:expo-image",
             "npm:react-native"
@@ -148,14 +142,14 @@
         },
         {
           "file": "apps/frontend/app/(tabs)/index.tsx",
-          "hash": "12701222200242123781",
+          "hash": "4851358962377969731",
           "deps": [
             "npm:react"
           ]
         },
         {
           "file": "apps/frontend/app/_layout.tsx",
-          "hash": "4004891138085536626",
+          "hash": "3017543308240115445",
           "deps": [
             "npm:@react-navigation/native",
             "npm:expo-router",
@@ -165,7 +159,7 @@
         },
         {
           "file": "apps/frontend/app/index.tsx",
-          "hash": "9742944310348759912",
+          "hash": "7276190352808795312",
           "deps": [
             "npm:react",
             "npm:react-native"
@@ -173,7 +167,7 @@
         },
         {
           "file": "apps/frontend/app/modal.tsx",
-          "hash": "5215039661340215217",
+          "hash": "15818614733108035475",
           "deps": [
             "npm:expo-router",
             "npm:react-native"
@@ -220,8 +214,12 @@
           "hash": "16102135492459408350"
         },
         {
+          "file": "apps/frontend/babel.config.js",
+          "hash": "15171899872433303675"
+        },
+        {
           "file": "apps/frontend/components/external-link.tsx",
-          "hash": "15289246464661451666",
+          "hash": "619642052675123640",
           "deps": [
             "npm:expo-router",
             "npm:expo-web-browser",
@@ -230,7 +228,7 @@
         },
         {
           "file": "apps/frontend/components/haptic-tab.tsx",
-          "hash": "5533600884243926710",
+          "hash": "15489109379723390544",
           "deps": [
             "npm:@react-navigation/bottom-tabs",
             "npm:@react-navigation/elements",
@@ -239,14 +237,102 @@
         },
         {
           "file": "apps/frontend/components/hello-wave.tsx",
-          "hash": "16939909605063346780",
+          "hash": "6704219318348234889",
           "deps": [
             "npm:react-native-reanimated"
           ]
         },
         {
+          "file": "apps/frontend/components/market/CategoryAccordion.tsx",
+          "hash": "15308115081710551990",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/EmptyState.tsx",
+          "hash": "2260349825268631517",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/LoadingSkeleton.tsx",
+          "hash": "6189691193908655302",
+          "deps": [
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/MarketHeader.tsx",
+          "hash": "13868212972964894224",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/MarketSelector.tsx",
+          "hash": "12207033025017674655",
+          "deps": [
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/MarketSummaryCard.tsx",
+          "hash": "1341417474550716726",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/ProductBottomSheet.tsx",
+          "hash": "8107229599168599850",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/SearchBar.tsx",
+          "hash": "2415326935450858058",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/reportGroups.ts",
+          "hash": "9886136194801181673",
+          "deps": [
+            "npm:@expo/vector-icons"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/theme.ts",
+          "hash": "9323264569070371852"
+        },
+        {
+          "file": "apps/frontend/components/market/types.ts",
+          "hash": "5022076119900309420",
+          "deps": [
+            "npm:@expo/vector-icons"
+          ]
+        },
+        {
           "file": "apps/frontend/components/parallax-scroll-view.tsx",
-          "hash": "13725485128001258518",
+          "hash": "14653674748704193518",
           "deps": [
             "npm:react",
             "npm:react-native",
@@ -254,35 +340,44 @@
           ]
         },
         {
-          "file": "apps/frontend/components/screens/ForgotPasswordScreen.tsx",
-          "hash": "15626842388734688761",
+          "file": "apps/frontend/components/screens/BuyerHomeScreen.tsx",
+          "hash": "3111021516512973079",
           "deps": [
-            "npm:react",
             "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/BuyersScreen.tsx",
+          "hash": "1764069649159778316",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/ForgotPasswordScreen.tsx",
+          "hash": "7682482939840381818",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
             "npm:react-native"
           ]
         },
         {
           "file": "apps/frontend/components/screens/HomeScreen.tsx",
-          "hash": "11059644049953598912",
+          "hash": "2989828938887076693",
           "deps": [
-            "npm:react",
             "npm:@expo/vector-icons",
+            "npm:react",
             "npm:react-native"
           ]
         },
         {
           "file": "apps/frontend/components/screens/LoadingScreen.tsx",
-          "hash": "12721896721530605607",
-          "deps": [
-            "npm:react",
-            "npm:react-native",
-            "npm:@expo/vector-icons"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/screens/LoginScreen.tsx",
-          "hash": "11757413197502555881",
+          "hash": "12307550388649295296",
           "deps": [
             "npm:@expo/vector-icons",
             "npm:react",
@@ -290,22 +385,94 @@
           ]
         },
         {
+          "file": "apps/frontend/components/screens/LoginScreen.tsx",
+          "hash": "16781251164879763183",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native",
+            "npm:firebase"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/MarketPricesScreen.tsx",
+          "hash": "14672251089299347526",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/ProfileCompletionScreen.tsx",
+          "hash": "5839514696100865966",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native",
+            "npm:react-native-safe-area-context"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/ProfileViewScreen.tsx",
+          "hash": "15875618188696919510",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native",
+            "npm:react-native-safe-area-context"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/SignUpScreen.tsx",
+          "hash": "4781391728455905713",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native",
+            "npm:firebase"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/WeatherScreen.tsx",
+          "hash": "16742672042457506846",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:expo-location",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/YieldPredictionScreen.tsx",
+          "hash": "15257354063300250578",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/profile-types.ts",
+          "hash": "12814536907947931978"
+        },
+        {
           "file": "apps/frontend/components/themed-text.tsx",
-          "hash": "4529078811461968752",
+          "hash": "3122477337740392823",
           "deps": [
             "npm:react-native"
           ]
         },
         {
           "file": "apps/frontend/components/themed-view.tsx",
-          "hash": "13974678473966001793",
+          "hash": "2284721163480632327",
           "deps": [
             "npm:react-native"
           ]
         },
         {
           "file": "apps/frontend/components/ui/collapsible.tsx",
-          "hash": "11100610072791393598",
+          "hash": "7424697222490553304",
           "deps": [
             "npm:react",
             "npm:react-native"
@@ -313,7 +480,7 @@
         },
         {
           "file": "apps/frontend/components/ui/icon-symbol.ios.tsx",
-          "hash": "12801160683556705757",
+          "hash": "5129615090540378573",
           "deps": [
             "npm:expo-symbols",
             "npm:react-native"
@@ -321,7 +488,7 @@
         },
         {
           "file": "apps/frontend/components/ui/icon-symbol.tsx",
-          "hash": "6398962000459802437",
+          "hash": "4383805248047041955",
           "deps": [
             "npm:@expo/vector-icons",
             "npm:expo-symbols",
@@ -331,14 +498,185 @@
         },
         {
           "file": "apps/frontend/constants/theme.ts",
-          "hash": "9635815210840157046",
+          "hash": "16508223583303807561",
           "deps": [
             "npm:react-native"
           ]
         },
         {
+          "file": "apps/frontend/hooks/use-color-scheme.ts",
+          "hash": "13957152307728180184",
+          "deps": [
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/hooks/use-color-scheme.web.ts",
+          "hash": "13231496458987236811",
+          "deps": [
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/hooks/use-theme-color.ts",
+          "hash": "2742386001990436387"
+        },
+        {
+          "file": "apps/frontend/index.js",
+          "hash": "14343180379406773961",
+          "deps": [
+            "npm:expo"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/firebase-config.ts",
+          "hash": "14557009797031244651"
+        },
+        {
+          "file": "apps/frontend/lib/firebase.native.ts",
+          "hash": "2527490490165927507",
+          "deps": [
+            "npm:firebase"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/firebase.ts",
+          "hash": "4663741137670460041",
+          "deps": [
+            "npm:@react-native-async-storage/async-storage",
+            "npm:firebase",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/firebase.web.ts",
+          "hash": "1624659577479539671",
+          "deps": [
+            "npm:firebase"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/prediction-api.ts",
+          "hash": "11592161927107022739"
+        },
+        {
+          "file": "apps/frontend/lib/spring-api.ts",
+          "hash": "2910978271464318181"
+        },
+        {
+          "file": "apps/frontend/lib/weather.ts",
+          "hash": "232587105261868616"
+        },
+        {
+          "file": "apps/frontend/npm-install.log",
+          "hash": "5596720377885444827"
+        },
+        {
+          "file": "apps/frontend/package-lock.json",
+          "hash": "7185473007938828423"
+        },
+        {
+          "file": "apps/frontend/package.json",
+          "hash": "8435005687394438362",
+          "deps": [
+            "npm:react-native",
+            "npm:babel-plugin-module-resolver"
+          ]
+        },
+        {
           "file": "apps/frontend/project.json",
           "hash": "13192672493923208681"
+        },
+        {
+          "file": "apps/frontend/tsconfig.json",
+          "hash": "14617262498094116381"
+        }
+      ],
+      "python_backend": [
+        {
+          "file": "apps/Backend/python_backend/README.md",
+          "hash": "4273144513629157772"
+        },
+        {
+          "file": "apps/Backend/python_backend/__pycache__/app.cpython-314.pyc",
+          "hash": "9906423761795220301"
+        },
+        {
+          "file": "apps/Backend/python_backend/app.py",
+          "hash": "13609538789070247240"
+        },
+        {
+          "file": "apps/Backend/python_backend/project.json",
+          "hash": "13101869080306266961"
+        },
+        {
+          "file": "apps/Backend/python_backend/requirements.txt",
+          "hash": "4767493064811790358"
+        },
+        {
+          "file": "apps/Backend/python_backend/scripts/__pycache__/train_models.cpython-314.pyc",
+          "hash": "3181286166357433178"
+        },
+        {
+          "file": "apps/Backend/python_backend/scripts/train_models.py",
+          "hash": "17977199060408091176"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/crop_median_production.joblib",
+          "hash": "13691589812835659450"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/price_model_features.joblib",
+          "hash": "10156043857776893746"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/price_prediction_model.joblib",
+          "hash": "18388452226950820740"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/yield_model.joblib",
+          "hash": "7153977336095513544"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/yield_model_features.joblib",
+          "hash": "16260038297128887579"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/yield_prediction_model.joblib",
+          "hash": "12317942548221981669"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/firebase_service.cpython-313.pyc",
+          "hash": "3607541764718965213"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/prediction_service.cpython-314.pyc",
+          "hash": "15451117766436982765"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/yield_prediction.cpython-313.pyc",
+          "hash": "11197955055776819408"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/yield_prediction.cpython-314.pyc",
+          "hash": "15494179624762132442"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/firebase_service.py",
+          "hash": "12559871288632289273"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/prediction_service.py",
+          "hash": "3036728500578462726"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/yield_prediction.py",
+          "hash": "15466435499366697269"
+        },
+        {
+          "file": "apps/Backend/python_backend/sri_lanka_vegetable_dataset.csv",
+          "hash": "10151999312307862927"
         }
       ],
       "Spring_Backend": [
@@ -348,7 +686,7 @@
         },
         {
           "file": "apps/Backend/Spring_Backend/pom.xml",
-          "hash": "10800011225220589259"
+          "hash": "6522937150456426096"
         },
         {
           "file": "apps/Backend/Spring_Backend/project.json",
@@ -359,12 +697,16 @@
           "hash": "775488759297675076"
         },
         {
+          "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/config/CorsConfig.java",
+          "hash": "11168883908965494224"
+        },
+        {
           "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/config/FirebaseConfig.java",
           "hash": "7992532694974002990"
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/controller/BuyerController.java",
-          "hash": "6807919004672382110"
+          "hash": "5431711902588232657"
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/controller/CropController.java",
@@ -376,7 +718,7 @@
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/controller/FarmerController.java",
-          "hash": "4492483029792705201"
+          "hash": "11196330554947510488"
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/controller/FirestoreCollectionController.java",
@@ -396,7 +738,7 @@
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/controller/MarketPriceController.java",
-          "hash": "7487772431876223148"
+          "hash": "10364500033589254602"
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/controller/MessageController.java",
@@ -468,15 +810,19 @@
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/service/BuyerService.java",
-          "hash": "11209053358689930848"
+          "hash": "6078798216910743197"
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/service/FarmerService.java",
-          "hash": "16198722418054527236"
+          "hash": "13117810736850989951"
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/service/FirestoreCollectionService.java",
           "hash": "13319159856432788968"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/service/HartiPriceService.java",
+          "hash": "17706296252689814200"
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/service/YieldPredictionSaveService.java",
@@ -488,11 +834,11 @@
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/resources/application.properties",
-          "hash": "13634054346846400655"
+          "hash": "9140827109070753253"
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/resources/firebase-service-account.json",
-          "hash": "10023851011407241164"
+          "hash": "3601478238318248267"
         },
         {
           "file": "apps/Backend/Spring_Backend/src/test/java/com/smartcrop/backend/controller/BuyerControllerTest.java",
@@ -520,186 +866,206 @@
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/application.properties",
-          "hash": "13634054346846400655"
+          "hash": "9140827109070753253"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/SpringBackendApplication.class",
-          "hash": "9930227416320788195"
+          "hash": "1295398270786542736"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/config/CorsConfig$1.class",
+          "hash": "9094419340118144046"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/config/CorsConfig.class",
+          "hash": "15951275082277787213"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/config/FirebaseConfig.class",
-          "hash": "8752595212013137412"
+          "hash": "5837574518868427070"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/BuyerController.class",
-          "hash": "10050966216038988574"
+          "hash": "2656295933145276997"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/CropController.class",
-          "hash": "1627258778989303386"
+          "hash": "5671663928591967281"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/DemandRecordController.class",
-          "hash": "3343554122556158339"
+          "hash": "10037006058060649743"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/FarmerController.class",
-          "hash": "17551916705131796785"
+          "hash": "17557376537846151827"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/FirestoreCollectionController.class",
-          "hash": "14923984611737887695"
+          "hash": "13685916524747965278"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/HarvestPredictionController.class",
-          "hash": "13562648461860618716"
+          "hash": "11977816344479352367"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/HealthController.class",
-          "hash": "15181638022221551753"
+          "hash": "16281562420677036068"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/LandPlotController.class",
-          "hash": "13428714222619416586"
+          "hash": "8316901139566809148"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/MarketPriceController.class",
-          "hash": "11805397162451959399"
+          "hash": "16696173921425530082"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/MessageController.class",
-          "hash": "10477784738744077456"
+          "hash": "11129009102784622539"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/NotificationController.class",
-          "hash": "130726202997521119"
+          "hash": "115715926513072547"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/WeatherDataController.class",
-          "hash": "17592178107577416263"
+          "hash": "15200931980346934917"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/YieldPredictionController.class",
-          "hash": "5421908793800102130"
+          "hash": "5803313307488720473"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/YieldPredictionSaveController.class",
-          "hash": "15761294673733564329"
+          "hash": "16742450518183910195"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/BuyerRequest.class",
-          "hash": "951191460097490228"
+          "hash": "16294182723056136905"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/CropRequest.class",
-          "hash": "17926541462344909298"
+          "hash": "11121550172207480872"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/DemandRecordRequest.class",
-          "hash": "11947122934339835052"
+          "hash": "9538618498594588679"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/FarmerRequest.class",
-          "hash": "16429435100006977344"
+          "hash": "8580112293453708994"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/HarvestPredictionRequest.class",
-          "hash": "1584520874944292902"
+          "hash": "5371135752929493301"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/LandPlotRequest.class",
-          "hash": "4429783191867213727"
+          "hash": "2787007121970281193"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/MarketPriceRequest.class",
-          "hash": "143444522095208316"
+          "hash": "11706866848784364094"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/MessageRequest.class",
-          "hash": "1062992154945630361"
+          "hash": "13773804899872660251"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/NotificationRequest.class",
-          "hash": "15402013872944909141"
+          "hash": "15573486900154984128"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/WeatherDataRequest.class",
-          "hash": "12924216841622631664"
+          "hash": "12688841363629351247"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/YieldPredictionRequest.class",
-          "hash": "1417081922867929835"
+          "hash": "5159129678282724275"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/YieldPredictionSaveRequest.class",
-          "hash": "1546495712246924829"
+          "hash": "16468643178320494256"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/BuyerService.class",
-          "hash": "12453731595277480878"
+          "hash": "7180110747862465836"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/FarmerService.class",
-          "hash": "16444373822783968137"
+          "hash": "517288531802553761"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/FirestoreCollectionService.class",
-          "hash": "6933188143871204853"
+          "hash": "17308594747626140016"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/HartiPriceService$BulletinResult.class",
+          "hash": "11495547140930776935"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/HartiPriceService$BulletinSource.class",
+          "hash": "1666830020951790520"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/HartiPriceService.class",
+          "hash": "13853693563155417988"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/YieldPredictionSaveService.class",
-          "hash": "11424935448105276768"
+          "hash": "5669203645735722731"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/YieldPredictionService.class",
-          "hash": "18289710505097863259"
+          "hash": "2098403488277274395"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/firebase-service-account.json",
-          "hash": "10023851011407241164"
+          "hash": "3601478238318248267"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst",
-          "hash": "3244421341483603138"
+          "hash": "13085801505040895576"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst",
-          "hash": "3103420952633857881"
+          "hash": "9930681900201531719"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst",
-          "hash": "5883259480984566432"
+          "hash": "5038957576745502621"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst",
-          "hash": "7877895681044429078"
+          "hash": "2868281622397003900"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/test-classes/com/smartcrop/backend/controller/BuyerControllerTest.class",
-          "hash": "243806922032699002"
+          "hash": "6986143552532655651"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/test-classes/com/smartcrop/backend/controller/FarmerControllerTest.class",
-          "hash": "17548143405746648409"
+          "hash": "12295171322791111598"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/test-classes/com/smartcrop/backend/controller/FirestoreCollectionControllerTest.class",
-          "hash": "9188592335894483188"
+          "hash": "5429418213375810611"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/test-classes/com/smartcrop/backend/service/BuyerServiceTest.class",
-          "hash": "2545139085075260927"
+          "hash": "9667085867840116505"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/test-classes/com/smartcrop/backend/service/FarmerServiceTest.class",
-          "hash": "15064378501237685073"
+          "hash": "7267973675505598256"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/test-classes/com/smartcrop/backend/service/FirestoreCollectionServiceTest.class",
-          "hash": "7469785953603202154"
+          "hash": "1348012477654645622"
         }
       ]
     }
   },
-  "externalNodesHash": "12431469369495020132"
+  "externalNodesHash": "3295009575525255792"
 }

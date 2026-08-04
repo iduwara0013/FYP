@@ -1,15 +1,18 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useRef, useState } from "react";
 import {
-    Animated,
-    Easing,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Animated,
+  Easing,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
 
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
@@ -42,8 +45,14 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [nameFocused, setNameFocused] = useState(false);
+  const [emailFocused, setEmailFocused] = useState(false);
+  const [regionFocused, setRegionFocused] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  const [confirmFocused, setConfirmFocused] = useState(false);
   const stepOpacity = useRef(new Animated.Value(0)).current;
   const stepOffset = useRef(new Animated.Value(12)).current;
+  const buttonScale = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     stepOpacity.setValue(0);
@@ -64,6 +73,24 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
       }),
     ]).start();
   }, [step, stepOpacity, stepOffset]);
+
+  const handlePressIn = () => {
+    Animated.spring(buttonScale, {
+      toValue: 0.97,
+      useNativeDriver: true,
+      speed: 40,
+      bounciness: 0,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(buttonScale, {
+      toValue: 1,
+      useNativeDriver: true,
+      speed: 40,
+      bounciness: 8,
+    }).start();
+  };
 
   const handleContinue = () => {
     setStep(2);
@@ -133,14 +160,65 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
     }
   };
 
+  const fullNameValid = fullName.trim().length > 0;
+  const emailValid = email.trim().length > 0;
+  const passwordValid = password.trim().length > 0;
+  const canContinue = selectedRole !== null;
+  const canCreate =
+    fullNameValid && emailValid && passwordValid && agreedToTerms && !loading;
+
   return (
     <SafeAreaView style={styles.container}>
+      <LinearGradient
+        colors={["#F8FAFC", "#F0FDF4", "#F8FAFC"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={StyleSheet.absoluteFill}
+      />
       <View style={styles.backgroundLeafOne} />
       <View style={styles.backgroundLeafTwo} />
+      <View style={styles.backgroundLeafThree} />
+
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
+        {/* Step indicator */}
+        <View style={styles.stepRow}>
+          <View style={[styles.stepItem, step === 1 && styles.stepItemActive]}>
+            <View style={[styles.stepDot, step >= 1 && styles.stepDotActive]}>
+              <Text style={styles.stepDotText}>1</Text>
+            </View>
+            <Text
+              style={[styles.stepLabel, step === 1 && styles.stepLabelActive]}
+            >
+              Role
+            </Text>
+          </View>
+          <View
+            style={[styles.stepLine, step === 2 && styles.stepLineActive]}
+          />
+          <View style={[styles.stepItem, step === 2 && styles.stepItemActive]}>
+            <View style={[styles.stepDot, step === 2 && styles.stepDotActive]}>
+              {step === 2 ? (
+                <MaterialCommunityIcons
+                  name="check"
+                  size={12}
+                  color="#FFFFFF"
+                />
+              ) : (
+                <Text style={styles.stepDotText}>2</Text>
+              )}
+            </View>
+            <Text
+              style={[styles.stepLabel, step === 2 && styles.stepLabelActive]}
+            >
+              Account
+            </Text>
+          </View>
+        </View>
+
         {step === 1 ? (
           <>
             <Animated.View
@@ -156,7 +234,7 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
                 <MaterialCommunityIcons
                   name="account-plus-outline"
                   size={30}
-                  color="#0F7A3A"
+                  color="#16A34A"
                 />
               </View>
               <Text style={styles.title}>Choose Your Role</Text>
@@ -180,6 +258,7 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
                   styles.roleCard,
                   selectedRole === "farmer" && styles.roleCardActiveGreen,
                 ]}
+                accessibilityLabel="Select Farmer role"
               >
                 <View style={[styles.roleIcon, styles.roleIconGreen]}>
                   <MaterialCommunityIcons
@@ -196,11 +275,13 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
                   </Text>
                 </View>
                 {selectedRole === "farmer" ? (
-                  <MaterialCommunityIcons
-                    name="check-circle"
-                    size={24}
-                    color="#16A34A"
-                  />
+                  <View style={styles.checkCircle}>
+                    <MaterialCommunityIcons
+                      name="check"
+                      size={14}
+                      color="#FFFFFF"
+                    />
+                  </View>
                 ) : null}
               </TouchableOpacity>
 
@@ -210,6 +291,7 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
                   styles.roleCard,
                   selectedRole === "buyer" && styles.roleCardActiveAmber,
                 ]}
+                accessibilityLabel="Select Buyer role"
               >
                 <View style={[styles.roleIcon, styles.roleIconAmber]}>
                   <MaterialCommunityIcons
@@ -225,21 +307,45 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
                   </Text>
                 </View>
                 {selectedRole === "buyer" ? (
-                  <MaterialCommunityIcons
-                    name="check-circle"
-                    size={24}
-                    color="#F59E0B"
-                  />
+                  <View style={[styles.checkCircle, styles.checkCircleAmber]}>
+                    <MaterialCommunityIcons
+                      name="check"
+                      size={14}
+                      color="#FFFFFF"
+                    />
+                  </View>
                 ) : null}
               </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={handleContinue}
-                activeOpacity={0.9}
-                style={styles.primaryButton}
-              >
-                <Text style={styles.primaryButtonText}>Continue</Text>
-              </TouchableOpacity>
+              <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
+                <TouchableWithoutFeedback
+                  onPressIn={handlePressIn}
+                  onPressOut={handlePressOut}
+                  onPress={handleContinue}
+                  disabled={!canContinue}
+                >
+                  <LinearGradient
+                    colors={
+                      canContinue
+                        ? ["#16A34A", "#22C55E"]
+                        : ["#9CA3AF", "#9CA3AF"]
+                    }
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={[
+                      styles.primaryButton,
+                      !canContinue && styles.primaryButtonDisabled,
+                    ]}
+                  >
+                    <Text style={styles.primaryButtonText}>Continue</Text>
+                    <MaterialCommunityIcons
+                      name="arrow-right"
+                      size={20}
+                      color="#FFFFFF"
+                    />
+                  </LinearGradient>
+                </TouchableWithoutFeedback>
+              </Animated.View>
 
               <Text style={styles.footerText}>
                 Already have an account?{" "}
@@ -264,7 +370,7 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
                 <MaterialCommunityIcons
                   name="account-plus-outline"
                   size={30}
-                  color="#0F7A3A"
+                  color="#16A34A"
                 />
               </View>
               <Text style={styles.title}>Create Account</Text>
@@ -284,109 +390,177 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
               ]}
             >
               {errorMessage ? (
-                <Text style={styles.errorText}>{errorMessage}</Text>
+                <View style={styles.errorBanner}>
+                  <MaterialCommunityIcons
+                    name="alert-circle-outline"
+                    size={18}
+                    color="#DC2626"
+                  />
+                  <Text style={styles.errorText}>{errorMessage}</Text>
+                </View>
               ) : null}
 
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="account-outline"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="Full Name"
-                  placeholderTextColor="#9CA3AF"
-                  value={fullName}
-                  onChangeText={setFullName}
-                  style={styles.input}
-                />
-              </View>
-
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="email-outline"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="Email"
-                  placeholderTextColor="#9CA3AF"
-                  value={email}
-                  onChangeText={setEmail}
-                  style={styles.input}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                />
-              </View>
-
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="lock-outline"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="Password"
-                  placeholderTextColor="#9CA3AF"
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry={!showPassword}
-                  style={[styles.input, styles.passwordInput]}
-                />
-                <TouchableOpacity
-                  onPress={() => setShowPassword((value) => !value)}
-                  style={styles.iconButton}
+              <View style={styles.fieldGroup}>
+                <Text style={styles.fieldLabel}>Full Name</Text>
+                <View
+                  style={[
+                    styles.inputGroup,
+                    nameFocused && styles.inputGroupFocused,
+                  ]}
                 >
                   <MaterialCommunityIcons
-                    name={showPassword ? "eye-off-outline" : "eye-outline"}
+                    name="account-outline"
                     size={20}
-                    color="#6B7280"
+                    color={nameFocused ? "#16A34A" : "#6B7280"}
                   />
-                </TouchableOpacity>
+                  <TextInput
+                    placeholder="John Farmer"
+                    placeholderTextColor="#9CA3AF"
+                    value={fullName}
+                    onChangeText={setFullName}
+                    onFocus={() => setNameFocused(true)}
+                    onBlur={() => setNameFocused(false)}
+                    style={styles.input}
+                    accessibilityLabel="Full name"
+                  />
+                </View>
               </View>
 
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="lock-check-outline"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="Confirm Password"
-                  placeholderTextColor="#9CA3AF"
-                  value={confirmPassword}
-                  onChangeText={setConfirmPassword}
-                  secureTextEntry={!showConfirmPassword}
-                  style={[styles.input, styles.passwordInput]}
-                />
-                <TouchableOpacity
-                  onPress={() => setShowConfirmPassword((value) => !value)}
-                  style={styles.iconButton}
+              <View style={styles.fieldGroup}>
+                <Text style={styles.fieldLabel}>Email</Text>
+                <View
+                  style={[
+                    styles.inputGroup,
+                    emailFocused && styles.inputGroupFocused,
+                  ]}
                 >
                   <MaterialCommunityIcons
-                    name={
-                      showConfirmPassword ? "eye-off-outline" : "eye-outline"
+                    name="email-outline"
+                    size={20}
+                    color={emailFocused ? "#16A34A" : "#6B7280"}
+                  />
+                  <TextInput
+                    placeholder="you@example.com"
+                    placeholderTextColor="#9CA3AF"
+                    value={email}
+                    onChangeText={setEmail}
+                    onFocus={() => setEmailFocused(true)}
+                    onBlur={() => setEmailFocused(false)}
+                    style={styles.input}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    accessibilityLabel="Email address"
+                  />
+                </View>
+              </View>
+
+              <View style={styles.fieldGroup}>
+                <Text style={styles.fieldLabel}>Password</Text>
+                <View
+                  style={[
+                    styles.inputGroup,
+                    passwordFocused && styles.inputGroupFocused,
+                  ]}
+                >
+                  <MaterialCommunityIcons
+                    name="lock-outline"
+                    size={20}
+                    color={passwordFocused ? "#16A34A" : "#6B7280"}
+                  />
+                  <TextInput
+                    placeholder="Create a password"
+                    placeholderTextColor="#9CA3AF"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry={!showPassword}
+                    onFocus={() => setPasswordFocused(true)}
+                    onBlur={() => setPasswordFocused(false)}
+                    style={[styles.input, styles.passwordInput]}
+                    accessibilityLabel="Password"
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowPassword((value) => !value)}
+                    style={styles.iconButton}
+                    accessibilityLabel={
+                      showPassword ? "Hide password" : "Show password"
                     }
-                    size={20}
-                    color="#6B7280"
-                  />
-                </TouchableOpacity>
+                  >
+                    <MaterialCommunityIcons
+                      name={showPassword ? "eye-off-outline" : "eye-outline"}
+                      size={20}
+                      color="#6B7280"
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
 
-              <View style={styles.inputGroup}>
-                <MaterialCommunityIcons
-                  name="map-marker-outline"
-                  size={20}
-                  color="#6B7280"
-                />
-                <TextInput
-                  placeholder="Region or District"
-                  placeholderTextColor="#9CA3AF"
-                  value={region}
-                  onChangeText={setRegion}
-                  style={styles.input}
-                />
+              <View style={styles.fieldGroup}>
+                <Text style={styles.fieldLabel}>Confirm Password</Text>
+                <View
+                  style={[
+                    styles.inputGroup,
+                    confirmFocused && styles.inputGroupFocused,
+                  ]}
+                >
+                  <MaterialCommunityIcons
+                    name="lock-check-outline"
+                    size={20}
+                    color={confirmFocused ? "#16A34A" : "#6B7280"}
+                  />
+                  <TextInput
+                    placeholder="Re-enter password"
+                    placeholderTextColor="#9CA3AF"
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
+                    secureTextEntry={!showConfirmPassword}
+                    onFocus={() => setConfirmFocused(true)}
+                    onBlur={() => setConfirmFocused(false)}
+                    style={[styles.input, styles.passwordInput]}
+                    accessibilityLabel="Confirm password"
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowConfirmPassword((value) => !value)}
+                    style={styles.iconButton}
+                    accessibilityLabel={
+                      showConfirmPassword ? "Hide password" : "Show password"
+                    }
+                  >
+                    <MaterialCommunityIcons
+                      name={
+                        showConfirmPassword ? "eye-off-outline" : "eye-outline"
+                      }
+                      size={20}
+                      color="#6B7280"
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <View style={styles.fieldGroup}>
+                <Text style={styles.fieldLabel}>Region or District</Text>
+                <View
+                  style={[
+                    styles.inputGroup,
+                    regionFocused && styles.inputGroupFocused,
+                  ]}
+                >
+                  <MaterialCommunityIcons
+                    name="map-marker-outline"
+                    size={20}
+                    color={regionFocused ? "#16A34A" : "#6B7280"}
+                  />
+                  <TextInput
+                    placeholder="e.g. Kandy"
+                    placeholderTextColor="#9CA3AF"
+                    value={region}
+                    onChangeText={setRegion}
+                    onFocus={() => setRegionFocused(true)}
+                    onBlur={() => setRegionFocused(false)}
+                    style={styles.input}
+                    accessibilityLabel="Region or district"
+                  />
+                </View>
               </View>
 
               <View style={styles.termsRow}>
@@ -396,6 +570,9 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
                     styles.checkbox,
                     agreedToTerms && styles.checkboxActive,
                   ]}
+                  accessibilityLabel={
+                    agreedToTerms ? "Deselect terms" : "Accept terms"
+                  }
                 >
                   {agreedToTerms ? (
                     <MaterialCommunityIcons
@@ -412,21 +589,54 @@ export function SignUpScreen({ onLogin, onSignUp }: SignUpScreenProps) {
                 </Text>
               </View>
 
-              <TouchableOpacity
-                onPress={handleCreateAccount}
-                activeOpacity={0.9}
-                style={styles.primaryButton}
-                disabled={loading}
-              >
-                <Text style={styles.primaryButtonText}>
-                  {loading ? "Creating..." : "Sign Up"}
-                </Text>
-              </TouchableOpacity>
+              <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
+                <TouchableWithoutFeedback
+                  onPressIn={handlePressIn}
+                  onPressOut={handlePressOut}
+                  onPress={handleCreateAccount}
+                  disabled={!canCreate}
+                >
+                  <LinearGradient
+                    colors={
+                      canCreate
+                        ? ["#16A34A", "#22C55E"]
+                        : ["#9CA3AF", "#9CA3AF"]
+                    }
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={[
+                      styles.primaryButton,
+                      !canCreate && styles.primaryButtonDisabled,
+                    ]}
+                  >
+                    {loading ? (
+                      <ActivityIndicator color="#FFFFFF" />
+                    ) : (
+                      <>
+                        <Text style={styles.primaryButtonText}>
+                          {loading ? "Creating..." : "Sign Up"}
+                        </Text>
+                        <MaterialCommunityIcons
+                          name="check-circle-outline"
+                          size={20}
+                          color="#FFFFFF"
+                        />
+                      </>
+                    )}
+                  </LinearGradient>
+                </TouchableWithoutFeedback>
+              </Animated.View>
 
               <TouchableOpacity
                 onPress={() => setStep(1)}
                 style={styles.backLink}
+                accessibilityLabel="Back to role selection"
               >
+                <MaterialCommunityIcons
+                  name="chevron-left"
+                  size={16}
+                  color="#64748B"
+                />
                 <Text style={styles.backLinkText}>Back to role selection</Text>
               </TouchableOpacity>
             </Animated.View>
@@ -444,28 +654,84 @@ const styles = StyleSheet.create({
   },
   backgroundLeafOne: {
     position: "absolute",
-    width: 180,
-    height: 180,
-    borderRadius: 180,
+    width: 200,
+    height: 200,
+    borderRadius: 200,
     backgroundColor: "#DCFCE7",
-    opacity: 0.38,
-    top: -40,
-    right: -70,
+    opacity: 0.5,
+    top: -60,
+    right: -80,
   },
   backgroundLeafTwo: {
     position: "absolute",
-    width: 160,
-    height: 160,
-    borderRadius: 160,
+    width: 180,
+    height: 180,
+    borderRadius: 180,
     backgroundColor: "#FEF3C7",
-    opacity: 0.32,
-    bottom: -50,
-    left: -60,
+    opacity: 0.4,
+    bottom: -60,
+    left: -70,
+  },
+  backgroundLeafThree: {
+    position: "absolute",
+    width: 140,
+    height: 140,
+    borderRadius: 140,
+    backgroundColor: "#CFFAFE",
+    opacity: 0.4,
+    top: "45%",
+    left: -50,
   },
   scrollContent: {
     flexGrow: 1,
     padding: 20,
     justifyContent: "center",
+  },
+  stepRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 18,
+    paddingHorizontal: 40,
+  },
+  stepItem: {
+    alignItems: "center",
+  },
+  stepItemActive: {
+    opacity: 1,
+  },
+  stepDot: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: "#E2E8F0",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  stepDotActive: {
+    backgroundColor: "#16A34A",
+  },
+  stepDotText: {
+    color: "#FFFFFF",
+    fontSize: 13,
+    fontWeight: "800",
+  },
+  stepLabel: {
+    marginTop: 4,
+    fontSize: 10,
+    fontWeight: "700",
+    color: "#94A3B8",
+  },
+  stepLabelActive: {
+    color: "#16A34A",
+  },
+  stepLine: {
+    flex: 1,
+    height: 2,
+    backgroundColor: "#E2E8F0",
+    marginHorizontal: 8,
+  },
+  stepLineActive: {
+    backgroundColor: "#16A34A",
   },
   heroCard: {
     alignItems: "center",
@@ -482,30 +748,45 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: "800",
+    fontWeight: "900",
     color: "#0F172A",
     textAlign: "center",
+    letterSpacing: 0.2,
   },
   subtitle: {
-    marginTop: 10,
+    marginTop: 8,
     textAlign: "center",
-    color: "#475569",
+    color: "#64748B",
     lineHeight: 22,
+  },
+  errorBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: "#FEF2F2",
+    borderRadius: 14,
+    padding: 12,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: "#FECACA",
   },
   errorText: {
     color: "#B91C1C",
-    marginBottom: 14,
     fontWeight: "600",
+    flex: 1,
+    fontSize: 13,
   },
   formCard: {
     backgroundColor: "#FFFFFF",
     borderRadius: 28,
-    padding: 20,
+    padding: 24,
     shadowColor: "#0F172A",
     shadowOpacity: 0.08,
     shadowRadius: 24,
     shadowOffset: { width: 0, height: 12 },
     elevation: 6,
+    borderWidth: 1,
+    borderColor: "rgba(226,232,240,0.6)",
   },
   roleCard: {
     flexDirection: "row",
@@ -553,6 +834,26 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     fontSize: 12,
   },
+  checkCircle: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: "#16A34A",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  checkCircleAmber: {
+    backgroundColor: "#F59E0B",
+  },
+  fieldGroup: {
+    marginBottom: 14,
+  },
+  fieldLabel: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: "#475569",
+    marginBottom: 6,
+  },
   inputGroup: {
     flexDirection: "row",
     alignItems: "center",
@@ -561,17 +862,25 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: "#F8FAFC",
     paddingHorizontal: 14,
-    marginBottom: 14,
     minHeight: 56,
+    gap: 10,
+  },
+  inputGroupFocused: {
+    borderColor: "#16A34A",
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#16A34A",
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
   },
   input: {
     flex: 1,
     fontSize: 15,
     color: "#0F172A",
-    marginLeft: 10,
   },
   passwordInput: {
-    paddingRight: 36,
+    paddingRight: 4,
   },
   iconButton: {
     padding: 4,
@@ -595,8 +904,8 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   checkboxActive: {
-    backgroundColor: "#0F7A3A",
-    borderColor: "#0F7A3A",
+    backgroundColor: "#16A34A",
+    borderColor: "#16A34A",
   },
   termsText: {
     flex: 1,
@@ -605,20 +914,24 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   termsLink: {
-    color: "#0F7A3A",
+    color: "#16A34A",
     fontWeight: "700",
   },
   primaryButton: {
-    backgroundColor: "#0F7A3A",
+    height: 56,
     borderRadius: 18,
-    height: 54,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#0F7A3A",
-    shadowOpacity: 0.22,
+    gap: 8,
+    shadowColor: "#16A34A",
+    shadowOpacity: 0.25,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 10 },
-    elevation: 4,
+    elevation: 5,
+  },
+  primaryButtonDisabled: {
+    shadowOpacity: 0.1,
   },
   primaryButtonText: {
     color: "#FFFFFF",
@@ -629,9 +942,10 @@ const styles = StyleSheet.create({
     marginTop: 16,
     textAlign: "center",
     color: "#64748B",
+    fontSize: 13,
   },
   footerLink: {
-    color: "#0F7A3A",
+    color: "#16A34A",
     fontWeight: "800",
   },
   roleInline: {
@@ -641,6 +955,10 @@ const styles = StyleSheet.create({
   },
   backLink: {
     marginTop: 14,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 4,
   },
   backLinkText: {
     textAlign: "center",

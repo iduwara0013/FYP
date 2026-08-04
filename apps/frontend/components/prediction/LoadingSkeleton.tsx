@@ -1,0 +1,58 @@
+import React, { useEffect, useRef } from "react";
+import { Animated, StyleSheet, View } from "react-native";
+
+import { predictionRadius, predictionSpacing } from "./theme";
+
+function SkeletonBlock({ style }: { style?: object }) {
+  const opacity = useRef(new Animated.Value(0.4)).current;
+
+  useEffect(() => {
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(opacity, {
+          toValue: 0.9,
+          duration: 700,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacity, {
+          toValue: 0.4,
+          duration: 700,
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+    animation.start();
+    return () => animation.stop();
+  }, [opacity]);
+
+  return <Animated.View style={[styles.block, style, { opacity }]} />;
+}
+
+export function PredictionLoadingSkeleton() {
+  return (
+    <View style={styles.wrap}>
+      <SkeletonBlock style={styles.hero} />
+      <SkeletonBlock style={styles.card} />
+      <SkeletonBlock style={styles.card} />
+      <SkeletonBlock style={styles.card} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  wrap: {
+    gap: predictionSpacing.lg,
+  },
+  block: {
+    backgroundColor: "#E2E8F0",
+    borderRadius: predictionRadius.lg,
+  },
+  hero: {
+    height: 120,
+    borderRadius: predictionRadius.xl,
+  },
+  card: {
+    height: 140,
+    borderRadius: predictionRadius.lg,
+  },
+});

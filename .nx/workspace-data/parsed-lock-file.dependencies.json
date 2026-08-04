@@ -3106,7 +3106,7 @@
   },
   {
     "source": "npm:@firebase/app",
-    "target": "npm:idb",
+    "target": "npm:idb@7.1.1",
     "type": "static"
   },
   {
@@ -3200,8 +3200,18 @@
     "type": "static"
   },
   {
+    "source": "npm:@firebase/app-types",
+    "target": "npm:@firebase/logger",
+    "type": "static"
+  },
+  {
     "source": "npm:@firebase/auth",
     "target": "npm:@firebase/app",
+    "type": "static"
+  },
+  {
+    "source": "npm:@firebase/auth",
+    "target": "npm:@react-native-async-storage/async-storage",
     "type": "static"
   },
   {
@@ -3541,7 +3551,7 @@
   },
   {
     "source": "npm:@firebase/installations",
-    "target": "npm:idb",
+    "target": "npm:idb@7.1.1",
     "type": "static"
   },
   {
@@ -3616,7 +3626,7 @@
   },
   {
     "source": "npm:@firebase/messaging",
-    "target": "npm:idb",
+    "target": "npm:idb@7.1.1",
     "type": "static"
   },
   {
@@ -6265,21 +6275,6 @@
     "type": "static"
   },
   {
-    "source": "npm:@nx/docker",
-    "target": "npm:@nx/devkit",
-    "type": "static"
-  },
-  {
-    "source": "npm:@nx/docker",
-    "target": "npm:enquirer",
-    "type": "static"
-  },
-  {
-    "source": "npm:@nx/docker",
-    "target": "npm:tslib",
-    "type": "static"
-  },
-  {
     "source": "npm:@nx/eslint",
     "target": "npm:@zkochan/js-yaml",
     "type": "static"
@@ -6747,46 +6742,6 @@
   {
     "source": "npm:@nx/module-federation",
     "target": "npm:webpack",
-    "type": "static"
-  },
-  {
-    "source": "npm:@nx/node",
-    "target": "npm:@nx/devkit",
-    "type": "static"
-  },
-  {
-    "source": "npm:@nx/node",
-    "target": "npm:@nx/docker",
-    "type": "static"
-  },
-  {
-    "source": "npm:@nx/node",
-    "target": "npm:@nx/eslint",
-    "type": "static"
-  },
-  {
-    "source": "npm:@nx/node",
-    "target": "npm:@nx/jest",
-    "type": "static"
-  },
-  {
-    "source": "npm:@nx/node",
-    "target": "npm:@nx/js",
-    "type": "static"
-  },
-  {
-    "source": "npm:@nx/node",
-    "target": "npm:kill-port",
-    "type": "static"
-  },
-  {
-    "source": "npm:@nx/node",
-    "target": "npm:tcp-port-used",
-    "type": "static"
-  },
-  {
-    "source": "npm:@nx/node",
-    "target": "npm:tslib",
     "type": "static"
   },
   {
@@ -7327,6 +7282,21 @@
   {
     "source": "npm:@radix-ui/react-use-layout-effect",
     "target": "npm:react",
+    "type": "static"
+  },
+  {
+    "source": "npm:@react-native-async-storage/async-storage",
+    "target": "npm:react",
+    "type": "static"
+  },
+  {
+    "source": "npm:@react-native-async-storage/async-storage",
+    "target": "npm:react-native",
+    "type": "static"
+  },
+  {
+    "source": "npm:@react-native-async-storage/async-storage",
+    "target": "npm:idb",
     "type": "static"
   },
   {
@@ -9820,6 +9790,71 @@
     "type": "static"
   },
   {
+    "source": "npm:babel-plugin-module-resolver",
+    "target": "npm:find-babel-config",
+    "type": "static"
+  },
+  {
+    "source": "npm:babel-plugin-module-resolver",
+    "target": "npm:glob@9.3.5",
+    "type": "static"
+  },
+  {
+    "source": "npm:babel-plugin-module-resolver",
+    "target": "npm:pkg-up",
+    "type": "static"
+  },
+  {
+    "source": "npm:babel-plugin-module-resolver",
+    "target": "npm:reselect@4.1.8",
+    "type": "static"
+  },
+  {
+    "source": "npm:babel-plugin-module-resolver",
+    "target": "npm:resolve",
+    "type": "static"
+  },
+  {
+    "source": "npm:brace-expansion@2.1.0",
+    "target": "npm:balanced-match",
+    "type": "static"
+  },
+  {
+    "source": "npm:glob@9.3.5",
+    "target": "npm:fs.realpath",
+    "type": "static"
+  },
+  {
+    "source": "npm:glob@9.3.5",
+    "target": "npm:minimatch@8.0.7",
+    "type": "static"
+  },
+  {
+    "source": "npm:glob@9.3.5",
+    "target": "npm:minipass@4.2.8",
+    "type": "static"
+  },
+  {
+    "source": "npm:glob@9.3.5",
+    "target": "npm:path-scurry@1.11.1",
+    "type": "static"
+  },
+  {
+    "source": "npm:minimatch@8.0.7",
+    "target": "npm:brace-expansion@2.1.0",
+    "type": "static"
+  },
+  {
+    "source": "npm:path-scurry@1.11.1",
+    "target": "npm:lru-cache@10.4.3",
+    "type": "static"
+  },
+  {
+    "source": "npm:path-scurry@1.11.1",
+    "target": "npm:minipass",
+    "type": "static"
+  },
+  {
     "source": "npm:babel-plugin-polyfill-corejs2",
     "target": "npm:@babel/core",
     "type": "static"
@@ -11921,7 +11956,7 @@
   },
   {
     "source": "npm:eslint-config-expo",
-    "target": "npm:eslint-import-resolver-typescript",
+    "target": "npm:eslint-import-resolver-typescript@3.10.1",
     "type": "static"
   },
   {
@@ -11947,6 +11982,66 @@
   {
     "source": "npm:eslint-config-expo",
     "target": "npm:globals@16.5.0",
+    "type": "static"
+  },
+  {
+    "source": "npm:eslint-import-resolver-typescript@3.10.1",
+    "target": "npm:eslint",
+    "type": "static"
+  },
+  {
+    "source": "npm:eslint-import-resolver-typescript@3.10.1",
+    "target": "npm:eslint-plugin-import",
+    "type": "static"
+  },
+  {
+    "source": "npm:eslint-import-resolver-typescript@3.10.1",
+    "target": "npm:@nolyfill/is-core-module",
+    "type": "static"
+  },
+  {
+    "source": "npm:eslint-import-resolver-typescript@3.10.1",
+    "target": "npm:debug",
+    "type": "static"
+  },
+  {
+    "source": "npm:eslint-import-resolver-typescript@3.10.1",
+    "target": "npm:get-tsconfig",
+    "type": "static"
+  },
+  {
+    "source": "npm:eslint-import-resolver-typescript@3.10.1",
+    "target": "npm:is-bun-module",
+    "type": "static"
+  },
+  {
+    "source": "npm:eslint-import-resolver-typescript@3.10.1",
+    "target": "npm:stable-hash",
+    "type": "static"
+  },
+  {
+    "source": "npm:eslint-import-resolver-typescript@3.10.1",
+    "target": "npm:tinyglobby",
+    "type": "static"
+  },
+  {
+    "source": "npm:eslint-import-resolver-typescript@3.10.1",
+    "target": "npm:unrs-resolver",
+    "type": "static"
+  },
+  {
+    "source": "npm:eslint-import-context",
+    "target": "npm:unrs-resolver",
+    "type": "static"
+  },
+  {
+    "source": "npm:eslint-import-context",
+    "target": "npm:get-tsconfig",
+    "type": "static"
+  },
+  {
+    "source": "npm:eslint-import-context",
+    "target": "npm:stable-hash-x",
     "type": "static"
   },
   {
@@ -11981,12 +12076,12 @@
   },
   {
     "source": "npm:eslint-import-resolver-typescript",
-    "target": "npm:@nolyfill/is-core-module",
+    "target": "npm:debug",
     "type": "static"
   },
   {
     "source": "npm:eslint-import-resolver-typescript",
-    "target": "npm:debug",
+    "target": "npm:eslint-import-context",
     "type": "static"
   },
   {
@@ -12001,7 +12096,7 @@
   },
   {
     "source": "npm:eslint-import-resolver-typescript",
-    "target": "npm:stable-hash",
+    "target": "npm:stable-hash-x",
     "type": "static"
   },
   {
@@ -12625,6 +12720,21 @@
     "type": "static"
   },
   {
+    "source": "npm:expo-linear-gradient",
+    "target": "npm:expo",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-linear-gradient",
+    "target": "npm:react",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-linear-gradient",
+    "target": "npm:react-native",
+    "type": "static"
+  },
+  {
     "source": "npm:expo-linking",
     "target": "npm:react",
     "type": "static"
@@ -12642,6 +12752,11 @@
   {
     "source": "npm:expo-linking",
     "target": "npm:invariant",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-location",
+    "target": "npm:expo",
     "type": "static"
   },
   {
@@ -13820,6 +13935,11 @@
     "type": "static"
   },
   {
+    "source": "npm:find-babel-config",
+    "target": "npm:json5",
+    "type": "static"
+  },
+  {
     "source": "npm:find-cache-dir",
     "target": "npm:commondir",
     "type": "static"
@@ -14757,21 +14877,6 @@
   {
     "source": "npm:is-wsl",
     "target": "npm:is-docker",
-    "type": "static"
-  },
-  {
-    "source": "npm:is2",
-    "target": "npm:deep-is",
-    "type": "static"
-  },
-  {
-    "source": "npm:is2",
-    "target": "npm:ip-regex",
-    "type": "static"
-  },
-  {
-    "source": "npm:is2",
-    "target": "npm:is-url",
     "type": "static"
   },
   {
@@ -18565,16 +18670,6 @@
     "type": "static"
   },
   {
-    "source": "npm:kill-port",
-    "target": "npm:get-them-args",
-    "type": "static"
-  },
-  {
-    "source": "npm:kill-port",
-    "target": "npm:shell-exec",
-    "type": "static"
-  },
-  {
     "source": "npm:levn",
     "target": "npm:prelude-ls",
     "type": "static"
@@ -20256,6 +20351,36 @@
   },
   {
     "source": "npm:p-locate@4.1.0",
+    "target": "npm:p-limit@2.3.0",
+    "type": "static"
+  },
+  {
+    "source": "npm:pkg-up",
+    "target": "npm:find-up@3.0.0",
+    "type": "static"
+  },
+  {
+    "source": "npm:find-up@3.0.0",
+    "target": "npm:locate-path@3.0.0",
+    "type": "static"
+  },
+  {
+    "source": "npm:locate-path@3.0.0",
+    "target": "npm:p-locate@3.0.0",
+    "type": "static"
+  },
+  {
+    "source": "npm:locate-path@3.0.0",
+    "target": "npm:path-exists@3.0.0",
+    "type": "static"
+  },
+  {
+    "source": "npm:p-limit@2.3.0",
+    "target": "npm:p-try",
+    "type": "static"
+  },
+  {
+    "source": "npm:p-locate@3.0.0",
     "target": "npm:p-limit@2.3.0",
     "type": "static"
   },
@@ -22487,21 +22612,6 @@
   {
     "source": "npm:readable-stream@3.6.2",
     "target": "npm:util-deprecate",
-    "type": "static"
-  },
-  {
-    "source": "npm:tcp-port-used",
-    "target": "npm:debug@4.3.1",
-    "type": "static"
-  },
-  {
-    "source": "npm:tcp-port-used",
-    "target": "npm:is2",
-    "type": "static"
-  },
-  {
-    "source": "npm:debug@4.3.1",
-    "target": "npm:ms@2.1.2",
     "type": "static"
   },
   {

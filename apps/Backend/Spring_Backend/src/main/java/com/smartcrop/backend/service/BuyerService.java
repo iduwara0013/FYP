@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
@@ -64,7 +65,8 @@ public class BuyerService {
     }
 
     public Map<String, Object> getBuyerById(String buyerId) throws Exception {
-        DocumentSnapshot document = firestore.collection(BUYER_COLLECTION).document(buyerId).get().get();
+        String nonNullBuyerId = Objects.requireNonNull(buyerId, "buyerId must not be null");
+        DocumentSnapshot document = firestore.collection(BUYER_COLLECTION).document(nonNullBuyerId).get().get();
 
         if (!document.exists()) {
             return null;
@@ -113,11 +115,10 @@ public class BuyerService {
                 }
             }
 
-            Map<String, Object> counterData = Map.of(
+            transaction.set(counterDocument, Map.of(
                 "year", year,
                 "sequence", nextSequence
-            );
-            transaction.set(counterDocument, counterData);
+            ));
 
             return nextSequence;
         }).get();
