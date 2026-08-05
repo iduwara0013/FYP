@@ -2,11 +2,12 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+import { NotificationBadge } from "../notifications/NotificationComponents";
 import {
-    dashboardColors,
-    dashboardRadius,
-    dashboardShadow,
-    dashboardSpacing,
+  dashboardColors,
+  dashboardRadius,
+  dashboardShadow,
+  dashboardSpacing,
 } from "./theme";
 
 type DashboardHeaderProps = {
@@ -16,6 +17,7 @@ type DashboardHeaderProps = {
   isFarmer: boolean;
   onProfile: () => void;
   onNotifications: () => void;
+  unreadCount?: number;
 };
 
 function formatDate(date: Date): string {
@@ -40,6 +42,7 @@ export function DashboardHeader({
   isFarmer,
   onProfile,
   onNotifications,
+  unreadCount = 0,
 }: DashboardHeaderProps) {
   return (
     <View style={styles.wrap}>
@@ -61,7 +64,13 @@ export function DashboardHeader({
               size={20}
               color={dashboardColors.text}
             />
-            <View style={styles.badgeDot} />
+            {unreadCount > 0 ? (
+              <View style={styles.badgeContainer}>
+                <NotificationBadge count={unreadCount} size="sm" />
+              </View>
+            ) : (
+              <View style={styles.badgeDot} />
+            )}
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -141,6 +150,11 @@ const styles = StyleSheet.create({
     backgroundColor: dashboardColors.danger,
     borderWidth: 1.5,
     borderColor: dashboardColors.white,
+  },
+  badgeContainer: {
+    position: "absolute",
+    top: 4,
+    right: 4,
   },
   avatar: {
     width: 42,

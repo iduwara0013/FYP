@@ -41,6 +41,8 @@ type BuyerHomeScreenProps = {
   onWeatherUpdate: () => void;
   onBrowsePeople: () => void;
   onProfile: () => void;
+  onNotifications?: () => void;
+  unreadNotifications?: number;
 };
 
 function getGreeting(date: Date) {
@@ -69,6 +71,8 @@ export function BuyerHomeScreen({
   onWeatherUpdate,
   onBrowsePeople,
   onProfile,
+  onNotifications,
+  unreadNotifications = 0,
 }: BuyerHomeScreenProps) {
   const cardOpacity = useRef(new Animated.Value(0)).current;
   const cardOffset = useRef(new Animated.Value(12)).current;
@@ -420,7 +424,8 @@ export function BuyerHomeScreen({
             firstName={greetingName}
             now={now}
             onProfile={() => onProfile()}
-            onNotifications={() => {}}
+            onNotifications={() => onNotifications?.()}
+            unreadCount={unreadNotifications}
           />
         </Animated.View>
 

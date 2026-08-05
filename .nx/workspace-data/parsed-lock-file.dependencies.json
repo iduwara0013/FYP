@@ -9595,6 +9595,31 @@
     "type": "static"
   },
   {
+    "source": "npm:assert",
+    "target": "npm:call-bind",
+    "type": "static"
+  },
+  {
+    "source": "npm:assert",
+    "target": "npm:is-nan",
+    "type": "static"
+  },
+  {
+    "source": "npm:assert",
+    "target": "npm:object-is",
+    "type": "static"
+  },
+  {
+    "source": "npm:assert",
+    "target": "npm:object.assign",
+    "type": "static"
+  },
+  {
+    "source": "npm:assert",
+    "target": "npm:util",
+    "type": "static"
+  },
+  {
     "source": "npm:autoprefixer",
     "target": "npm:postcss",
     "type": "static"
@@ -12610,6 +12635,11 @@
     "type": "static"
   },
   {
+    "source": "npm:expo-application",
+    "target": "npm:expo",
+    "type": "static"
+  },
+  {
     "source": "npm:expo-asset",
     "target": "npm:expo",
     "type": "static"
@@ -12797,6 +12827,56 @@
   {
     "source": "npm:expo-modules-core",
     "target": "npm:invariant",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-notifications",
+    "target": "npm:expo",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-notifications",
+    "target": "npm:react",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-notifications",
+    "target": "npm:react-native",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-notifications",
+    "target": "npm:@expo/image-utils",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-notifications",
+    "target": "npm:@ide/backoff",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-notifications",
+    "target": "npm:abort-controller",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-notifications",
+    "target": "npm:assert",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-notifications",
+    "target": "npm:badgin",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-notifications",
+    "target": "npm:expo-application",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-notifications",
+    "target": "npm:expo-constants",
     "type": "static"
   },
   {
@@ -14665,6 +14745,16 @@
     "type": "static"
   },
   {
+    "source": "npm:is-arguments",
+    "target": "npm:call-bound",
+    "type": "static"
+  },
+  {
+    "source": "npm:is-arguments",
+    "target": "npm:has-tostringtag",
+    "type": "static"
+  },
+  {
     "source": "npm:is-array-buffer",
     "target": "npm:call-bind",
     "type": "static"
@@ -14787,6 +14877,16 @@
   {
     "source": "npm:is-glob",
     "target": "npm:is-extglob",
+    "type": "static"
+  },
+  {
+    "source": "npm:is-nan",
+    "target": "npm:call-bind",
+    "type": "static"
+  },
+  {
+    "source": "npm:is-nan",
+    "target": "npm:define-properties",
     "type": "static"
   },
   {
@@ -20030,6 +20130,16 @@
     "type": "static"
   },
   {
+    "source": "npm:object-is",
+    "target": "npm:call-bind",
+    "type": "static"
+  },
+  {
+    "source": "npm:object-is",
+    "target": "npm:define-properties",
+    "type": "static"
+  },
+  {
     "source": "npm:object.assign",
     "target": "npm:call-bind",
     "type": "static"
@@ -23127,6 +23237,31 @@
   {
     "source": "npm:use-sync-external-store",
     "target": "npm:react",
+    "type": "static"
+  },
+  {
+    "source": "npm:util",
+    "target": "npm:inherits",
+    "type": "static"
+  },
+  {
+    "source": "npm:util",
+    "target": "npm:is-arguments",
+    "type": "static"
+  },
+  {
+    "source": "npm:util",
+    "target": "npm:is-generator-function",
+    "type": "static"
+  },
+  {
+    "source": "npm:util",
+    "target": "npm:is-typed-array",
+    "type": "static"
+  },
+  {
+    "source": "npm:util",
+    "target": "npm:which-typed-array",
     "type": "static"
   },
   {

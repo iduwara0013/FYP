@@ -26,7 +26,9 @@ public class FirestoreCollectionService {
         "market_prices",
         "messages",
         "notifications",
-        "weather_data"
+        "weather_data",
+        "app_notifications",
+        "notification_preferences"
     ));
 
     private final Firestore firestore;

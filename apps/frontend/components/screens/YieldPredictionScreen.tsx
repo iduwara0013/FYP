@@ -2,6 +2,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
+import { recordPredictionMade } from "../../lib/notifications/DailyTipsService";
 import {
   FarmPrediction,
   getPredictionOptions,
@@ -218,6 +219,8 @@ export function YieldPredictionScreen({
       });
 
       setResult(prediction);
+      // Record that the user made a prediction (for prediction reminders).
+      void recordPredictionMade();
     } catch (requestError) {
       setResult(null);
       setError(

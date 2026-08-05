@@ -46,6 +46,14 @@
         "hash": "15506841999317835013"
       },
       {
+        "file": "babel.config.js",
+        "hash": "17477682806607470478"
+      },
+      {
+        "file": "docs/PR2_Presentation.md",
+        "hash": "11078656416116058576"
+      },
+      {
         "file": "eslint.config.js",
         "hash": "2023422486053701422"
       },
@@ -79,11 +87,11 @@
       },
       {
         "file": "package-lock.json",
-        "hash": "13852744168174280115"
+        "hash": "8978051614259488689"
       },
       {
         "file": "package.json",
-        "hash": "10068402471418558227"
+        "hash": "7581288342695374400"
       },
       {
         "file": "scripts/reset-project.js",
@@ -99,6 +107,92 @@
       }
     ],
     "projectFileMap": {
+      "python_backend": [
+        {
+          "file": "apps/Backend/python_backend/README.md",
+          "hash": "4273144513629157772"
+        },
+        {
+          "file": "apps/Backend/python_backend/__pycache__/app.cpython-314.pyc",
+          "hash": "9906423761795220301"
+        },
+        {
+          "file": "apps/Backend/python_backend/app.py",
+          "hash": "13609538789070247240"
+        },
+        {
+          "file": "apps/Backend/python_backend/project.json",
+          "hash": "13101869080306266961"
+        },
+        {
+          "file": "apps/Backend/python_backend/requirements.txt",
+          "hash": "4767493064811790358"
+        },
+        {
+          "file": "apps/Backend/python_backend/scripts/__pycache__/train_models.cpython-314.pyc",
+          "hash": "3181286166357433178"
+        },
+        {
+          "file": "apps/Backend/python_backend/scripts/train_models.py",
+          "hash": "17977199060408091176"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/crop_median_production.joblib",
+          "hash": "13691589812835659450"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/price_model_features.joblib",
+          "hash": "10156043857776893746"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/price_prediction_model.joblib",
+          "hash": "18388452226950820740"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/yield_model.joblib",
+          "hash": "7153977336095513544"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/yield_model_features.joblib",
+          "hash": "16260038297128887579"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/yield_prediction_model.joblib",
+          "hash": "12317942548221981669"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/firebase_service.cpython-313.pyc",
+          "hash": "3607541764718965213"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/prediction_service.cpython-314.pyc",
+          "hash": "15451117766436982765"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/yield_prediction.cpython-313.pyc",
+          "hash": "11197955055776819408"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/yield_prediction.cpython-314.pyc",
+          "hash": "15494179624762132442"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/firebase_service.py",
+          "hash": "12559871288632289273"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/prediction_service.py",
+          "hash": "3036728500578462726"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/yield_prediction.py",
+          "hash": "15466435499366697269"
+        },
+        {
+          "file": "apps/Backend/python_backend/sri_lanka_vegetable_dataset.csv",
+          "hash": "10151999312307862927"
+        }
+      ],
       "frontend": [
         {
           "file": "apps/frontend/.env",
@@ -122,7 +216,7 @@
         },
         {
           "file": "apps/frontend/app.json",
-          "hash": "12511447948768751725"
+          "hash": "9055584396055852908"
         },
         {
           "file": "apps/frontend/app/(tabs)/_layout.tsx",
@@ -159,7 +253,7 @@
         },
         {
           "file": "apps/frontend/app/index.tsx",
-          "hash": "7276190352808795312",
+          "hash": "15272161833595854254",
           "deps": [
             "npm:react",
             "npm:react-native"
@@ -172,6 +266,10 @@
             "npm:expo-router",
             "npm:react-native"
           ]
+        },
+        {
+          "file": "apps/frontend/assets/images/.gitkeep",
+          "hash": "3244421341483603138"
         },
         {
           "file": "apps/frontend/assets/images/android-icon-background.png",
@@ -216,6 +314,97 @@
         {
           "file": "apps/frontend/babel.config.js",
           "hash": "15171899872433303675"
+        },
+        {
+          "file": "apps/frontend/components/buyer/BuyerComponents.tsx",
+          "hash": "10602848776618908990",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:expo-linear-gradient",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/buyer/theme.ts",
+          "hash": "5552332411267036277"
+        },
+        {
+          "file": "apps/frontend/components/dashboard/AIInsightCard.tsx",
+          "hash": "17835693006286620900",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/DashboardHeader.tsx",
+          "hash": "11076550223690635898",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/FloatingBottomNav.tsx",
+          "hash": "534661152611712681",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/InfoCards.tsx",
+          "hash": "10292012557994575957",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/PredictionCarousel.tsx",
+          "hash": "11317258011491251991",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/ProfileCard.tsx",
+          "hash": "11800180015651849266",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/QuickActionGrid.tsx",
+          "hash": "13964680602761287805",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/WeatherCard.tsx",
+          "hash": "2095406063313973023",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:expo-linear-gradient",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/theme.ts",
+          "hash": "194333086367204963"
         },
         {
           "file": "apps/frontend/components/external-link.tsx",
@@ -331,6 +520,28 @@
           ]
         },
         {
+          "file": "apps/frontend/components/notifications/NotificationComponents.tsx",
+          "hash": "12448001751404717186",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/notifications/PremiumNotificationCards.tsx",
+          "hash": "4000547264438061817",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/notifications/theme.ts",
+          "hash": "2311542738067134311"
+        },
+        {
           "file": "apps/frontend/components/parallax-scroll-view.tsx",
           "hash": "14653674748704193518",
           "deps": [
@@ -340,10 +551,77 @@
           ]
         },
         {
-          "file": "apps/frontend/components/screens/BuyerHomeScreen.tsx",
-          "hash": "3111021516512973079",
+          "file": "apps/frontend/components/prediction/FarmSummaryCard.tsx",
+          "hash": "764626771972654316",
           "deps": [
             "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/prediction/InputSection.tsx",
+          "hash": "1115206557615607866",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/prediction/LoadingSkeleton.tsx",
+          "hash": "17212431692437376153",
+          "deps": [
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/prediction/PredictionButton.tsx",
+          "hash": "10721008777475787884",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:expo-linear-gradient",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/prediction/PredictionHeader.tsx",
+          "hash": "4568610049870982149",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:expo-linear-gradient",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/prediction/ResultCard.tsx",
+          "hash": "15136674704482294946",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/prediction/Selectors.tsx",
+          "hash": "14793998978807711001",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/prediction/theme.ts",
+          "hash": "12450252014798010828"
+        },
+        {
+          "file": "apps/frontend/components/screens/BuyerHomeScreen.tsx",
+          "hash": "227882500224623192",
+          "deps": [
             "npm:react",
             "npm:react-native"
           ]
@@ -368,27 +646,28 @@
         },
         {
           "file": "apps/frontend/components/screens/HomeScreen.tsx",
-          "hash": "2989828938887076693",
+          "hash": "3353043313180882127",
           "deps": [
-            "npm:@expo/vector-icons",
             "npm:react",
             "npm:react-native"
           ]
         },
         {
           "file": "apps/frontend/components/screens/LoadingScreen.tsx",
-          "hash": "12307550388649295296",
+          "hash": "6783166692122913131",
           "deps": [
             "npm:@expo/vector-icons",
+            "npm:expo-linear-gradient",
             "npm:react",
             "npm:react-native"
           ]
         },
         {
           "file": "apps/frontend/components/screens/LoginScreen.tsx",
-          "hash": "16781251164879763183",
+          "hash": "16143156559345771549",
           "deps": [
             "npm:@expo/vector-icons",
+            "npm:expo-linear-gradient",
             "npm:react",
             "npm:react-native",
             "npm:firebase"
@@ -397,6 +676,15 @@
         {
           "file": "apps/frontend/components/screens/MarketPricesScreen.tsx",
           "hash": "14672251089299347526",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/NotificationScreen.tsx",
+          "hash": "752015131541682387",
           "deps": [
             "npm:@expo/vector-icons",
             "npm:react",
@@ -425,9 +713,10 @@
         },
         {
           "file": "apps/frontend/components/screens/SignUpScreen.tsx",
-          "hash": "4781391728455905713",
+          "hash": "12375504429282880191",
           "deps": [
             "npm:@expo/vector-icons",
+            "npm:expo-linear-gradient",
             "npm:react",
             "npm:react-native",
             "npm:firebase"
@@ -445,7 +734,7 @@
         },
         {
           "file": "apps/frontend/components/screens/YieldPredictionScreen.tsx",
-          "hash": "15257354063300250578",
+          "hash": "11806019603303852313",
           "deps": [
             "npm:@expo/vector-icons",
             "npm:react",
@@ -523,6 +812,13 @@
           "hash": "2742386001990436387"
         },
         {
+          "file": "apps/frontend/hooks/useNotifications.ts",
+          "hash": "10634137004907271565",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
           "file": "apps/frontend/index.js",
           "hash": "14343180379406773961",
           "deps": [
@@ -554,6 +850,55 @@
           "hash": "1624659577479539671",
           "deps": [
             "npm:firebase"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/notifications/DailyTipsService.ts",
+          "hash": "9424021121493558548",
+          "deps": [
+            "npm:@react-native-async-storage/async-storage"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/notifications/MarketNotificationService.ts",
+          "hash": "10653404768308128236",
+          "deps": [
+            "npm:@react-native-async-storage/async-storage"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/notifications/NotificationPreferences.ts",
+          "hash": "8928825726821937925"
+        },
+        {
+          "file": "apps/frontend/lib/notifications/NotificationService.ts",
+          "hash": "8149689521508242171",
+          "deps": [
+            "npm:@react-native-async-storage/async-storage",
+            "npm:expo-notifications",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/notifications/NotificationTest.ts",
+          "hash": "10485327235452325849"
+        },
+        {
+          "file": "apps/frontend/lib/notifications/WeatherNotificationService.ts",
+          "hash": "2708895107408956792",
+          "deps": [
+            "npm:@react-native-async-storage/async-storage"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/notifications/index.ts",
+          "hash": "12276207819704292430"
+        },
+        {
+          "file": "apps/frontend/lib/notifications/types.ts",
+          "hash": "14541476128664902411",
+          "deps": [
+            "npm:@expo/vector-icons"
           ]
         },
         {
@@ -591,92 +936,6 @@
         {
           "file": "apps/frontend/tsconfig.json",
           "hash": "14617262498094116381"
-        }
-      ],
-      "python_backend": [
-        {
-          "file": "apps/Backend/python_backend/README.md",
-          "hash": "4273144513629157772"
-        },
-        {
-          "file": "apps/Backend/python_backend/__pycache__/app.cpython-314.pyc",
-          "hash": "9906423761795220301"
-        },
-        {
-          "file": "apps/Backend/python_backend/app.py",
-          "hash": "13609538789070247240"
-        },
-        {
-          "file": "apps/Backend/python_backend/project.json",
-          "hash": "13101869080306266961"
-        },
-        {
-          "file": "apps/Backend/python_backend/requirements.txt",
-          "hash": "4767493064811790358"
-        },
-        {
-          "file": "apps/Backend/python_backend/scripts/__pycache__/train_models.cpython-314.pyc",
-          "hash": "3181286166357433178"
-        },
-        {
-          "file": "apps/Backend/python_backend/scripts/train_models.py",
-          "hash": "17977199060408091176"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/models/crop_median_production.joblib",
-          "hash": "13691589812835659450"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/models/price_model_features.joblib",
-          "hash": "10156043857776893746"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/models/price_prediction_model.joblib",
-          "hash": "18388452226950820740"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/models/yield_model.joblib",
-          "hash": "7153977336095513544"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/models/yield_model_features.joblib",
-          "hash": "16260038297128887579"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/models/yield_prediction_model.joblib",
-          "hash": "12317942548221981669"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/__pycache__/firebase_service.cpython-313.pyc",
-          "hash": "3607541764718965213"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/__pycache__/prediction_service.cpython-314.pyc",
-          "hash": "15451117766436982765"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/__pycache__/yield_prediction.cpython-313.pyc",
-          "hash": "11197955055776819408"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/__pycache__/yield_prediction.cpython-314.pyc",
-          "hash": "15494179624762132442"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/firebase_service.py",
-          "hash": "12559871288632289273"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/prediction_service.py",
-          "hash": "3036728500578462726"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/yield_prediction.py",
-          "hash": "15466435499366697269"
-        },
-        {
-          "file": "apps/Backend/python_backend/sri_lanka_vegetable_dataset.csv",
-          "hash": "10151999312307862927"
         }
       ],
       "Spring_Backend": [
@@ -818,7 +1077,7 @@
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/service/FirestoreCollectionService.java",
-          "hash": "13319159856432788968"
+          "hash": "11357849937182798963"
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/service/HartiPriceService.java",
@@ -998,7 +1257,7 @@
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/FirestoreCollectionService.class",
-          "hash": "17308594747626140016"
+          "hash": "12887763839078072439"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/HartiPriceService$BulletinResult.class",
@@ -1067,5 +1326,5 @@
       ]
     }
   },
-  "externalNodesHash": "3295009575525255792"
+  "externalNodesHash": "17317271199989475916"
 }

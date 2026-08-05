@@ -2610,6 +2610,15 @@
         "hash": "sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ=="
       }
     },
+    "npm:@ide/backoff": {
+      "type": "npm",
+      "name": "npm:@ide/backoff",
+      "data": {
+        "version": "1.0.0",
+        "packageName": "@ide/backoff",
+        "hash": "sha512-F0YfUDjvT+Mtt/R4xdl2X0EYCHMMiJqNLdxHD++jDT5ydEFIyqbCHh51Qx2E211dgZprPKhV7sHmnXKpLuvc5g=="
+      }
+    },
     "npm:@isaacs/cliui": {
       "type": "npm",
       "name": "npm:@isaacs/cliui",
@@ -6552,6 +6561,15 @@
         "hash": "sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA=="
       }
     },
+    "npm:assert": {
+      "type": "npm",
+      "name": "npm:assert",
+      "data": {
+        "version": "2.1.0",
+        "packageName": "assert",
+        "hash": "sha512-eLHpSK/Y4nhMJ07gDaAzoX/XAKS8PSaojml3M0DM4JpV1LAi5JOJ/p6H/XWrl8L+DzVEvVCW1z3vWAaB9oTsQw=="
+      }
+    },
     "npm:assertion-error": {
       "type": "npm",
       "name": "npm:assertion-error",
@@ -6865,6 +6883,15 @@
         "version": "30.3.0",
         "packageName": "babel-preset-jest",
         "hash": "sha512-6ZcUbWHC+dMz2vfzdNwi87Z1gQsLNK2uLuK1Q89R11xdvejcivlYYwDlEv0FHX3VwEXpbBQ9uufB/MUNpZGfhQ=="
+      }
+    },
+    "npm:badgin": {
+      "type": "npm",
+      "name": "npm:badgin",
+      "data": {
+        "version": "1.2.3",
+        "packageName": "badgin",
+        "hash": "sha512-NQGA7LcfCpSzIbGRbkgjgdWkjy7HI+Th5VLxTJfW5EeaAf3fnS+xWQaQOCYiny+q6QSvxqoSO04vCx+4u++EJw=="
       }
     },
     "npm:base64-js": {
@@ -8658,6 +8685,15 @@
         "hash": "sha512-3yOEfAKqo+gqHcV8vKcnq0uA5zxlohnhA3fu4G43likN8ct5ZZ3LjAh9wDdKteEkoad3tFPvwxmXW711S5OHUw=="
       }
     },
+    "npm:expo-application": {
+      "type": "npm",
+      "name": "npm:expo-application",
+      "data": {
+        "version": "7.0.8",
+        "packageName": "expo-application",
+        "hash": "sha512-qFGyxk7VJbrNOQWBbE09XUuGuvkOgFS9QfToaK2FdagM2aQ+x3CvGV2DuVgl/l4ZxPgIf3b/MNh9xHpwSwn74Q=="
+      }
+    },
     "npm:expo-asset": {
       "type": "npm",
       "name": "npm:expo-asset",
@@ -8764,6 +8800,15 @@
         "version": "3.0.29",
         "packageName": "expo-modules-core",
         "hash": "sha512-LzipcjGqk8gvkrOUf7O2mejNWugPkf3lmd9GkqL9WuNyeN2fRwU0Dn77e3ZUKI3k6sI+DNwjkq4Nu9fNN9WS7Q=="
+      }
+    },
+    "npm:expo-notifications": {
+      "type": "npm",
+      "name": "npm:expo-notifications",
+      "data": {
+        "version": "0.32.17",
+        "packageName": "expo-notifications",
+        "hash": "sha512-lwwzn7tImuzTzn9PAglZlS2VfZEvsfFGJTK9Eb8I4cqkGh2DI23YJFJH+WPEIu4QhDvk5JeBjklenJ8IZbmA4A=="
       }
     },
     "npm:expo-router": {
@@ -9882,6 +9927,15 @@
         "hash": "sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g=="
       }
     },
+    "npm:is-arguments": {
+      "type": "npm",
+      "name": "npm:is-arguments",
+      "data": {
+        "version": "1.2.0",
+        "packageName": "is-arguments",
+        "hash": "sha512-7bVbi0huj/wrIAOzb8U1aszg9kdi3KN/CyU19CTI7tAoZYEZoL9yCDXpbXN+uPsuWnP02cyug1gleqq+TU+YCA=="
+      }
+    },
     "npm:is-array-buffer": {
       "type": "npm",
       "name": "npm:is-array-buffer",
@@ -10051,6 +10105,15 @@
         "version": "1.0.0",
         "packageName": "is-module",
         "hash": "sha512-51ypPSPCoTEIN9dy5Oy+h4pShgJmPCygKfyRCISBI+JoWT/2oJvK8QPxmwv7b/p239jXrm9M1mlQbyKJ5A152g=="
+      }
+    },
+    "npm:is-nan": {
+      "type": "npm",
+      "name": "npm:is-nan",
+      "data": {
+        "version": "1.3.2",
+        "packageName": "is-nan",
+        "hash": "sha512-E+zBKpQ2t6MEo1VsonYmluk9NxGrbzpeeLC2xIViuO2EjU2xsXsBPwTr3Ykv9l08UYEVEdWeRZNouaZqF6RN0w=="
       }
     },
     "npm:is-negative-zero": {
@@ -11590,6 +11653,15 @@
         "version": "1.13.4",
         "packageName": "object-inspect",
         "hash": "sha512-W67iLl4J2EXEGTbfeHCffrjDfitvLANg0UlX3wFUUSTx92KXRFegMHUVgSqE+wvhAbi4WqjGg9czysTV2Epbew=="
+      }
+    },
+    "npm:object-is": {
+      "type": "npm",
+      "name": "npm:object-is",
+      "data": {
+        "version": "1.1.6",
+        "packageName": "object-is",
+        "hash": "sha512-F8cZ+KfGlSGi09lJT7/Nd6KJZ9ygtvYC0/UYYLI9nmQKLMnydpB9yvbv9K1uSkEu7FU9vYPmVwLg328tX+ot3Q=="
       }
     },
     "npm:object-keys": {
@@ -13824,6 +13896,15 @@
         "hash": "sha512-Xn0w3MtiQ6zoz2vFyUVruaCL53O/DwUvkEeOvj+uulMm0BkUGYWmBYVyElqZaSLhY6ZD0ulfU3aBra2aVT4xfA=="
       }
     },
+    "npm:util": {
+      "type": "npm",
+      "name": "npm:util",
+      "data": {
+        "version": "0.12.5",
+        "packageName": "util",
+        "hash": "sha512-kZf/K6hEIrWHI6XqOFUiiMa+79wE/D8Q+NCNAWclkyg3b4d2k7s0QGepNjiABc+aR3N1PAyHL7p6UcLY6LmrnA=="
+      }
+    },
     "npm:util-deprecate": {
       "type": "npm",
       "name": "npm:util-deprecate",
@@ -14516,6 +14597,7 @@
     "node_modules/@humanfs/node": "npm:@humanfs/node",
     "node_modules/@humanwhocodes/module-importer": "npm:@humanwhocodes/module-importer",
     "node_modules/@humanwhocodes/retry": "npm:@humanwhocodes/retry",
+    "node_modules/@ide/backoff": "npm:@ide/backoff",
     "node_modules/@isaacs/cliui": "npm:@isaacs/cliui",
     "node_modules/@isaacs/cliui/node_modules/ansi-regex": "npm:ansi-regex@6.2.2",
     "node_modules/@isaacs/cliui/node_modules/ansi-styles": "npm:ansi-styles@6.2.3",
@@ -14986,6 +15068,7 @@
     "node_modules/array.prototype.tosorted": "npm:array.prototype.tosorted",
     "node_modules/arraybuffer.prototype.slice": "npm:arraybuffer.prototype.slice",
     "node_modules/asap": "npm:asap",
+    "node_modules/assert": "npm:assert",
     "node_modules/assertion-error": "npm:assertion-error",
     "node_modules/async": "npm:async",
     "node_modules/async-function": "npm:async-function",
@@ -15022,6 +15105,7 @@
     "node_modules/babel-preset-current-node-syntax": "npm:babel-preset-current-node-syntax",
     "node_modules/babel-preset-expo": "npm:babel-preset-expo",
     "node_modules/babel-preset-jest": "npm:babel-preset-jest",
+    "node_modules/badgin": "npm:badgin",
     "node_modules/balanced-match": "npm:balanced-match",
     "node_modules/base64-js": "npm:base64-js",
     "node_modules/baseline-browser-mapping": "npm:baseline-browser-mapping",
@@ -15232,6 +15316,7 @@
     "node_modules/expect": "npm:expect",
     "node_modules/expect-type": "npm:expect-type",
     "node_modules/expo": "npm:expo",
+    "node_modules/expo-application": "npm:expo-application",
     "node_modules/expo-asset": "npm:expo-asset",
     "node_modules/expo-constants": "npm:expo-constants",
     "node_modules/expo-file-system": "npm:expo-file-system",
@@ -15244,6 +15329,7 @@
     "node_modules/expo-location": "npm:expo-location",
     "node_modules/expo-modules-autolinking": "npm:expo-modules-autolinking",
     "node_modules/expo-modules-core": "npm:expo-modules-core",
+    "node_modules/expo-notifications": "npm:expo-notifications",
     "node_modules/expo-router": "npm:expo-router",
     "node_modules/expo-router/node_modules/@radix-ui/react-collection": "npm:@radix-ui/react-collection@1.1.7",
     "node_modules/expo-router/node_modules/@radix-ui/react-collection/node_modules/@radix-ui/react-slot": "npm:@radix-ui/react-slot@1.2.3",
@@ -15398,6 +15484,7 @@
     "node_modules/internal-slot": "npm:internal-slot",
     "node_modules/invariant": "npm:invariant",
     "node_modules/ipaddr.js": "npm:ipaddr.js",
+    "node_modules/is-arguments": "npm:is-arguments",
     "node_modules/is-array-buffer": "npm:is-array-buffer",
     "node_modules/is-arrayish": "npm:is-arrayish",
     "node_modules/is-async-function": "npm:is-async-function",
@@ -15419,6 +15506,7 @@
     "node_modules/is-interactive": "npm:is-interactive",
     "node_modules/is-map": "npm:is-map",
     "node_modules/is-module": "npm:is-module",
+    "node_modules/is-nan": "npm:is-nan",
     "node_modules/is-negative-zero": "npm:is-negative-zero",
     "node_modules/is-number": "npm:is-number",
     "node_modules/is-number-object": "npm:is-number-object",
@@ -15804,6 +15892,7 @@
     "node_modules/ob1": "npm:ob1",
     "node_modules/object-assign": "npm:object-assign",
     "node_modules/object-inspect": "npm:object-inspect",
+    "node_modules/object-is": "npm:object-is",
     "node_modules/object-keys": "npm:object-keys",
     "node_modules/object.assign": "npm:object.assign",
     "node_modules/object.entries": "npm:object.entries",
@@ -16138,6 +16227,7 @@
     "node_modules/use-sidecar": "npm:use-sidecar",
     "node_modules/use-sync-external-store": "npm:use-sync-external-store",
     "node_modules/utf8-byte-length": "npm:utf8-byte-length",
+    "node_modules/util": "npm:util",
     "node_modules/util-deprecate": "npm:util-deprecate",
     "node_modules/utils-merge": "npm:utils-merge",
     "node_modules/uuid": "npm:uuid",

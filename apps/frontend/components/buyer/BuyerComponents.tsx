@@ -2,15 +2,16 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import {
-    ActivityIndicator,
-    FlatList,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { getWeatherDescription, getWeatherIcon } from "../../lib/weather";
+import { NotificationBadge } from "../notifications/NotificationComponents";
 import type { ProfileData } from "../screens/profile-types";
 import { buyerColors, buyerRadius, buyerShadow, buyerSpacing } from "./theme";
 
@@ -24,6 +25,7 @@ type BuyerHeaderProps = {
   now: Date;
   onProfile: () => void;
   onNotifications: () => void;
+  unreadCount?: number;
 };
 
 export function BuyerHeader({
@@ -32,6 +34,7 @@ export function BuyerHeader({
   now,
   onProfile,
   onNotifications,
+  unreadCount = 0,
 }: BuyerHeaderProps) {
   return (
     <LinearGradient
@@ -67,7 +70,13 @@ export function BuyerHeader({
             size={20}
             color="#FFFFFF"
           />
-          <View style={styles.badgeDot} />
+          {unreadCount > 0 ? (
+            <View style={styles.badgeContainer}>
+              <NotificationBadge count={unreadCount} size="sm" />
+            </View>
+          ) : (
+            <View style={styles.badgeDot} />
+          )}
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.iconButton, styles.avatarButton]}
@@ -708,6 +717,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#EF4444",
     borderWidth: 1.5,
     borderColor: "#FFFFFF",
+  },
+  badgeContainer: {
+    position: "absolute",
+    top: 3,
+    right: 3,
   },
   heroGreeting: {
     fontSize: 24,

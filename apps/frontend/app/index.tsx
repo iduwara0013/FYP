@@ -8,6 +8,7 @@ import { HomeScreen } from "@/components/screens/HomeScreen";
 import { LoadingScreen } from "@/components/screens/LoadingScreen";
 import { LoginScreen } from "@/components/screens/LoginScreen";
 import { MarketPricesScreen } from "@/components/screens/MarketPricesScreen";
+import { NotificationScreen } from "@/components/screens/NotificationScreen";
 import { ProfileCompletionScreen } from "@/components/screens/ProfileCompletionScreen";
 import { ProfileViewScreen } from "@/components/screens/ProfileViewScreen";
 import { SignUpScreen } from "@/components/screens/SignUpScreen";
@@ -18,6 +19,7 @@ import {
   Role,
   SignupDetails,
 } from "@/components/screens/profile-types";
+import { useNotifications } from "@/hooks/useNotifications";
 import { getProfileByEmail } from "@/lib/spring-api";
 
 type Screen =
@@ -31,6 +33,7 @@ type Screen =
   | "weather"
   | "yield-prediction"
   | "buyers"
+  | "notifications"
   | "home";
 
 export default function EntryScreen() {
@@ -40,6 +43,21 @@ export default function EntryScreen() {
     null,
   );
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
+
+  // Wire up the notification system (push permission, background checks,
+  // deep-link handling, live unread count).
+  const { unreadCount } = useNotifications({
+    profile: profileData,
+    onDeepLink: (deepLink) => {
+      if (deepLink === "smartcrop://weather") setCurrentScreen("weather");
+      else if (deepLink === "smartcrop://market-prices")
+        setCurrentScreen("market-prices");
+      else if (deepLink === "smartcrop://yield-prediction")
+        setCurrentScreen("yield-prediction");
+      else if (deepLink === "smartcrop://home") setCurrentScreen("home");
+    },
+    enabled: !!profileData,
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => setCurrentScreen("login"), 2400);
@@ -102,8 +120,9 @@ export default function EntryScreen() {
         />
       )}
 
-      {currentScreen === "home" && profileData && (
-        profileData.role === "buyer" ? (
+      {currentScreen === "home" &&
+        profileData &&
+        (profileData.role === "buyer" ? (
           <BuyerHomeScreen
             profile={profileData}
             onMarketPrices={() => setCurrentScreen("market-prices")}
@@ -112,6 +131,8 @@ export default function EntryScreen() {
             onProfile={() =>
               setCurrentScreen(profileData ? "profile-view" : "profile")
             }
+            onNotifications={() => setCurrentScreen("notifications")}
+            unreadNotifications={unreadCount}
           />
         ) : (
           <HomeScreen
@@ -124,9 +145,10 @@ export default function EntryScreen() {
             onProfile={() =>
               setCurrentScreen(profileData ? "profile-view" : "profile")
             }
+            onNotifications={() => setCurrentScreen("notifications")}
+            unreadNotifications={unreadCount}
           />
-        )
-      )}
+        ))}
 
       {currentScreen === "weather" && (
         <WeatherScreen
@@ -150,6 +172,21 @@ export default function EntryScreen() {
         <BuyersScreen
           onBackToHome={() => setCurrentScreen("home")}
           userRegion={profileData?.region}
+        />
+      )}
+
+      {currentScreen === "notifications" && profileData && (
+        <NotificationScreen
+          profile={profileData}
+          onBackToHome={() => setCurrentScreen("home")}
+          onDeepLink={(deepLink) => {
+            if (deepLink === "smartcrop://weather") setCurrentScreen("weather");
+            else if (deepLink === "smartcrop://market-prices")
+              setCurrentScreen("market-prices");
+            else if (deepLink === "smartcrop://yield-prediction")
+              setCurrentScreen("yield-prediction");
+            else setCurrentScreen("home");
+          }}
         />
       )}
     </View>

@@ -163,6 +163,8 @@ type HomeScreenProps = {
   onBuyers?: () => void;
   onYieldPrediction?: () => void;
   onCropRecommendation?: () => void;
+  onNotifications?: () => void;
+  unreadNotifications?: number;
 };
 
 function getGreeting(date: Date) {
@@ -205,6 +207,8 @@ export function HomeScreen({
   onBuyers,
   onYieldPrediction,
   onCropRecommendation,
+  onNotifications,
+  unreadNotifications = 0,
 }: HomeScreenProps) {
   const isFarmer = profile?.role !== "buyer";
   const cardOpacity = useRef(new Animated.Value(0)).current;
@@ -419,7 +423,8 @@ export function HomeScreen({
             now={now}
             isFarmer={isFarmer}
             onProfile={() => onProfile?.()}
-            onNotifications={() => {}}
+            onNotifications={() => onNotifications?.()}
+            unreadCount={unreadNotifications}
           />
         </Animated.View>
 

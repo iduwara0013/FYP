@@ -43,6 +43,45 @@
         {
           "locationWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location to show live weather for your area."
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#0F7A3A",
+          "sounds": [],
+          "androidChannels": [
+            {
+              "channelId": "weather",
+              "name": "Weather Alerts",
+              "importance": "high",
+              "vibration": true
+            },
+            {
+              "channelId": "market",
+              "name": "Market Price Alerts",
+              "importance": "default",
+              "vibration": true
+            },
+            {
+              "channelId": "tips",
+              "name": "Daily Tips",
+              "importance": "low",
+              "vibration": false
+            },
+            {
+              "channelId": "prediction",
+              "name": "Prediction Reminders",
+              "importance": "default",
+              "vibration": true
+            },
+            {
+              "channelId": "news",
+              "name": "News Updates",
+              "importance": "low",
+              "vibration": false
+            }
+          ]
+        }
       ]
     ],
     "experiments": {
