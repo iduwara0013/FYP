@@ -11,6 +11,8 @@ import {
   View,
 } from "react-native";
 
+import { useTheme } from "../../context/ThemeContext";
+import { useI18n } from "../../i18n";
 import {
   fetchWeatherForCoordinates,
   fetchWeatherForRegion,
@@ -109,6 +111,9 @@ type MetricItem = {
 };
 
 export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
+  const { theme } = useTheme();
+  const { colors } = theme;
+  const { t } = useI18n();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [weather, setWeather] = useState<WeatherState | null>(null);
@@ -154,7 +159,7 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
     ? [
         {
           key: "humidity",
-          label: "Humidity",
+          label: t("humidity"),
           value:
             weather.humidity != null
               ? `${Math.round(weather.humidity)}%`
@@ -165,7 +170,7 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
         },
         {
           key: "wind",
-          label: "Wind Speed",
+          label: t("windSpeed"),
           value:
             weather.windSpeed != null
               ? `${Math.round(weather.windSpeed)} km/h`
@@ -176,7 +181,7 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
         },
         {
           key: "location",
-          label: "Coordinates",
+          label: t("coordinates"),
           value: `${weather.latitude.toFixed(2)}°, ${weather.longitude.toFixed(2)}°`,
           icon: "map-marker-outline",
           tint: "#B45309",
@@ -186,40 +191,48 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
     : [];
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.topBlob} />
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
+      <View style={[styles.topBlob, { backgroundColor: colors.weatherSoft }]} />
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.headerRow}>
           <TouchableOpacity
-            style={styles.backButton}
+            style={[styles.backButton, { backgroundColor: colors.surface }]}
             onPress={onBackToHome}
             activeOpacity={0.85}
           >
             <MaterialCommunityIcons
               name="arrow-left"
               size={22}
-              color="#0F172A"
+              color={colors.text}
             />
-            <Text style={styles.backButtonText}>Home</Text>
+            <Text style={[styles.backButtonText, { color: colors.text }]}>
+              {t("home")}
+            </Text>
           </TouchableOpacity>
-          <View style={styles.headerIconWrap}>
+          <View
+            style={[styles.headerIconWrap, { backgroundColor: colors.surface }]}
+          >
             <MaterialCommunityIcons
               name="weather-partly-cloudy"
               size={22}
-              color="#2563EB"
+              color={colors.weather}
             />
           </View>
         </View>
 
-        <Text style={styles.title}>Weather Details</Text>
-        <Text style={styles.subtitle}>
-          Live conditions based on your{" "}
+        <Text style={[styles.title, { color: colors.text }]}>
+          {t("weatherDetails")}
+        </Text>
+        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+          {t("liveConditions")}{" "}
           {locationSource === "gps"
-            ? "current GPS location"
-            : `region: ${region}`}
+            ? t("currentGps")
+            : `${t("regionLabel")}: ${region}`}
           .
         </Text>
 
@@ -230,23 +243,27 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
               size={16}
               color="#0F7A3A"
             />
-            <Text style={styles.gpsBadgeText}>Using your current location</Text>
+            <Text style={styles.gpsBadgeText}>{t("usingGps")}</Text>
           </View>
         ) : null}
 
         {loading ? (
           <View style={styles.centerState}>
-            <ActivityIndicator color="#2563EB" size="large" />
-            <Text style={styles.centerText}>Loading live weather…</Text>
+            <ActivityIndicator color={colors.weather} size="large" />
+            <Text style={[styles.centerText, { color: colors.textSecondary }]}>
+              {t("loadingWeather")}
+            </Text>
           </View>
         ) : error ? (
-          <View style={styles.errorCard}>
+          <View style={[styles.errorCard, { backgroundColor: colors.surface }]}>
             <MaterialCommunityIcons
               name="cloud-alert-outline"
               size={44}
               color="#B91C1C"
             />
-            <Text style={styles.errorText}>{error}</Text>
+            <Text style={[styles.errorText, { color: colors.danger }]}>
+              {error}
+            </Text>
             <TouchableOpacity
               style={styles.retryButton}
               onPress={loadWeather}
@@ -257,12 +274,14 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
                 size={18}
                 color="#FFFFFF"
               />
-              <Text style={styles.retryButtonText}>Try again</Text>
+              <Text style={styles.retryButtonText}>{t("retry")}</Text>
             </TouchableOpacity>
           </View>
         ) : weather ? (
           <>
-            <View style={styles.heroCard}>
+            <View
+              style={[styles.heroCard, { backgroundColor: colors.surface }]}
+            >
               <View style={styles.heroTopRow}>
                 <View style={styles.heroIconWrap}>
                   <MaterialCommunityIcons
@@ -271,21 +290,33 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
                     color="#2563EB"
                   />
                 </View>
-                <Text style={styles.heroTemp}>
+                <Text style={[styles.heroTemp, { color: colors.text }]}>
                   {Math.round(weather.temperature)}°C
                 </Text>
               </View>
-              <Text style={styles.heroLocation}>{weather.locationName}</Text>
-              <Text style={styles.heroDescription}>{weather.description}</Text>
-              <Text style={styles.heroUpdated}>
+              <Text style={[styles.heroLocation, { color: colors.text }]}>
+                {weather.locationName}
+              </Text>
+              <Text style={[styles.heroDescription, { color: colors.weather }]}>
+                {weather.description}
+              </Text>
+              <Text style={[styles.heroUpdated, { color: colors.textMuted }]}>
                 Updated {formatUpdatedAt(weather.updatedAt)}
               </Text>
             </View>
 
-            <Text style={styles.sectionTitle}>Current Conditions</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              {t("currentConditions")}
+            </Text>
             <View style={styles.metricsGrid}>
               {metrics.map((metric) => (
-                <View key={metric.key} style={styles.metricCard}>
+                <View
+                  key={metric.key}
+                  style={[
+                    styles.metricCard,
+                    { backgroundColor: colors.surface },
+                  ]}
+                >
                   <View
                     style={[
                       styles.metricIconWrap,
@@ -298,22 +329,33 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
                       color={metric.tint}
                     />
                   </View>
-                  <Text style={styles.metricLabel}>{metric.label}</Text>
-                  <Text style={styles.metricValue}>{metric.value}</Text>
+                  <Text
+                    style={[
+                      styles.metricLabel,
+                      { color: colors.textSecondary },
+                    ]}
+                  >
+                    {metric.label}
+                  </Text>
+                  <Text style={[styles.metricValue, { color: colors.text }]}>
+                    {metric.value}
+                  </Text>
                 </View>
               ))}
             </View>
 
-            <View style={styles.card}>
+            <View style={[styles.card, { backgroundColor: colors.surface }]}>
               <View style={styles.cardHeaderRow}>
                 <MaterialCommunityIcons
                   name="information-outline"
                   size={20}
                   color="#0F7A3A"
                 />
-                <Text style={styles.cardTitle}>Forecast Note</Text>
+                <Text style={[styles.cardTitle, { color: colors.text }]}>
+                  {t("forecastNote")}
+                </Text>
               </View>
-              <Text style={styles.cardText}>
+              <Text style={[styles.cardText, { color: colors.textSecondary }]}>
                 Current conditions are fetched live for{" "}
                 {locationSource === "gps"
                   ? "your current GPS location"
@@ -338,7 +380,7 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
                   color="#FFFFFF"
                 />
               )}
-              <Text style={styles.refreshFullText}>Refresh Weather</Text>
+              <Text style={styles.refreshFullText}>{t("refreshWeather")}</Text>
             </TouchableOpacity>
           </>
         ) : null}
@@ -350,7 +392,6 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
   },
   topBlob: {
     position: "absolute",
@@ -358,7 +399,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 220,
-    backgroundColor: "#DBEAFE",
     borderBottomLeftRadius: 60,
     borderBottomRightRadius: 60,
   },

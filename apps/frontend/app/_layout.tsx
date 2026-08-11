@@ -1,19 +1,20 @@
 import {
-    DarkTheme,
-    DefaultTheme,
-    ThemeProvider,
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider as NavThemeProvider,
 } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { ThemeProvider, useTheme } from "@/context/ThemeContext";
+import { I18nProvider } from "@/i18n";
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+function RootNavigator() {
+  const { theme } = useTheme();
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <NavThemeProvider value={theme.isDark ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -22,7 +23,17 @@ export default function RootLayout() {
           options={{ presentation: "modal", title: "Modal" }}
         />
       </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+      <StatusBar style={theme.isDark ? "light" : "dark"} />
+    </NavThemeProvider>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <I18nProvider>
+      <ThemeProvider>
+        <RootNavigator />
+      </ThemeProvider>
+    </I18nProvider>
   );
 }

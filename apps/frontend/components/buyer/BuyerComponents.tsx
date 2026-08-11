@@ -25,6 +25,7 @@ type BuyerHeaderProps = {
   now: Date;
   onProfile: () => void;
   onNotifications: () => void;
+  onSettings?: () => void;
   unreadCount?: number;
 };
 
@@ -34,6 +35,7 @@ export function BuyerHeader({
   now,
   onProfile,
   onNotifications,
+  onSettings,
   unreadCount = 0,
 }: BuyerHeaderProps) {
   return (
@@ -59,6 +61,21 @@ export function BuyerHeader({
             })}
           </Text>
         </View>
+        {onSettings ? (
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={onSettings}
+            activeOpacity={0.8}
+            accessibilityLabel="Settings"
+          >
+            <MaterialCommunityIcons
+              name="cog-outline"
+              size={20}
+              color="#FFFFFF"
+            />
+          </TouchableOpacity>
+        ) : null}
+
         <TouchableOpacity
           style={styles.iconButton}
           onPress={onNotifications}

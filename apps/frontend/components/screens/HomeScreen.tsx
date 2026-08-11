@@ -14,6 +14,8 @@ import {
   StyleSheet,
 } from "react-native";
 
+import { useTheme } from "../../context/ThemeContext";
+import { useI18n } from "../../i18n";
 import { AIInsightCard } from "../dashboard/AIInsightCard";
 import { DashboardHeader } from "../dashboard/DashboardHeader";
 import { FloatingBottomNav } from "../dashboard/FloatingBottomNav";
@@ -34,7 +36,7 @@ import {
   type QuickAction,
 } from "../dashboard/QuickActionGrid";
 import { WeatherCard } from "../dashboard/WeatherCard";
-import { dashboardColors, dashboardSpacing } from "../dashboard/theme";
+import { dashboardSpacing } from "../dashboard/theme";
 import { ProfileData } from "./profile-types";
 
 const farmerActionCards: QuickAction[] = [
@@ -164,6 +166,7 @@ type HomeScreenProps = {
   onYieldPrediction?: () => void;
   onCropRecommendation?: () => void;
   onNotifications?: () => void;
+  onSettings?: () => void;
   unreadNotifications?: number;
 };
 
@@ -208,12 +211,16 @@ export function HomeScreen({
   onYieldPrediction,
   onCropRecommendation,
   onNotifications,
+  onSettings,
   unreadNotifications = 0,
 }: HomeScreenProps) {
+  const { theme } = useTheme();
+  const { colors } = theme;
+  const { t } = useI18n();
   const isFarmer = profile?.role !== "buyer";
   const cardOpacity = useRef(new Animated.Value(0)).current;
   const cardOffset = useRef(new Animated.Value(12)).current;
-  const greetingName = profile?.fullName?.split(" ")[0] ?? "Farmer";
+  const greetingName = profile?.fullName?.split(" ")[0] ?? t("farmer");
   const weatherRegion = profile?.region?.trim() || "Kandy";
   const [weatherLoading, setWeatherLoading] = useState(false);
   const [weatherError, setWeatherError] = useState("");
@@ -398,7 +405,9 @@ export function HomeScreen({
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -406,8 +415,8 @@ export function HomeScreen({
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            tintColor={dashboardColors.primary}
-            colors={[dashboardColors.primary]}
+            tintColor={colors.primary}
+            colors={[colors.primary]}
           />
         }
       >
@@ -418,12 +427,25 @@ export function HomeScreen({
           }}
         >
           <DashboardHeader
-            greeting={getGreeting(now)}
+            greeting={t(
+              isFarmer
+                ? getGreeting(now) === "Good Morning"
+                  ? "goodMorningFarmer"
+                  : getGreeting(now) === "Good Afternoon"
+                    ? "goodAfternoonFarmer"
+                    : "goodEveningFarmer"
+                : getGreeting(now) === "Good Morning"
+                  ? "goodMorningBuyer"
+                  : getGreeting(now) === "Good Afternoon"
+                    ? "goodAfternoonBuyer"
+                    : "goodEveningBuyer",
+            )}
             firstName={greetingName}
             now={now}
             isFarmer={isFarmer}
             onProfile={() => onProfile?.()}
             onNotifications={() => onNotifications?.()}
+            onSettings={() => onSettings?.()}
             unreadCount={unreadNotifications}
           />
         </Animated.View>
@@ -450,20 +472,20 @@ export function HomeScreen({
         />
 
         <AlertCard
-          title="Weather Alert"
-          message="Moderate rainfall expected in the next 48 hours. Good timing for land preparation."
+          title={t("weatherAlert")}
+          message={t("moderateRain")}
           severity="warning"
         />
 
-        <SectionTitle title="Quick Actions" />
+        <SectionTitle title={t("quickActions")} />
         <QuickActionGrid
           actions={isFarmer ? farmerActionCards : buyerActionCards}
           onPress={handleQuickAction}
         />
 
         <SectionTitle
-          title="Market Prices"
-          actionLabel="View all"
+          title={t("marketPrices")}
+          actionLabel={t("viewAll")}
           onAction={onMarketPrices}
         />
         <MarketPreviewCard
@@ -471,10 +493,12 @@ export function HomeScreen({
           onViewReport={() => onMarketPrices?.()}
         />
 
-        <SectionTitle title="Recent Predictions" />
+        <SectionTitle title={t("recentPredictions")} />
         <PredictionCarousel items={recentPredictions} />
 
-        <SectionTitle title={isFarmer ? "Farm Summary" : "Buyer Dashboard"} />
+        <SectionTitle
+          title={isFarmer ? t("farmSummary") : t("buyerDashboard")}
+        />
         <DashboardFarmSummaryCard tiles={isFarmer ? farmTiles : buyerTiles} />
       </ScrollView>
 
@@ -486,7 +510,6 @@ export function HomeScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: dashboardColors.background,
   },
   scrollContent: {
     paddingHorizontal: dashboardSpacing.lg,

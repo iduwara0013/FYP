@@ -14544,12 +14544,12 @@
       },
       {
         "source": "frontend",
-        "target": "npm:expo",
+        "target": "npm:@react-native-async-storage/async-storage",
         "type": "static"
       },
       {
         "source": "frontend",
-        "target": "npm:@react-native-async-storage/async-storage",
+        "target": "npm:expo",
         "type": "static"
       },
       {
@@ -36824,5 +36824,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1785909506943
+  "computedAt": 1786416321784
 }

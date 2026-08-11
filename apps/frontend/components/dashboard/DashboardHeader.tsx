@@ -2,13 +2,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+import { useTheme } from "../../context/ThemeContext";
+import { useI18n } from "../../i18n";
 import { NotificationBadge } from "../notifications/NotificationComponents";
-import {
-  dashboardColors,
-  dashboardRadius,
-  dashboardShadow,
-  dashboardSpacing,
-} from "./theme";
+import { dashboardRadius, dashboardShadow, dashboardSpacing } from "./theme";
 
 type DashboardHeaderProps = {
   greeting: string;
@@ -17,6 +14,7 @@ type DashboardHeaderProps = {
   isFarmer: boolean;
   onProfile: () => void;
   onNotifications: () => void;
+  onSettings?: () => void;
   unreadCount?: number;
 };
 
@@ -42,19 +40,43 @@ export function DashboardHeader({
   isFarmer,
   onProfile,
   onNotifications,
+  onSettings,
   unreadCount = 0,
 }: DashboardHeaderProps) {
+  const { theme } = useTheme();
+  const { colors } = theme;
+  const { t } = useI18n();
+
   return (
     <View style={styles.wrap}>
       <View style={styles.topRow}>
         <View style={styles.infoWrap}>
-          <Text style={styles.eyebrow}>{formatDate(now)}</Text>
-          <Text style={styles.clock}>{formatClock(now)}</Text>
+          <Text style={[styles.eyebrow, { color: colors.textSecondary }]}>
+            {formatDate(now)}
+          </Text>
+          <Text style={[styles.clock, { color: colors.text }]}>
+            {formatClock(now)}
+          </Text>
         </View>
 
         <View style={styles.actions}>
+          {onSettings ? (
+            <TouchableOpacity
+              style={[styles.iconButton, { backgroundColor: colors.surface }]}
+              onPress={onSettings}
+              activeOpacity={0.8}
+              accessibilityLabel="Settings"
+            >
+              <MaterialCommunityIcons
+                name="cog-outline"
+                size={20}
+                color={colors.text}
+              />
+            </TouchableOpacity>
+          ) : null}
+
           <TouchableOpacity
-            style={styles.iconButton}
+            style={[styles.iconButton, { backgroundColor: colors.surface }]}
             onPress={onNotifications}
             activeOpacity={0.8}
             accessibilityLabel="Notifications"
@@ -62,14 +84,16 @@ export function DashboardHeader({
             <MaterialCommunityIcons
               name="bell-outline"
               size={20}
-              color={dashboardColors.text}
+              color={colors.text}
             />
             {unreadCount > 0 ? (
               <View style={styles.badgeContainer}>
                 <NotificationBadge count={unreadCount} size="sm" />
               </View>
             ) : (
-              <View style={styles.badgeDot} />
+              <View
+                style={[styles.badgeDot, { borderColor: colors.surface }]}
+              />
             )}
           </TouchableOpacity>
 
@@ -77,7 +101,7 @@ export function DashboardHeader({
             style={[
               styles.avatar,
               {
-                backgroundColor: isFarmer ? dashboardColors.primary : "#C47F00",
+                backgroundColor: isFarmer ? colors.primary : "#C47F00",
               },
             ]}
             onPress={onProfile}
@@ -87,16 +111,18 @@ export function DashboardHeader({
             <MaterialCommunityIcons
               name="account"
               size={20}
-              color={dashboardColors.white}
+              color={colors.white}
             />
           </TouchableOpacity>
         </View>
       </View>
 
-      <Text style={styles.greeting}>
+      <Text style={[styles.greeting, { color: colors.text }]}>
         {greeting}, {firstName}
       </Text>
-      <Text style={styles.subtitle}>Today is a great day for farming.</Text>
+      <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+        {t("todayIsGreat")}
+      </Text>
     </View>
   );
 }
@@ -117,13 +143,11 @@ const styles = StyleSheet.create({
   eyebrow: {
     fontSize: 13,
     fontWeight: "700",
-    color: dashboardColors.textSecondary,
     textTransform: "capitalize",
   },
   clock: {
     fontSize: 22,
     fontWeight: "800",
-    color: dashboardColors.text,
     fontVariant: ["tabular-nums"],
   },
   actions: {
@@ -137,7 +161,6 @@ const styles = StyleSheet.create({
     borderRadius: dashboardRadius.pill,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: dashboardColors.card,
     ...dashboardShadow.soft,
   },
   badgeDot: {
@@ -147,9 +170,8 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: dashboardColors.danger,
+    backgroundColor: "#EF4444",
     borderWidth: 1.5,
-    borderColor: dashboardColors.white,
   },
   badgeContainer: {
     position: "absolute",
@@ -167,11 +189,9 @@ const styles = StyleSheet.create({
   greeting: {
     fontSize: 26,
     fontWeight: "900",
-    color: dashboardColors.text,
   },
   subtitle: {
     marginTop: 4,
     fontSize: 13,
-    color: dashboardColors.textSecondary,
   },
 });

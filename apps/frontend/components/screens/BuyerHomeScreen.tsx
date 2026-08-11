@@ -14,6 +14,8 @@ import {
   StyleSheet,
 } from "react-native";
 
+import { useTheme } from "../../context/ThemeContext";
+import { useI18n } from "../../i18n";
 import {
   ActivityTimeline,
   BuyerHeader,
@@ -32,7 +34,7 @@ import {
   type MarketPriceItem,
   type SummaryTile,
 } from "../buyer/BuyerComponents";
-import { buyerColors, buyerSpacing } from "../buyer/theme";
+import { buyerSpacing } from "../buyer/theme";
 import { ProfileData } from "./profile-types";
 
 type BuyerHomeScreenProps = {
@@ -42,6 +44,7 @@ type BuyerHomeScreenProps = {
   onBrowsePeople: () => void;
   onProfile: () => void;
   onNotifications?: () => void;
+  onSettings?: () => void;
   unreadNotifications?: number;
 };
 
@@ -72,11 +75,15 @@ export function BuyerHomeScreen({
   onBrowsePeople,
   onProfile,
   onNotifications,
+  onSettings,
   unreadNotifications = 0,
 }: BuyerHomeScreenProps) {
+  const { theme } = useTheme();
+  const { colors } = theme;
+  const { t } = useI18n();
   const cardOpacity = useRef(new Animated.Value(0)).current;
   const cardOffset = useRef(new Animated.Value(12)).current;
-  const greetingName = profile?.fullName?.split(" ")[0] ?? "Buyer";
+  const greetingName = profile?.fullName?.split(" ")[0] ?? t("buyer");
   const weatherRegion = profile?.region?.trim() || "Kandy";
   const [weatherLoading, setWeatherLoading] = useState(false);
   const [weatherError, setWeatherError] = useState("");
@@ -204,53 +211,53 @@ export function BuyerHomeScreen({
       {
         id: "weather",
         icon: "weather-partly-cloudy",
-        title: "Weather",
-        description: "Check local forecast",
+        title: t("weather"),
+        description: t("liveForecast"),
         background: "#DBEAFE",
         iconColor: "#2563EB",
       },
       {
         id: "market",
         icon: "currency-usd",
-        title: "Market Prices",
-        description: "Latest HARTI prices",
+        title: t("marketPrices"),
+        description: t("todaysBulletin"),
         background: "#FFEDD5",
         iconColor: "#EA580C",
       },
       {
         id: "browse",
         icon: "account-group-outline",
-        title: "Browse Farmers",
-        description: "Connect with sellers",
+        title: t("browseFarmers"),
+        description: t("connectWithSellers"),
         background: "#E0E7FF",
         iconColor: "#4338CA",
       },
       {
         id: "requirements",
         icon: "clipboard-text-outline",
-        title: "Requirements",
-        description: "Manage your needs",
+        title: t("requirements"),
+        description: t("manageNeeds"),
         background: "#FCE7F3",
         iconColor: "#BE185D",
       },
       {
         id: "history",
         icon: "history",
-        title: "Purchase History",
-        description: "Past orders",
+        title: t("purchaseHistory"),
+        description: t("pastOrders"),
         background: "#DCFCE7",
         iconColor: "#15803D",
       },
       {
         id: "saved",
         icon: "star-outline",
-        title: "Saved Farmers",
-        description: "Your favorites",
+        title: t("savedFarmers"),
+        description: t("yourFavorites"),
         background: "#FEF3C7",
         iconColor: "#B45309",
       },
     ],
-    [],
+    [t],
   );
 
   const handleQuickAction = useCallback(
@@ -400,7 +407,9 @@ export function BuyerHomeScreen({
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -408,8 +417,8 @@ export function BuyerHomeScreen({
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            tintColor={buyerColors.primary}
-            colors={[buyerColors.primary]}
+            tintColor={colors.primary}
+            colors={[colors.primary]}
           />
         }
       >
@@ -420,11 +429,18 @@ export function BuyerHomeScreen({
           }}
         >
           <BuyerHeader
-            greeting={getGreeting(now)}
+            greeting={t(
+              getGreeting(now) === "Good Morning"
+                ? "goodMorningBuyer"
+                : getGreeting(now) === "Good Afternoon"
+                  ? "goodAfternoonBuyer"
+                  : "goodEveningBuyer",
+            )}
             firstName={greetingName}
             now={now}
             onProfile={() => onProfile()}
             onNotifications={() => onNotifications?.()}
+            onSettings={() => onSettings?.()}
             unreadCount={unreadNotifications}
           />
         </Animated.View>
@@ -477,7 +493,7 @@ export function BuyerHomeScreen({
             transform: [{ translateY: cardOffset }],
           }}
         >
-          <SectionTitle title="Quick Actions" />
+          <SectionTitle title={t("quickActions")} />
           <QuickActionGrid actions={quickActions} onPress={handleQuickAction} />
         </Animated.View>
 
@@ -487,7 +503,7 @@ export function BuyerHomeScreen({
             transform: [{ translateY: cardOffset }],
           }}
         >
-          <SectionTitle title="Today's Market" />
+          <SectionTitle title={t("todayMarket")} />
           <MarketPriceCards
             items={marketItems}
             onViewReport={() => onMarketPrices()}
@@ -500,7 +516,7 @@ export function BuyerHomeScreen({
             transform: [{ translateY: cardOffset }],
           }}
         >
-          <SectionTitle title="Buyer Summary" />
+          <SectionTitle title={t("buyerSummary")} />
           <BuyerSummary tiles={summaryTiles} />
         </Animated.View>
 
@@ -510,7 +526,7 @@ export function BuyerHomeScreen({
             transform: [{ translateY: cardOffset }],
           }}
         >
-          <SectionTitle title="Recommended Farmers" />
+          <SectionTitle title={t("recommendedFarmers")} />
           <RecommendedFarmers farmers={farmers} />
         </Animated.View>
 
@@ -520,7 +536,7 @@ export function BuyerHomeScreen({
             transform: [{ translateY: cardOffset }],
           }}
         >
-          <SectionTitle title="Recent Activity" />
+          <SectionTitle title={t("recentActivity")} />
           <ActivityTimeline items={activities} />
         </Animated.View>
 
@@ -530,7 +546,7 @@ export function BuyerHomeScreen({
             transform: [{ translateY: cardOffset }],
           }}
         >
-          <BuyerTipCard message="Connect with farmers in high-supply regions like Kandy for the best wholesale prices this week." />
+          <BuyerTipCard message={t("buyerTip")} />
         </Animated.View>
       </ScrollView>
     </SafeAreaView>
@@ -540,7 +556,6 @@ export function BuyerHomeScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: buyerColors.background,
   },
   scrollContent: {
     paddingHorizontal: buyerSpacing.lg,

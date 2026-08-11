@@ -17,6 +17,8 @@ import {
 
 import { signInWithEmailAndPassword } from "firebase/auth";
 
+import { useTheme } from "../../context/ThemeContext";
+import { useI18n } from "../../i18n";
 import { getFirebaseAuth } from "../../lib/firebase";
 
 type LoginScreenProps = {
@@ -30,6 +32,9 @@ export function LoginScreen({
   onSignUp,
   onLogin,
 }: LoginScreenProps) {
+  const { theme } = useTheme();
+  const { colors, spacing, radius } = theme;
+  const { t, language, setLanguage } = useI18n();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -80,7 +85,7 @@ export function LoginScreen({
     const trimmedEmail = email.trim();
 
     if (!trimmedEmail || !password.trim()) {
-      setErrorMessage("Enter your email and password.");
+      setErrorMessage(t("enterEmail"));
       return;
     }
 
@@ -100,18 +105,18 @@ export function LoginScreen({
           : "";
 
       if (code === "auth/invalid-email") {
-        setErrorMessage("Enter a valid email address.");
+        setErrorMessage(t("validEmail"));
       } else if (
         code === "auth/user-not-found" ||
         code === "auth/wrong-password" ||
         code === "auth/invalid-credential"
       ) {
-        setErrorMessage("Wrong email or password.");
+        setErrorMessage(t("wrongCredentials"));
       } else if (code === "auth/too-many-requests") {
-        setErrorMessage("Too many attempts. Try again later.");
+        setErrorMessage(t("tooManyAttempts"));
       } else {
         setErrorMessage(
-          error instanceof Error ? error.message : "Login failed.",
+          error instanceof Error ? error.message : t("loginFailed"),
         );
       }
     } finally {
@@ -124,23 +129,111 @@ export function LoginScreen({
   const canSubmit = emailValid && passwordValid && !loading;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <LinearGradient
-        colors={["#F8FAFC", "#F0FDF4", "#F8FAFC"]}
+        colors={
+          theme.isDark
+            ? [colors.background, colors.backgroundAlt, colors.background]
+            : ["#F8FAFC", "#F0FDF4", "#F8FAFC"]
+        }
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={StyleSheet.absoluteFill}
         pointerEvents="none"
       />
-      <View style={styles.backgroundGlowOne} pointerEvents="none" />
-      <View style={styles.backgroundGlowTwo} pointerEvents="none" />
-      <View style={styles.backgroundGlowThree} pointerEvents="none" />
+      <View
+        style={[
+          styles.backgroundGlowOne,
+          {
+            backgroundColor: theme.isDark ? "rgba(34,197,94,0.08)" : "#DCFCE7",
+          },
+        ]}
+        pointerEvents="none"
+      />
+      <View
+        style={[
+          styles.backgroundGlowTwo,
+          {
+            backgroundColor: theme.isDark ? "rgba(251,191,36,0.06)" : "#FEF3C7",
+          },
+        ]}
+        pointerEvents="none"
+      />
+      <View
+        style={[
+          styles.backgroundGlowThree,
+          {
+            backgroundColor: theme.isDark ? "rgba(56,189,248,0.05)" : "#CFFAFE",
+          },
+        ]}
+        pointerEvents="none"
+      />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
+        {/* Language Toggle */}
+        <View style={styles.languageToggleRow}>
+          <TouchableOpacity
+            style={[
+              styles.languageToggle,
+              {
+                backgroundColor:
+                  language === "en" ? colors.primary : colors.surface,
+                borderColor: language === "en" ? colors.primary : colors.border,
+              },
+            ]}
+            onPress={() => setLanguage("en")}
+            activeOpacity={0.8}
+            accessible
+            accessibilityLabel="English"
+            accessibilityRole="button"
+          >
+            <Text
+              style={[
+                styles.languageToggleText,
+                {
+                  color:
+                    language === "en" ? colors.primaryContrast : colors.text,
+                },
+              ]}
+            >
+              🇬🇧 English
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.languageToggle,
+              {
+                backgroundColor:
+                  language === "si" ? colors.primary : colors.surface,
+                borderColor: language === "si" ? colors.primary : colors.border,
+              },
+            ]}
+            onPress={() => setLanguage("si")}
+            activeOpacity={0.8}
+            accessible
+            accessibilityLabel="Sinhala"
+            accessibilityRole="button"
+          >
+            <Text
+              style={[
+                styles.languageToggleText,
+                {
+                  color:
+                    language === "si" ? colors.primaryContrast : colors.text,
+                },
+              ]}
+            >
+              🇱🇰 සිංහල
+            </Text>
+          </TouchableOpacity>
+        </View>
+
         {/* Hero Area */}
         <Animated.View
           style={[
@@ -151,9 +244,19 @@ export function LoginScreen({
             },
           ]}
         >
-          <View style={styles.logoWrap}>
+          <View
+            style={[
+              styles.logoWrap,
+              {
+                backgroundColor: theme.isDark
+                  ? colors.surface
+                  : "rgba(255,255,255,0.95)",
+                shadowColor: colors.primary,
+              },
+            ]}
+          >
             <LinearGradient
-              colors={["#16A34A", "#22C55E"]}
+              colors={[colors.primary, colors.primaryLight]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.logoGradient}
@@ -161,8 +264,12 @@ export function LoginScreen({
               <MaterialCommunityIcons name="sprout" size={34} color="#FFFFFF" />
             </LinearGradient>
           </View>
-          <Text style={styles.title}>Smart Crop Forecasting</Text>
-          <Text style={styles.subtitle}>Predict crops with confidence</Text>
+          <Text style={[styles.title, { color: colors.text }]}>
+            {t("appName")}
+          </Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+            {t("predictCrops")}
+          </Text>
         </Animated.View>
 
         {/* Form Card */}
@@ -170,45 +277,69 @@ export function LoginScreen({
           style={[
             styles.formCard,
             {
+              backgroundColor: colors.surface,
+              borderColor: colors.border,
+              shadowColor: colors.shadow,
               opacity: cardOpacity,
               transform: [{ translateY: cardOffset }],
             },
           ]}
         >
-          <Text style={styles.sectionTitle}>Welcome back</Text>
-          <Text style={styles.sectionSubtitle}>
-            Sign in with your email and password.
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            {t("welcomeBack")}
+          </Text>
+          <Text
+            style={[styles.sectionSubtitle, { color: colors.textSecondary }]}
+          >
+            {t("signInSubtitle")}
           </Text>
 
           {errorMessage ? (
-            <View style={styles.errorBanner}>
+            <View
+              style={[
+                styles.errorBanner,
+                {
+                  backgroundColor: colors.dangerSoft,
+                  borderColor: colors.danger,
+                },
+              ]}
+            >
               <MaterialCommunityIcons
                 name="alert-circle-outline"
                 size={18}
-                color="#DC2626"
+                color={colors.danger}
               />
-              <Text style={styles.errorText}>{errorMessage}</Text>
+              <Text style={[styles.errorText, { color: colors.danger }]}>
+                {errorMessage}
+              </Text>
             </View>
           ) : null}
 
           {/* Email input */}
           <View style={styles.fieldGroup}>
-            <Text style={styles.fieldLabel}>Email</Text>
+            <Text style={[styles.fieldLabel, { color: colors.textSecondary }]}>
+              {t("email")}
+            </Text>
             <View
               style={[
                 styles.inputGroup,
-                emailFocused && styles.inputGroupFocused,
-                errorMessage && !emailValid && styles.inputGroupError,
+                {
+                  borderColor: emailFocused ? colors.primary : colors.border,
+                  backgroundColor: emailFocused
+                    ? colors.surface
+                    : colors.background,
+                },
+                errorMessage && !emailValid && { borderColor: colors.danger },
               ]}
             >
               <MaterialCommunityIcons
                 name="email-outline"
                 size={20}
-                color={emailFocused ? "#16A34A" : "#6B7280"}
+                color={emailFocused ? colors.primary : colors.textMuted}
               />
               <TextInput
                 placeholder="you@example.com"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.textMuted}
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -216,7 +347,7 @@ export function LoginScreen({
                 autoCorrect={false}
                 onFocus={() => setEmailFocused(true)}
                 onBlur={() => setEmailFocused(false)}
-                style={styles.input}
+                style={[styles.input, { color: colors.text }]}
                 accessibilityLabel="Email address"
               />
             </View>
@@ -224,28 +355,40 @@ export function LoginScreen({
 
           {/* Password input */}
           <View style={styles.fieldGroup}>
-            <Text style={styles.fieldLabel}>Password</Text>
+            <Text style={[styles.fieldLabel, { color: colors.textSecondary }]}>
+              {t("password")}
+            </Text>
             <View
               style={[
                 styles.inputGroup,
-                passwordFocused && styles.inputGroupFocused,
-                errorMessage && !passwordValid && styles.inputGroupError,
+                {
+                  borderColor: passwordFocused ? colors.primary : colors.border,
+                  backgroundColor: passwordFocused
+                    ? colors.surface
+                    : colors.background,
+                },
+                errorMessage &&
+                  !passwordValid && { borderColor: colors.danger },
               ]}
             >
               <MaterialCommunityIcons
                 name="lock-outline"
                 size={20}
-                color={passwordFocused ? "#16A34A" : "#6B7280"}
+                color={passwordFocused ? colors.primary : colors.textMuted}
               />
               <TextInput
                 placeholder="Enter your password"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.textMuted}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={!showPassword}
                 onFocus={() => setPasswordFocused(true)}
                 onBlur={() => setPasswordFocused(false)}
-                style={[styles.input, styles.passwordInput]}
+                style={[
+                  styles.input,
+                  styles.passwordInput,
+                  { color: colors.text },
+                ]}
                 accessibilityLabel="Password"
               />
               <TouchableOpacity
@@ -258,7 +401,7 @@ export function LoginScreen({
                 <MaterialCommunityIcons
                   name={showPassword ? "eye-off-outline" : "eye-outline"}
                   size={20}
-                  color="#6B7280"
+                  color={colors.textMuted}
                 />
               </TouchableOpacity>
             </View>
@@ -269,7 +412,9 @@ export function LoginScreen({
             style={styles.forgotLink}
             accessibilityLabel="Forgot password"
           >
-            <Text style={styles.forgotText}>Forgot Password?</Text>
+            <Text style={[styles.forgotText, { color: colors.primary }]}>
+              {t("forgotPassword")}
+            </Text>
           </TouchableOpacity>
 
           {/* Primary button */}
@@ -282,7 +427,9 @@ export function LoginScreen({
             >
               <LinearGradient
                 colors={
-                  canSubmit ? ["#16A34A", "#22C55E"] : ["#9CA3AF", "#9CA3AF"]
+                  canSubmit
+                    ? [colors.primary, colors.primaryLight]
+                    : [colors.textMuted, colors.textMuted]
                 }
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
@@ -300,7 +447,7 @@ export function LoginScreen({
                       size={20}
                       color="#FFFFFF"
                     />
-                    <Text style={styles.primaryButtonText}>Login</Text>
+                    <Text style={styles.primaryButtonText}>{t("login")}</Text>
                   </>
                 )}
               </LinearGradient>
@@ -309,22 +456,41 @@ export function LoginScreen({
 
           {/* Divider */}
           <View style={styles.dividerRow}>
-            <View style={styles.divider} />
-            <Text style={styles.dividerText}>or continue with</Text>
-            <View style={styles.divider} />
+            <View
+              style={[styles.divider, { backgroundColor: colors.border }]}
+            />
+            <Text style={[styles.dividerText, { color: colors.textMuted }]}>
+              {t("orContinueWith")}
+            </Text>
+            <View
+              style={[styles.divider, { backgroundColor: colors.border }]}
+            />
           </View>
 
           {/* Social buttons */}
           <View style={styles.socialRow}>
             <TouchableOpacity
-              style={styles.socialButton}
+              style={[
+                styles.socialButton,
+                {
+                  backgroundColor: colors.surface,
+                  borderColor: colors.border,
+                },
+              ]}
               activeOpacity={0.8}
               accessibilityLabel="Continue with Google"
             >
               <MaterialCommunityIcons name="google" size={22} color="#EA4335" />
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.socialButtonDark}
+              style={[
+                styles.socialButtonDark,
+                {
+                  backgroundColor: theme.isDark
+                    ? colors.surfaceSecondary
+                    : "#111827",
+                },
+              ]}
               activeOpacity={0.8}
               accessibilityLabel="Continue with Apple"
             >
@@ -332,10 +498,13 @@ export function LoginScreen({
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.footerText}>
-            Don’t have an account?{" "}
-            <Text onPress={onSignUp} style={styles.footerLink}>
-              Sign Up
+          <Text style={[styles.footerText, { color: colors.textSecondary }]}>
+            {t("dontHaveAccount")}{" "}
+            <Text
+              onPress={onSignUp}
+              style={[styles.footerLink, { color: colors.primary }]}
+            >
+              {t("signup")}
             </Text>
           </Text>
         </Animated.View>
@@ -347,14 +516,30 @@ export function LoginScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+  },
+  languageToggleRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 8,
+    marginBottom: 16,
+  },
+  languageToggle: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 999,
+    borderWidth: 1,
+    minHeight: 44,
+    justifyContent: "center",
+  },
+  languageToggleText: {
+    fontSize: 13,
+    fontWeight: "700",
   },
   backgroundGlowOne: {
     position: "absolute",
     width: 260,
     height: 260,
     borderRadius: 260,
-    backgroundColor: "#DCFCE7",
     opacity: 0.7,
     top: -80,
     right: -100,
@@ -364,7 +549,6 @@ const styles = StyleSheet.create({
     width: 220,
     height: 220,
     borderRadius: 220,
-    backgroundColor: "#FEF3C7",
     opacity: 0.6,
     bottom: -90,
     left: -90,
@@ -374,7 +558,6 @@ const styles = StyleSheet.create({
     width: 160,
     height: 160,
     borderRadius: 160,
-    backgroundColor: "#CFFAFE",
     opacity: 0.5,
     top: "40%",
     left: -60,
@@ -392,11 +575,9 @@ const styles = StyleSheet.create({
     width: 76,
     height: 76,
     borderRadius: 38,
-    backgroundColor: "rgba(255,255,255,0.95)",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 16,
-    shadowColor: "#16A34A",
     shadowOpacity: 0.2,
     shadowRadius: 18,
     shadowOffset: { width: 0, height: 8 },
@@ -412,36 +593,29 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "900",
-    color: "#0F172A",
     textAlign: "center",
     letterSpacing: 0.2,
   },
   subtitle: {
     marginTop: 8,
     textAlign: "center",
-    color: "#64748B",
     fontSize: 14,
     lineHeight: 20,
   },
   formCard: {
-    backgroundColor: "#FFFFFF",
     borderRadius: 28,
     padding: 24,
-    shadowColor: "#0F172A",
     shadowOpacity: 0.08,
     shadowRadius: 24,
     shadowOffset: { width: 0, height: 12 },
     elevation: 6,
     borderWidth: 1,
-    borderColor: "rgba(226,232,240,0.6)",
   },
   sectionTitle: {
     fontSize: 22,
     fontWeight: "800",
-    color: "#0F172A",
   },
   sectionSubtitle: {
-    color: "#64748B",
     marginTop: 6,
     marginBottom: 20,
     lineHeight: 20,
@@ -450,15 +624,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    backgroundColor: "#FEF2F2",
     borderRadius: 14,
     padding: 12,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#FECACA",
   },
   errorText: {
-    color: "#B91C1C",
     fontWeight: "600",
     flex: 1,
     fontSize: 13,
@@ -469,31 +640,20 @@ const styles = StyleSheet.create({
   fieldLabel: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#475569",
     marginBottom: 6,
   },
   inputGroup: {
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#E2E8F0",
     borderRadius: 18,
-    backgroundColor: "#F8FAFC",
     paddingHorizontal: 14,
     minHeight: 56,
     gap: 10,
   },
-  inputGroupFocused: {
-    borderColor: "#16A34A",
-    backgroundColor: "#FFFFFF",
-  },
-  inputGroupError: {
-    borderColor: "#DC2626",
-  },
   input: {
     flex: 1,
     fontSize: 15,
-    color: "#0F172A",
   },
   passwordInput: {
     paddingRight: 4,
@@ -506,7 +666,6 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   forgotText: {
-    color: "#16A34A",
     fontWeight: "700",
     fontSize: 13,
   },
@@ -539,11 +698,9 @@ const styles = StyleSheet.create({
   divider: {
     flex: 1,
     height: 1,
-    backgroundColor: "#E2E8F0",
   },
   dividerText: {
     marginHorizontal: 10,
-    color: "#94A3B8",
     fontSize: 12,
   },
   socialRow: {
@@ -555,9 +712,7 @@ const styles = StyleSheet.create({
     width: 58,
     height: 58,
     borderRadius: 18,
-    backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: "#E2E8F0",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -565,18 +720,15 @@ const styles = StyleSheet.create({
     width: 58,
     height: 58,
     borderRadius: 18,
-    backgroundColor: "#111827",
     alignItems: "center",
     justifyContent: "center",
   },
   footerText: {
     textAlign: "center",
-    color: "#64748B",
     marginTop: 18,
     fontSize: 13,
   },
   footerLink: {
-    color: "#16A34A",
     fontWeight: "800",
   },
 });

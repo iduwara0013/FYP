@@ -50,8 +50,48 @@
         "hash": "17477682806607470478"
       },
       {
+        "file": "docs/Architecture_and_Design.md",
+        "hash": "15770944522189885853"
+      },
+      {
+        "file": "docs/Challenges_and_Solutions.md",
+        "hash": "1722826720035767271"
+      },
+      {
+        "file": "docs/Code_Repository_Evidence.md",
+        "hash": "17164791948354669738"
+      },
+      {
+        "file": "docs/Ethical_Social_Security_Update.md",
+        "hash": "7498787195082354899"
+      },
+      {
+        "file": "docs/Feature_Completion_List.md",
+        "hash": "17222911748261357744"
+      },
+      {
+        "file": "docs/PR2_Deliverables_Index.md",
+        "hash": "14813611498634540744"
+      },
+      {
         "file": "docs/PR2_Presentation.md",
         "hash": "11078656416116058576"
+      },
+      {
+        "file": "docs/Project_Plan_Update.md",
+        "hash": "7780123148870018219"
+      },
+      {
+        "file": "docs/Research_Diary.md",
+        "hash": "5724672591903253609"
+      },
+      {
+        "file": "docs/Testing_Evidence.md",
+        "hash": "12713995999727551068"
+      },
+      {
+        "file": "docs/Working_System_Demonstration.md",
+        "hash": "15772329262853438883"
       },
       {
         "file": "eslint.config.js",
@@ -191,751 +231,6 @@
         {
           "file": "apps/Backend/python_backend/sri_lanka_vegetable_dataset.csv",
           "hash": "10151999312307862927"
-        }
-      ],
-      "frontend": [
-        {
-          "file": "apps/frontend/.env",
-          "hash": "12829923846317057843"
-        },
-        {
-          "file": "apps/frontend/.env.example",
-          "hash": "16331174520020304813"
-        },
-        {
-          "file": "apps/frontend/.gitignore",
-          "hash": "1316414564126377975"
-        },
-        {
-          "file": "apps/frontend/EntryScreen.tsx",
-          "hash": "5850962484124622923",
-          "deps": [
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/app.json",
-          "hash": "9055584396055852908"
-        },
-        {
-          "file": "apps/frontend/app/(tabs)/_layout.tsx",
-          "hash": "8543605135166621015",
-          "deps": [
-            "npm:expo-router",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/frontend/app/(tabs)/explore.tsx",
-          "hash": "3114117556691560049",
-          "deps": [
-            "npm:expo-image",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/app/(tabs)/index.tsx",
-          "hash": "4851358962377969731",
-          "deps": [
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/frontend/app/_layout.tsx",
-          "hash": "3017543308240115445",
-          "deps": [
-            "npm:@react-navigation/native",
-            "npm:expo-router",
-            "npm:expo-status-bar",
-            "npm:react-native-reanimated"
-          ]
-        },
-        {
-          "file": "apps/frontend/app/index.tsx",
-          "hash": "15272161833595854254",
-          "deps": [
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/app/modal.tsx",
-          "hash": "15818614733108035475",
-          "deps": [
-            "npm:expo-router",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/assets/images/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/frontend/assets/images/android-icon-background.png",
-          "hash": "10994153683116332424"
-        },
-        {
-          "file": "apps/frontend/assets/images/android-icon-foreground.png",
-          "hash": "15383051144788430570"
-        },
-        {
-          "file": "apps/frontend/assets/images/android-icon-monochrome.png",
-          "hash": "3343180278029361732"
-        },
-        {
-          "file": "apps/frontend/assets/images/favicon.png",
-          "hash": "17921061654045018263"
-        },
-        {
-          "file": "apps/frontend/assets/images/icon.png",
-          "hash": "11872069641359971350"
-        },
-        {
-          "file": "apps/frontend/assets/images/partial-react-logo.png",
-          "hash": "17138856618252336249"
-        },
-        {
-          "file": "apps/frontend/assets/images/react-logo.png",
-          "hash": "12800764183471362565"
-        },
-        {
-          "file": "apps/frontend/assets/images/react-logo@2x.png",
-          "hash": "10620144842436275618"
-        },
-        {
-          "file": "apps/frontend/assets/images/react-logo@3x.png",
-          "hash": "12902748134652534090"
-        },
-        {
-          "file": "apps/frontend/assets/images/splash-icon.png",
-          "hash": "16102135492459408350"
-        },
-        {
-          "file": "apps/frontend/babel.config.js",
-          "hash": "15171899872433303675"
-        },
-        {
-          "file": "apps/frontend/components/buyer/BuyerComponents.tsx",
-          "hash": "10602848776618908990",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:expo-linear-gradient",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/buyer/theme.ts",
-          "hash": "5552332411267036277"
-        },
-        {
-          "file": "apps/frontend/components/dashboard/AIInsightCard.tsx",
-          "hash": "17835693006286620900",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/dashboard/DashboardHeader.tsx",
-          "hash": "11076550223690635898",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/dashboard/FloatingBottomNav.tsx",
-          "hash": "534661152611712681",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/dashboard/InfoCards.tsx",
-          "hash": "10292012557994575957",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/dashboard/PredictionCarousel.tsx",
-          "hash": "11317258011491251991",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/dashboard/ProfileCard.tsx",
-          "hash": "11800180015651849266",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/dashboard/QuickActionGrid.tsx",
-          "hash": "13964680602761287805",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/dashboard/WeatherCard.tsx",
-          "hash": "2095406063313973023",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:expo-linear-gradient",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/dashboard/theme.ts",
-          "hash": "194333086367204963"
-        },
-        {
-          "file": "apps/frontend/components/external-link.tsx",
-          "hash": "619642052675123640",
-          "deps": [
-            "npm:expo-router",
-            "npm:expo-web-browser",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/haptic-tab.tsx",
-          "hash": "15489109379723390544",
-          "deps": [
-            "npm:@react-navigation/bottom-tabs",
-            "npm:@react-navigation/elements",
-            "npm:expo-haptics"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/hello-wave.tsx",
-          "hash": "6704219318348234889",
-          "deps": [
-            "npm:react-native-reanimated"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/market/CategoryAccordion.tsx",
-          "hash": "15308115081710551990",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/market/EmptyState.tsx",
-          "hash": "2260349825268631517",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/market/LoadingSkeleton.tsx",
-          "hash": "6189691193908655302",
-          "deps": [
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/market/MarketHeader.tsx",
-          "hash": "13868212972964894224",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/market/MarketSelector.tsx",
-          "hash": "12207033025017674655",
-          "deps": [
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/market/MarketSummaryCard.tsx",
-          "hash": "1341417474550716726",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/market/ProductBottomSheet.tsx",
-          "hash": "8107229599168599850",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/market/SearchBar.tsx",
-          "hash": "2415326935450858058",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/market/reportGroups.ts",
-          "hash": "9886136194801181673",
-          "deps": [
-            "npm:@expo/vector-icons"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/market/theme.ts",
-          "hash": "9323264569070371852"
-        },
-        {
-          "file": "apps/frontend/components/market/types.ts",
-          "hash": "5022076119900309420",
-          "deps": [
-            "npm:@expo/vector-icons"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/notifications/NotificationComponents.tsx",
-          "hash": "12448001751404717186",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/notifications/PremiumNotificationCards.tsx",
-          "hash": "4000547264438061817",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/notifications/theme.ts",
-          "hash": "2311542738067134311"
-        },
-        {
-          "file": "apps/frontend/components/parallax-scroll-view.tsx",
-          "hash": "14653674748704193518",
-          "deps": [
-            "npm:react",
-            "npm:react-native",
-            "npm:react-native-reanimated"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/prediction/FarmSummaryCard.tsx",
-          "hash": "764626771972654316",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/prediction/InputSection.tsx",
-          "hash": "1115206557615607866",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/prediction/LoadingSkeleton.tsx",
-          "hash": "17212431692437376153",
-          "deps": [
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/prediction/PredictionButton.tsx",
-          "hash": "10721008777475787884",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:expo-linear-gradient",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/prediction/PredictionHeader.tsx",
-          "hash": "4568610049870982149",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:expo-linear-gradient",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/prediction/ResultCard.tsx",
-          "hash": "15136674704482294946",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/prediction/Selectors.tsx",
-          "hash": "14793998978807711001",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/prediction/theme.ts",
-          "hash": "12450252014798010828"
-        },
-        {
-          "file": "apps/frontend/components/screens/BuyerHomeScreen.tsx",
-          "hash": "227882500224623192",
-          "deps": [
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/screens/BuyersScreen.tsx",
-          "hash": "1764069649159778316",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/screens/ForgotPasswordScreen.tsx",
-          "hash": "7682482939840381818",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/screens/HomeScreen.tsx",
-          "hash": "3353043313180882127",
-          "deps": [
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/screens/LoadingScreen.tsx",
-          "hash": "6783166692122913131",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:expo-linear-gradient",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/screens/LoginScreen.tsx",
-          "hash": "16143156559345771549",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:expo-linear-gradient",
-            "npm:react",
-            "npm:react-native",
-            "npm:firebase"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/screens/MarketPricesScreen.tsx",
-          "hash": "14672251089299347526",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/screens/NotificationScreen.tsx",
-          "hash": "752015131541682387",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/screens/ProfileCompletionScreen.tsx",
-          "hash": "5839514696100865966",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native",
-            "npm:react-native-safe-area-context"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/screens/ProfileViewScreen.tsx",
-          "hash": "15875618188696919510",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native",
-            "npm:react-native-safe-area-context"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/screens/SignUpScreen.tsx",
-          "hash": "12375504429282880191",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:expo-linear-gradient",
-            "npm:react",
-            "npm:react-native",
-            "npm:firebase"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/screens/WeatherScreen.tsx",
-          "hash": "16742672042457506846",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:expo-location",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/screens/YieldPredictionScreen.tsx",
-          "hash": "11806019603303852313",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/screens/profile-types.ts",
-          "hash": "12814536907947931978"
-        },
-        {
-          "file": "apps/frontend/components/themed-text.tsx",
-          "hash": "3122477337740392823",
-          "deps": [
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/themed-view.tsx",
-          "hash": "2284721163480632327",
-          "deps": [
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/ui/collapsible.tsx",
-          "hash": "7424697222490553304",
-          "deps": [
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/ui/icon-symbol.ios.tsx",
-          "hash": "5129615090540378573",
-          "deps": [
-            "npm:expo-symbols",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/components/ui/icon-symbol.tsx",
-          "hash": "4383805248047041955",
-          "deps": [
-            "npm:@expo/vector-icons",
-            "npm:expo-symbols",
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/constants/theme.ts",
-          "hash": "16508223583303807561",
-          "deps": [
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/hooks/use-color-scheme.ts",
-          "hash": "13957152307728180184",
-          "deps": [
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/hooks/use-color-scheme.web.ts",
-          "hash": "13231496458987236811",
-          "deps": [
-            "npm:react",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/hooks/use-theme-color.ts",
-          "hash": "2742386001990436387"
-        },
-        {
-          "file": "apps/frontend/hooks/useNotifications.ts",
-          "hash": "10634137004907271565",
-          "deps": [
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/frontend/index.js",
-          "hash": "14343180379406773961",
-          "deps": [
-            "npm:expo"
-          ]
-        },
-        {
-          "file": "apps/frontend/lib/firebase-config.ts",
-          "hash": "14557009797031244651"
-        },
-        {
-          "file": "apps/frontend/lib/firebase.native.ts",
-          "hash": "2527490490165927507",
-          "deps": [
-            "npm:firebase"
-          ]
-        },
-        {
-          "file": "apps/frontend/lib/firebase.ts",
-          "hash": "4663741137670460041",
-          "deps": [
-            "npm:@react-native-async-storage/async-storage",
-            "npm:firebase",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/lib/firebase.web.ts",
-          "hash": "1624659577479539671",
-          "deps": [
-            "npm:firebase"
-          ]
-        },
-        {
-          "file": "apps/frontend/lib/notifications/DailyTipsService.ts",
-          "hash": "9424021121493558548",
-          "deps": [
-            "npm:@react-native-async-storage/async-storage"
-          ]
-        },
-        {
-          "file": "apps/frontend/lib/notifications/MarketNotificationService.ts",
-          "hash": "10653404768308128236",
-          "deps": [
-            "npm:@react-native-async-storage/async-storage"
-          ]
-        },
-        {
-          "file": "apps/frontend/lib/notifications/NotificationPreferences.ts",
-          "hash": "8928825726821937925"
-        },
-        {
-          "file": "apps/frontend/lib/notifications/NotificationService.ts",
-          "hash": "8149689521508242171",
-          "deps": [
-            "npm:@react-native-async-storage/async-storage",
-            "npm:expo-notifications",
-            "npm:react-native"
-          ]
-        },
-        {
-          "file": "apps/frontend/lib/notifications/NotificationTest.ts",
-          "hash": "10485327235452325849"
-        },
-        {
-          "file": "apps/frontend/lib/notifications/WeatherNotificationService.ts",
-          "hash": "2708895107408956792",
-          "deps": [
-            "npm:@react-native-async-storage/async-storage"
-          ]
-        },
-        {
-          "file": "apps/frontend/lib/notifications/index.ts",
-          "hash": "12276207819704292430"
-        },
-        {
-          "file": "apps/frontend/lib/notifications/types.ts",
-          "hash": "14541476128664902411",
-          "deps": [
-            "npm:@expo/vector-icons"
-          ]
-        },
-        {
-          "file": "apps/frontend/lib/prediction-api.ts",
-          "hash": "11592161927107022739"
-        },
-        {
-          "file": "apps/frontend/lib/spring-api.ts",
-          "hash": "2910978271464318181"
-        },
-        {
-          "file": "apps/frontend/lib/weather.ts",
-          "hash": "232587105261868616"
-        },
-        {
-          "file": "apps/frontend/npm-install.log",
-          "hash": "5596720377885444827"
-        },
-        {
-          "file": "apps/frontend/package-lock.json",
-          "hash": "7185473007938828423"
-        },
-        {
-          "file": "apps/frontend/package.json",
-          "hash": "8435005687394438362",
-          "deps": [
-            "npm:react-native",
-            "npm:babel-plugin-module-resolver"
-          ]
-        },
-        {
-          "file": "apps/frontend/project.json",
-          "hash": "13192672493923208681"
-        },
-        {
-          "file": "apps/frontend/tsconfig.json",
-          "hash": "14617262498094116381"
         }
       ],
       "Spring_Backend": [
@@ -1322,6 +617,827 @@
         {
           "file": "apps/Backend/Spring_Backend/target/test-classes/com/smartcrop/backend/service/FirestoreCollectionServiceTest.class",
           "hash": "1348012477654645622"
+        }
+      ],
+      "frontend": [
+        {
+          "file": "apps/frontend/.env",
+          "hash": "12829923846317057843"
+        },
+        {
+          "file": "apps/frontend/.env.example",
+          "hash": "16331174520020304813"
+        },
+        {
+          "file": "apps/frontend/.gitignore",
+          "hash": "1316414564126377975"
+        },
+        {
+          "file": "apps/frontend/EntryScreen.tsx",
+          "hash": "5850962484124622923",
+          "deps": [
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/app.json",
+          "hash": "9055584396055852908"
+        },
+        {
+          "file": "apps/frontend/app/(tabs)/_layout.tsx",
+          "hash": "8543605135166621015",
+          "deps": [
+            "npm:expo-router",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/frontend/app/(tabs)/explore.tsx",
+          "hash": "3114117556691560049",
+          "deps": [
+            "npm:expo-image",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/app/(tabs)/index.tsx",
+          "hash": "4851358962377969731",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/frontend/app/_layout.tsx",
+          "hash": "4065811654428678523",
+          "deps": [
+            "npm:@react-navigation/native",
+            "npm:expo-router",
+            "npm:expo-status-bar",
+            "npm:react-native-reanimated"
+          ]
+        },
+        {
+          "file": "apps/frontend/app/index.tsx",
+          "hash": "11989469778255579472",
+          "deps": [
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/app/modal.tsx",
+          "hash": "15818614733108035475",
+          "deps": [
+            "npm:expo-router",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/assets/images/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/frontend/assets/images/android-icon-background.png",
+          "hash": "10994153683116332424"
+        },
+        {
+          "file": "apps/frontend/assets/images/android-icon-foreground.png",
+          "hash": "15383051144788430570"
+        },
+        {
+          "file": "apps/frontend/assets/images/android-icon-monochrome.png",
+          "hash": "3343180278029361732"
+        },
+        {
+          "file": "apps/frontend/assets/images/favicon.png",
+          "hash": "17921061654045018263"
+        },
+        {
+          "file": "apps/frontend/assets/images/icon.png",
+          "hash": "11872069641359971350"
+        },
+        {
+          "file": "apps/frontend/assets/images/partial-react-logo.png",
+          "hash": "17138856618252336249"
+        },
+        {
+          "file": "apps/frontend/assets/images/react-logo.png",
+          "hash": "12800764183471362565"
+        },
+        {
+          "file": "apps/frontend/assets/images/react-logo@2x.png",
+          "hash": "10620144842436275618"
+        },
+        {
+          "file": "apps/frontend/assets/images/react-logo@3x.png",
+          "hash": "12902748134652534090"
+        },
+        {
+          "file": "apps/frontend/assets/images/splash-icon.png",
+          "hash": "16102135492459408350"
+        },
+        {
+          "file": "apps/frontend/babel.config.js",
+          "hash": "15171899872433303675"
+        },
+        {
+          "file": "apps/frontend/components/buyer/BuyerComponents.tsx",
+          "hash": "13766482025276351636",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:expo-linear-gradient",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/buyer/theme.ts",
+          "hash": "5552332411267036277"
+        },
+        {
+          "file": "apps/frontend/components/dashboard/AIInsightCard.tsx",
+          "hash": "17835693006286620900",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/DashboardHeader.tsx",
+          "hash": "6289979510299682593",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/FloatingBottomNav.tsx",
+          "hash": "534661152611712681",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/InfoCards.tsx",
+          "hash": "10292012557994575957",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/PredictionCarousel.tsx",
+          "hash": "11317258011491251991",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/ProfileCard.tsx",
+          "hash": "11800180015651849266",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/QuickActionGrid.tsx",
+          "hash": "13964680602761287805",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/WeatherCard.tsx",
+          "hash": "2095406063313973023",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:expo-linear-gradient",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/dashboard/theme.ts",
+          "hash": "10995296140532497860"
+        },
+        {
+          "file": "apps/frontend/components/external-link.tsx",
+          "hash": "619642052675123640",
+          "deps": [
+            "npm:expo-router",
+            "npm:expo-web-browser",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/haptic-tab.tsx",
+          "hash": "15489109379723390544",
+          "deps": [
+            "npm:@react-navigation/bottom-tabs",
+            "npm:@react-navigation/elements",
+            "npm:expo-haptics"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/hello-wave.tsx",
+          "hash": "6704219318348234889",
+          "deps": [
+            "npm:react-native-reanimated"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/CategoryAccordion.tsx",
+          "hash": "15308115081710551990",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/EmptyState.tsx",
+          "hash": "2260349825268631517",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/LoadingSkeleton.tsx",
+          "hash": "6189691193908655302",
+          "deps": [
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/MarketHeader.tsx",
+          "hash": "13868212972964894224",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/MarketSelector.tsx",
+          "hash": "12207033025017674655",
+          "deps": [
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/MarketSummaryCard.tsx",
+          "hash": "1341417474550716726",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/ProductBottomSheet.tsx",
+          "hash": "8107229599168599850",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/SearchBar.tsx",
+          "hash": "2415326935450858058",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/reportGroups.ts",
+          "hash": "9886136194801181673",
+          "deps": [
+            "npm:@expo/vector-icons"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/market/theme.ts",
+          "hash": "9323264569070371852"
+        },
+        {
+          "file": "apps/frontend/components/market/types.ts",
+          "hash": "5022076119900309420",
+          "deps": [
+            "npm:@expo/vector-icons"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/notifications/NotificationComponents.tsx",
+          "hash": "12448001751404717186",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/notifications/PremiumNotificationCards.tsx",
+          "hash": "4000547264438061817",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/notifications/theme.ts",
+          "hash": "2311542738067134311"
+        },
+        {
+          "file": "apps/frontend/components/parallax-scroll-view.tsx",
+          "hash": "14653674748704193518",
+          "deps": [
+            "npm:react",
+            "npm:react-native",
+            "npm:react-native-reanimated"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/prediction/FarmSummaryCard.tsx",
+          "hash": "764626771972654316",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/prediction/InputSection.tsx",
+          "hash": "1115206557615607866",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/prediction/LoadingSkeleton.tsx",
+          "hash": "17212431692437376153",
+          "deps": [
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/prediction/PredictionButton.tsx",
+          "hash": "10721008777475787884",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:expo-linear-gradient",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/prediction/PredictionHeader.tsx",
+          "hash": "4568610049870982149",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:expo-linear-gradient",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/prediction/ResultCard.tsx",
+          "hash": "15136674704482294946",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/prediction/Selectors.tsx",
+          "hash": "14793998978807711001",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/prediction/theme.ts",
+          "hash": "12450252014798010828"
+        },
+        {
+          "file": "apps/frontend/components/screens/BuyerHomeScreen.tsx",
+          "hash": "10940796194011714357",
+          "deps": [
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/BuyersScreen.tsx",
+          "hash": "1764069649159778316",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/ForgotPasswordScreen.tsx",
+          "hash": "7682482939840381818",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/HomeScreen.tsx",
+          "hash": "8871688384706719902",
+          "deps": [
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/LoadingScreen.tsx",
+          "hash": "6783166692122913131",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:expo-linear-gradient",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/LoginScreen.tsx",
+          "hash": "10180767035891146495",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:expo-linear-gradient",
+            "npm:react",
+            "npm:react-native",
+            "npm:firebase"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/MarketPricesScreen.tsx",
+          "hash": "14672251089299347526",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/NotificationScreen.tsx",
+          "hash": "752015131541682387",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/ProfileCompletionScreen.tsx",
+          "hash": "5839514696100865966",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native",
+            "npm:react-native-safe-area-context"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/ProfileViewScreen.tsx",
+          "hash": "15875618188696919510",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native",
+            "npm:react-native-safe-area-context"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/SettingsScreen.tsx",
+          "hash": "11668357491815354535",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native",
+            "npm:firebase"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/SignUpScreen.tsx",
+          "hash": "12375504429282880191",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:expo-linear-gradient",
+            "npm:react",
+            "npm:react-native",
+            "npm:firebase"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/WeatherScreen.tsx",
+          "hash": "14886844007407592602",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:expo-location",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/YieldPredictionScreen.tsx",
+          "hash": "11806019603303852313",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/screens/profile-types.ts",
+          "hash": "12814536907947931978"
+        },
+        {
+          "file": "apps/frontend/components/settings/LanguageSelector.tsx",
+          "hash": "10359090031097194664",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/settings/SettingsRow.tsx",
+          "hash": "2338329904226538878",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/settings/SettingsSection.tsx",
+          "hash": "11053957439087791982",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/settings/ThemeSelector.tsx",
+          "hash": "13601964040245281201",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/themed-text.tsx",
+          "hash": "3122477337740392823",
+          "deps": [
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/themed-view.tsx",
+          "hash": "2284721163480632327",
+          "deps": [
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/ui/collapsible.tsx",
+          "hash": "7424697222490553304",
+          "deps": [
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/ui/icon-symbol.ios.tsx",
+          "hash": "5129615090540378573",
+          "deps": [
+            "npm:expo-symbols",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/components/ui/icon-symbol.tsx",
+          "hash": "4383805248047041955",
+          "deps": [
+            "npm:@expo/vector-icons",
+            "npm:expo-symbols",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/constants/theme.ts",
+          "hash": "16508223583303807561",
+          "deps": [
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/context/ThemeContext.tsx",
+          "hash": "12029401394192847448",
+          "deps": [
+            "npm:@react-native-async-storage/async-storage",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/hooks/use-color-scheme.ts",
+          "hash": "13957152307728180184",
+          "deps": [
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/hooks/use-color-scheme.web.ts",
+          "hash": "13231496458987236811",
+          "deps": [
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/hooks/use-theme-color.ts",
+          "hash": "2742386001990436387"
+        },
+        {
+          "file": "apps/frontend/hooks/useNotifications.ts",
+          "hash": "10634137004907271565",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/frontend/i18n/index.tsx",
+          "hash": "3428063484344471944",
+          "deps": [
+            "npm:@react-native-async-storage/async-storage",
+            "npm:react",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/i18n/translations/en.ts",
+          "hash": "811108176388467474"
+        },
+        {
+          "file": "apps/frontend/i18n/translations/si.ts",
+          "hash": "650881971009098970"
+        },
+        {
+          "file": "apps/frontend/index.js",
+          "hash": "14343180379406773961",
+          "deps": [
+            "npm:expo"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/firebase-config.ts",
+          "hash": "14557009797031244651"
+        },
+        {
+          "file": "apps/frontend/lib/firebase.native.ts",
+          "hash": "2527490490165927507",
+          "deps": [
+            "npm:firebase"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/firebase.ts",
+          "hash": "4663741137670460041",
+          "deps": [
+            "npm:@react-native-async-storage/async-storage",
+            "npm:firebase",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/firebase.web.ts",
+          "hash": "1624659577479539671",
+          "deps": [
+            "npm:firebase"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/notifications/DailyTipsService.ts",
+          "hash": "9424021121493558548",
+          "deps": [
+            "npm:@react-native-async-storage/async-storage"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/notifications/MarketNotificationService.ts",
+          "hash": "10653404768308128236",
+          "deps": [
+            "npm:@react-native-async-storage/async-storage"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/notifications/NotificationPreferences.ts",
+          "hash": "8928825726821937925"
+        },
+        {
+          "file": "apps/frontend/lib/notifications/NotificationService.ts",
+          "hash": "8149689521508242171",
+          "deps": [
+            "npm:@react-native-async-storage/async-storage",
+            "npm:expo-notifications",
+            "npm:react-native"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/notifications/NotificationTest.ts",
+          "hash": "10485327235452325849"
+        },
+        {
+          "file": "apps/frontend/lib/notifications/WeatherNotificationService.ts",
+          "hash": "2708895107408956792",
+          "deps": [
+            "npm:@react-native-async-storage/async-storage"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/notifications/index.ts",
+          "hash": "12276207819704292430"
+        },
+        {
+          "file": "apps/frontend/lib/notifications/types.ts",
+          "hash": "14541476128664902411",
+          "deps": [
+            "npm:@expo/vector-icons"
+          ]
+        },
+        {
+          "file": "apps/frontend/lib/prediction-api.ts",
+          "hash": "11592161927107022739"
+        },
+        {
+          "file": "apps/frontend/lib/spring-api.ts",
+          "hash": "2910978271464318181"
+        },
+        {
+          "file": "apps/frontend/lib/weather.ts",
+          "hash": "232587105261868616"
+        },
+        {
+          "file": "apps/frontend/npm-install.log",
+          "hash": "5596720377885444827"
+        },
+        {
+          "file": "apps/frontend/package-lock.json",
+          "hash": "7185473007938828423"
+        },
+        {
+          "file": "apps/frontend/package.json",
+          "hash": "8435005687394438362",
+          "deps": [
+            "npm:react-native",
+            "npm:babel-plugin-module-resolver"
+          ]
+        },
+        {
+          "file": "apps/frontend/project.json",
+          "hash": "13192672493923208681"
+        },
+        {
+          "file": "apps/frontend/theme/theme.ts",
+          "hash": "6521708679005947056"
+        },
+        {
+          "file": "apps/frontend/tsconfig.json",
+          "hash": "15054491336977966756"
         }
       ]
     }

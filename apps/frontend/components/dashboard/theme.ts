@@ -1,3 +1,9 @@
+import { AppColors, darkColors, lightColors } from "../../theme/theme";
+
+export function getDashboardColors(isDark: boolean): AppColors {
+  return isDark ? darkColors : lightColors;
+}
+
 export const dashboardColors = {
   primary: "#0F7A3A",
   secondary: "#16A34A",

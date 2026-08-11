@@ -11,6 +11,7 @@ import { MarketPricesScreen } from "@/components/screens/MarketPricesScreen";
 import { NotificationScreen } from "@/components/screens/NotificationScreen";
 import { ProfileCompletionScreen } from "@/components/screens/ProfileCompletionScreen";
 import { ProfileViewScreen } from "@/components/screens/ProfileViewScreen";
+import { SettingsScreen } from "@/components/screens/SettingsScreen";
 import { SignUpScreen } from "@/components/screens/SignUpScreen";
 import { WeatherScreen } from "@/components/screens/WeatherScreen";
 import { YieldPredictionScreen } from "@/components/screens/YieldPredictionScreen";
@@ -19,7 +20,9 @@ import {
   Role,
   SignupDetails,
 } from "@/components/screens/profile-types";
+import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { useNotifications } from "@/hooks/useNotifications";
+import { I18nProvider } from "@/i18n";
 import { getProfileByEmail } from "@/lib/spring-api";
 
 type Screen =
@@ -34,9 +37,11 @@ type Screen =
   | "yield-prediction"
   | "buyers"
   | "notifications"
+  | "settings"
   | "home";
 
-export default function EntryScreen() {
+function AppContent() {
+  const { theme } = useTheme();
   const [currentScreen, setCurrentScreen] = useState<Screen>("loading");
   const [userRole, setUserRole] = useState<Role | null>(null);
   const [signupDetails, setSignupDetails] = useState<SignupDetails | null>(
@@ -77,8 +82,15 @@ export default function EntryScreen() {
     setCurrentScreen(profile.role === "buyer" ? "buyers" : "home");
   };
 
+  const handleLogout = () => {
+    setProfileData(null);
+    setUserRole(null);
+    setSignupDetails(null);
+    setCurrentScreen("login");
+  };
+
   return (
-    <View style={{ flex: 1, backgroundColor: "#F8FAFC" }}>
+    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       {currentScreen === "loading" && (
         <LoadingScreen onLoadComplete={() => setCurrentScreen("login")} />
       )}
@@ -120,6 +132,20 @@ export default function EntryScreen() {
         />
       )}
 
+      {currentScreen === "settings" && (
+        <SettingsScreen
+          profile={profileData}
+          onBackToHome={() => setCurrentScreen("home")}
+          onEditProfile={() =>
+            setCurrentScreen(profileData ? "profile-view" : "profile")
+          }
+          onViewProfile={() =>
+            setCurrentScreen(profileData ? "profile-view" : "profile")
+          }
+          onLogout={handleLogout}
+        />
+      )}
+
       {currentScreen === "home" &&
         profileData &&
         (profileData.role === "buyer" ? (
@@ -132,6 +158,7 @@ export default function EntryScreen() {
               setCurrentScreen(profileData ? "profile-view" : "profile")
             }
             onNotifications={() => setCurrentScreen("notifications")}
+            onSettings={() => setCurrentScreen("settings")}
             unreadNotifications={unreadCount}
           />
         ) : (
@@ -146,6 +173,7 @@ export default function EntryScreen() {
               setCurrentScreen(profileData ? "profile-view" : "profile")
             }
             onNotifications={() => setCurrentScreen("notifications")}
+            onSettings={() => setCurrentScreen("settings")}
             unreadNotifications={unreadCount}
           />
         ))}
@@ -190,5 +218,15 @@ export default function EntryScreen() {
         />
       )}
     </View>
+  );
+}
+
+export default function EntryScreen() {
+  return (
+    <I18nProvider>
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
+    </I18nProvider>
   );
 }
