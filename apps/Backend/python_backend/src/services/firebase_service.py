@@ -12,6 +12,8 @@ from urllib.request import Request, urlopen
 from google.auth.transport.requests import Request as GoogleAuthRequest
 from google.oauth2 import service_account
 
+from src.core.config import settings
+
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 DEFAULT_CREDENTIALS_PATH = BASE_DIR / "firebase-service-account.json"
@@ -19,7 +21,8 @@ FIRESTORE_SCOPE = "https://www.googleapis.com/auth/datastore"
 
 
 def _credentials_path() -> Path:
-    return Path(os.getenv("FIREBASE_CREDENTIALS_PATH", str(DEFAULT_CREDENTIALS_PATH)))
+    # Prefer the configured path (from backend/.env via src.core.config).
+    return Path(settings.firestore_credentials_path)
 
 
 @lru_cache(maxsize=1)
@@ -103,6 +106,61 @@ def get_collection_documents(collection_name: str) -> list[dict[str, Any]]:
     response = _authorized_request(url)
     documents = response.get("documents") or []
     return [_decode_firestore_document(document) for document in documents]
+
+
+def _encode_firestore_value(value: Any) -> dict[str, Any]:
+    """Encode a Python value into a Firestore value dict for writes."""
+    if value is None:
+        return {"nullValue": None}
+    if isinstance(value, bool):
+        return {"booleanValue": value}
+    if isinstance(value, int):
+        return {"integerValue": str(value)}
+    if isinstance(value, float):
+        return {"doubleValue": value}
+    if isinstance(value, dict):
+        return {
+            "mapValue": {
+                "fields": {
+                    str(key): _encode_firestore_value(inner)
+                    for key, inner in value.items()
+                }
+            }
+        }
+    if isinstance(value, (list, tuple)):
+        return {
+            "arrayValue": {
+                "values": [_encode_firestore_value(item) for item in value]
+            }
+        }
+    return {"stringValue": str(value)}
+
+
+def _document_url(collection_name: str, document_id: str) -> str:
+    return (
+        f"{_firestore_base_url()}/{quote(collection_name)}/{quote(document_id)}"
+    )
+
+
+def create_document(
+    collection_name: str, document_id: str, data: dict[str, Any]
+) -> dict[str, Any]:
+    """Create (or overwrite) a document in Firestore. Returns the stored doc."""
+    url = _document_url(collection_name, document_id)
+    fields = {str(key): _encode_firestore_value(value) for key, value in data.items()}
+    body = json.dumps({"fields": fields}).encode("utf-8")
+    request = Request(
+        url,
+        data=body,
+        headers={
+            "Authorization": f"Bearer {_refresh_token()}",
+            "Content-Type": "application/json",
+        },
+        method="PATCH",
+    )
+    with urlopen(request, timeout=30) as response:
+        document = json.loads(response.read().decode("utf-8"))
+    return _decode_firestore_document(document)
 
 
 def get_document(collection_name: str, document_id: str) -> dict[str, Any] | None:

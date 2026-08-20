@@ -53,6 +53,15 @@
             "configurations": {},
             "parallelism": true,
             "cache": false
+          },
+          "serve:agent": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "python run_agent.py",
+              "cwd": "apps/Backend/python_backend"
+            },
+            "configurations": {},
+            "parallelism": true
           }
         },
         "implicitDependencies": [],
@@ -36824,5 +36833,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1786416321784
+  "computedAt": 1787128993745
 }

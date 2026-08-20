@@ -56,11 +56,19 @@ const farmerActionCards: QuickAction[] = [
     background: "#FFEDD5",
     iconColor: "#EA580C",
   },
-  {
+    {
     id: "crop",
     icon: "leaf",
     title: "Crop Recommendation",
     description: "AI-powered suggestions",
+    background: "#DCFCE7",
+    iconColor: "#15803D",
+  },
+  {
+    id: "growing-plan",
+    icon: "clipboard-outline",
+    title: "Growing Plan",
+    description: "Plan & confirm your crop schedule",
     background: "#DCFCE7",
     iconColor: "#15803D",
   },
@@ -164,7 +172,8 @@ type HomeScreenProps = {
   onWeatherUpdate?: () => void;
   onBuyers?: () => void;
   onYieldPrediction?: () => void;
-  onCropRecommendation?: () => void;
+    onCropRecommendation?: () => void;
+  onGrowingPlan?: () => void;
   onNotifications?: () => void;
   onSettings?: () => void;
   unreadNotifications?: number;
@@ -209,7 +218,8 @@ export function HomeScreen({
   onWeatherUpdate,
   onBuyers,
   onYieldPrediction,
-  onCropRecommendation,
+    onCropRecommendation,
+  onGrowingPlan,
   onNotifications,
   onSettings,
   unreadNotifications = 0,
@@ -345,8 +355,10 @@ export function HomeScreen({
         onBuyers?.();
       } else if (id === "yield") {
         onYieldPrediction?.();
-      } else if (id === "crop") {
+            } else if (id === "crop") {
         onCropRecommendation?.();
+      } else if (id === "growing-plan") {
+        onGrowingPlan?.();
       }
     },
     [
@@ -354,8 +366,9 @@ export function HomeScreen({
       handleWeatherPress,
       onMarketPrices,
       onBuyers,
-      onYieldPrediction,
+            onYieldPrediction,
       onCropRecommendation,
+      onGrowingPlan,
     ],
   );
 

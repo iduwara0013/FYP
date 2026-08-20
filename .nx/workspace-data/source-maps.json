@@ -264,6 +264,26 @@
       "apps/Backend/python_backend/project.json",
       "nx/core/project-json"
     ],
+    "targets.serve:agent": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve:agent.executor": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve:agent.options": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve:agent.options.command": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.serve:agent.options.cwd": [
+      "apps/Backend/python_backend/project.json",
+      "nx/core/project-json"
+    ],
     "targets.serve.cache": [
       "nx.json",
       "nx/target-defaults"

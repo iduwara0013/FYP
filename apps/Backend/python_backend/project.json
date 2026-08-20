@@ -10,6 +10,13 @@
         "command": "python app.py",
         "cwd": "apps/Backend/python_backend"
       }
+    },
+    "serve:agent": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python run_agent.py",
+        "cwd": "apps/Backend/python_backend"
+      }
     }
   }
 }

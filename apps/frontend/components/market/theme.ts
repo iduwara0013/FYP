@@ -1,25 +1,31 @@
+import { AppColors, darkColors, lightColors } from "../../theme/theme";
+
+export function getMarketColors(isDark: boolean): AppColors {
+  return isDark ? darkColors : lightColors;
+}
+
 export const colors = {
-  primary: "#2E7D32",
-  primaryDark: "#1B5E20",
-  primaryLight: "#66BB6A",
-  primarySoft: "#E8F5E9",
-  background: "#F5F7F9",
+  primary: "#0D4B5C",
+  primaryDark: "#193642",
+  primaryLight: "#BDEEFF",
+  primarySoft: "#BDEEFF",
+  background: "#FFFFFF",
   card: "#FFFFFF",
-  text: "#1A1D1F",
-  textSecondary: "#6B7280",
-  textMuted: "#9CA3AF",
-  border: "#E5E7EB",
-  success: "#16A34A",
-  successSoft: "#DCFCE7",
-  danger: "#DC2626",
-  dangerSoft: "#FEE2E2",
-  warning: "#D97706",
-  warningSoft: "#FEF3C7",
-  info: "#0E7490",
-  infoSoft: "#CFFAFE",
+  text: "#193642",
+  textSecondary: "#0D4B5C",
+  textMuted: "#5A7480",
+  border: "#BDEEFF",
+  success: "#0D504D",
+  successSoft: "#B8FAD8",
+  danger: "#193642",
+  dangerSoft: "#BDEEFF",
+  warning: "#FFF0BC",
+  warningSoft: "#FFF0BC",
+  info: "#0D4B5C",
+  infoSoft: "#BDEEFF",
   white: "#FFFFFF",
   black: "#000000",
-  overlay: "rgba(0, 0, 0, 0.45)",
+  overlay: "rgba(25, 54, 66, 0.2)",
 } as const;
 
 export const spacing = {

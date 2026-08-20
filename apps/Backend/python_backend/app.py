@@ -19,6 +19,7 @@ from src.services.prediction_service import (
     predict_farm,
 )
 from src.services.yield_prediction import FEATURE_COLUMNS, predict_yield
+from src.agent.graph import run_recommendation_agent
 
 app = Flask(__name__)
 SPRING_BACKEND_URL = os.getenv("SPRING_BACKEND_URL", "http://127.0.0.1:8080")
@@ -231,6 +232,17 @@ def _predict_and_save_for_farmer_id(farmer_id: str, overrides: dict | None = Non
         "unit": "ton/ha",
         "savedPrediction": save_result,
     }
+
+
+@app.post("/agent/recommend")
+def agent_recommend_route():
+    """Run the LangGraph crop recommendation agent."""
+    payload = request.get_json(silent=True) or {}
+    try:
+        result = run_recommendation_agent(payload)
+        return jsonify(result)
+    except Exception as error:
+        return jsonify({"error": str(error)}), 500
 
 
 @app.post("/predict-farmer-yield")

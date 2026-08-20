@@ -1,27 +1,61 @@
+import { AppColors, darkColors, lightColors } from "../../theme/theme";
+
+export function getPredictionColors(isDark: boolean): AppColors {
+  return isDark ? darkColors : lightColors;
+}
+
 export const predictionColors = {
-  primary: "#16A34A",
-  primaryDark: "#15803D",
-  accent: "#22C55E",
-  accentSoft: "#DCFCE7",
-  background: "#F8FAFC",
+  primary: "#0D4B5C",
+  primaryDark: "#193642",
+  accent: "#0D504D",
+  accentSoft: "#B8FAD8",
+  background: "#FFFFFF",
   card: "#FFFFFF",
-  text: "#0F172A",
-  textSecondary: "#475569",
-  textMuted: "#94A3B8",
-  border: "#E2E8F0",
-  danger: "#DC2626",
-  dangerSoft: "#FEE2E2",
-  warning: "#D97706",
-  warningSoft: "#FEF3C7",
-  info: "#0E7490",
-  infoSoft: "#CFFAFE",
-  success: "#16A34A",
-  successSoft: "#DCFCE7",
-  gold: "#B45309",
-  goldSoft: "#FEF3C7",
+  text: "#193642",
+  textSecondary: "#0D4B5C",
+  textMuted: "#5A7480",
+  border: "#BDEEFF",
+  danger: "#193642",
+  dangerSoft: "#BDEEFF",
+  warning: "#FFF0BC",
+  warningSoft: "#FFF0BC",
+  info: "#0D4B5C",
+  infoSoft: "#BDEEFF",
+  success: "#0D504D",
+  successSoft: "#B8FAD8",
+  gold: "#FFF0BC",
+  goldSoft: "#FFF0BC",
   white: "#FFFFFF",
-  overlay: "rgba(15, 23, 42, 0.45)",
+  overlay: "rgba(25, 54, 66, 0.2)",
 } as const;
+
+export function createPredictionPalette(isDark: boolean) {
+  const colors = isDark ? darkColors : lightColors;
+  return {
+    primary: colors.primary,
+    primaryDark: colors.primaryDark,
+    accent: colors.primaryLight,
+    accentSoft: colors.primarySoft,
+    background: colors.background,
+    card: colors.surface,
+    text: colors.text,
+    textSecondary: colors.textSecondary,
+    textMuted: colors.textMuted,
+    border: colors.border,
+    danger: colors.danger,
+    dangerSoft: colors.dangerSoft,
+    warning: colors.warning,
+    warningSoft: colors.warningSoft,
+    info: colors.info,
+    infoSoft: colors.infoSoft,
+    success: colors.success,
+    successSoft: colors.successSoft,
+    gold: colors.accent,
+    goldSoft: colors.accentSoft,
+    white: colors.white,
+    overlay: colors.overlay,
+  } as const;
+}
 
 export const predictionSpacing = {
   xs: 4,
@@ -42,14 +76,14 @@ export const predictionRadius = {
 
 export const predictionShadow = {
   card: {
-    shadowColor: "#0F172A",
+    shadowColor: "#193642",
     shadowOpacity: 0.07,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
     elevation: 4,
   },
   soft: {
-    shadowColor: "#0F172A",
+    shadowColor: "#193642",
     shadowOpacity: 0.05,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 5 },

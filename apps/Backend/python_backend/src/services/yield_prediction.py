@@ -1,3 +1,4 @@
+import warnings
 from pathlib import Path
 from typing import Any
 
@@ -5,6 +6,7 @@ import joblib
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.exceptions import InconsistentVersionWarning
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
@@ -87,7 +89,9 @@ def ensure_model() -> Pipeline:
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
 
     if MODEL_PATH.exists():
-        return joblib.load(MODEL_PATH)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", InconsistentVersionWarning)
+            return joblib.load(MODEL_PATH)
 
     training_frame = _build_training_frame()
     pipeline = _build_pipeline(training_frame[FEATURE_COLUMNS])

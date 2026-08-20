@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 
+import { AgenticRecommendationScreen } from "@/components/screens/AgenticRecommendationScreen";
 import { BuyerHomeScreen } from "@/components/screens/BuyerHomeScreen";
 import { BuyersScreen } from "@/components/screens/BuyersScreen";
 import { ForgotPasswordScreen } from "@/components/screens/ForgotPasswordScreen";
@@ -24,6 +25,9 @@ import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { useNotifications } from "@/hooks/useNotifications";
 import { I18nProvider } from "@/i18n";
 import { getProfileByEmail } from "@/lib/spring-api";
+import { buildCropPlan } from "@/lib/cropPlanBuilder";
+import { CropPlanScreen } from "@/components/screens/CropPlanScreen";
+import type { CropPlanDraft, CropOption } from "@/lib/plan-types";
 
 type Screen =
   | "loading"
@@ -35,6 +39,8 @@ type Screen =
   | "market-prices"
   | "weather"
   | "yield-prediction"
+    | "agentic-recommendation"
+  | "crop-plan"
   | "buyers"
   | "notifications"
   | "settings"
@@ -47,7 +53,8 @@ function AppContent() {
   const [signupDetails, setSignupDetails] = useState<SignupDetails | null>(
     null,
   );
-  const [profileData, setProfileData] = useState<ProfileData | null>(null);
+    const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [cropPlan, setCropPlan] = useState<CropPlanDraft | null>(null);
 
   // Wire up the notification system (push permission, background checks,
   // deep-link handling, live unread count).
@@ -82,12 +89,35 @@ function AppContent() {
     setCurrentScreen(profile.role === "buyer" ? "buyers" : "home");
   };
 
-  const handleLogout = () => {
+    const handleLogout = () => {
     setProfileData(null);
     setUserRole(null);
     setSignupDetails(null);
     setCurrentScreen("login");
   };
+
+  const handleViewPlan = useCallback(
+    (option: CropOption) => {
+      const month = new Date().getMonth() + 1;
+      const season: "Yala" | "Maha" = [10, 11, 12, 1, 2, 3].includes(month)
+        ? "Maha"
+        : "Yala";
+      const year = new Date().getFullYear();
+      const landArea =
+        profileData?.role === "farmer" && profileData?.totalLandArea
+          ? profileData.totalLandArea
+          : 1.0;
+      const hasIrrigation =
+        profileData?.role === "farmer"
+          ? profileData?.hasIrrigation ?? true
+          : true;
+      setCropPlan(
+        buildCropPlan(option, profileData, season, year, landArea, hasIrrigation),
+      );
+      setCurrentScreen("crop-plan");
+    },
+    [profileData],
+  );
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
@@ -168,7 +198,10 @@ function AppContent() {
             onWeatherUpdate={() => setCurrentScreen("weather")}
             onBuyers={() => setCurrentScreen("buyers")}
             onYieldPrediction={() => setCurrentScreen("yield-prediction")}
-            onCropRecommendation={() => setCurrentScreen("yield-prediction")}
+                        onCropRecommendation={() =>
+              setCurrentScreen("agentic-recommendation")
+            }
+            onGrowingPlan={() => setCurrentScreen("agentic-recommendation")}
             onProfile={() =>
               setCurrentScreen(profileData ? "profile-view" : "profile")
             }
@@ -189,6 +222,25 @@ function AppContent() {
         <YieldPredictionScreen
           profile={profileData}
           onBackToHome={() => setCurrentScreen("home")}
+        />
+      )}
+
+      {currentScreen === "agentic-recommendation" && (
+                <AgenticRecommendationScreen
+          profile={profileData}
+          onBackToHome={() => setCurrentScreen("home")}
+          onViewPlan={handleViewPlan}
+        />
+      )}
+
+      {currentScreen === "crop-plan" && cropPlan && (
+        <CropPlanScreen
+          profile={profileData}
+          plan={cropPlan}
+          onBack={() => {
+            setCropPlan(null);
+            setCurrentScreen("home");
+          }}
         />
       )}
 

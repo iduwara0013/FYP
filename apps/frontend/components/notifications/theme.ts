@@ -1,61 +1,67 @@
+import { AppColors, darkColors, lightColors } from "../../theme/theme";
+
+export function getNotificationColors(isDark: boolean): AppColors {
+  return isDark ? darkColors : lightColors;
+}
+
 export const notificationColors = {
   // Primary
-  primary: "#16A34A",
-  primaryHover: "#15803D",
-  primarySoft: "#DCFCE7",
+  primary: "#0D4B5C",
+  primaryHover: "#193642",
+  primarySoft: "#BDEEFF",
   primaryContrast: "#FFFFFF",
 
   // Secondary / accent
-  secondary: "#22C55E",
-  secondarySoft: "#DCFCE7",
+  secondary: "#B8FAD8",
+  secondarySoft: "#B8FAD8",
 
   // Background
-  background: "#F8FAFC",
-  backgroundGradientStart: "#F0FDF4",
-  backgroundGradientEnd: "#F8FAFC",
+  background: "#FFFFFF",
+  backgroundGradientStart: "#BDEEFF",
+  backgroundGradientEnd: "#FFFFFF",
 
   // Cards
   card: "#FFFFFF",
-  cardBorder: "#E2E8F0",
-  cardHover: "#F1F5F9",
+  cardBorder: "#BDEEFF",
+  cardHover: "#BDEEFF",
 
   // Text
-  text: "#0F172A",
-  textSecondary: "#64748B",
-  textMuted: "#94A3B8",
+  text: "#193642",
+  textSecondary: "#0D4B5C",
+  textMuted: "#5A7480",
   textInverted: "#FFFFFF",
 
   // Borders
-  border: "#E2E8F0",
-  borderStrong: "#CBD5E1",
+  border: "#BDEEFF",
+  borderStrong: "#0D4B5C",
 
   // Category colors
-  weather: "#3B82F6",
-  weatherSoft: "#DBEAFE",
-  market: "#F59E0B",
-  marketSoft: "#FEF3C7",
-  prediction: "#8B5CF6",
-  predictionSoft: "#EDE9FE",
-  tips: "#22C55E",
-  tipsSoft: "#DCFCE7",
-  news: "#06B6D4",
-  newsSoft: "#CFFAFE",
+  weather: "#0D4B5C",
+  weatherSoft: "#BDEEFF",
+  market: "#193642",
+  marketSoft: "#BDEEFF",
+  prediction: "#0D504D",
+  predictionSoft: "#B8FAD8",
+  tips: "#0D504D",
+  tipsSoft: "#B8FAD8",
+  news: "#0D4B5C",
+  newsSoft: "#BDEEFF",
 
   // Status
-  unread: "#EFF6FF",
-  unreadBorder: "#BFDBFE",
-  danger: "#EF4444",
-  dangerSoft: "#FEE2E2",
-  warning: "#F59E0B",
-  success: "#16A34A",
-  successSoft: "#DCFCE7",
+  unread: "#BDEEFF",
+  unreadBorder: "#0D4B5C",
+  danger: "#193642",
+  dangerSoft: "#BDEEFF",
+  warning: "#FFF0BC",
+  success: "#0D504D",
+  successSoft: "#B8FAD8",
 
   // Alias for backward compatibility
   white: "#FFFFFF",
 
   // Overlay
-  overlay: "rgba(15, 23, 42, 0.04)",
-  overlayStrong: "rgba(15, 23, 42, 0.08)",
+  overlay: "rgba(25, 54, 66, 0.08)",
+  overlayStrong: "rgba(13, 75, 92, 0.12)",
 } as const;
 
 export const notificationSpacing = {
@@ -77,14 +83,14 @@ export const notificationRadius = {
 
 export const notificationShadow = {
   card: {
-    shadowColor: "#0F172A",
+    shadowColor: "#193642",
     shadowOpacity: 0.06,
     shadowRadius: 14,
     shadowOffset: { width: 0, height: 6 },
     elevation: 3,
   },
   soft: {
-    shadowColor: "#0F172A",
+    shadowColor: "#193642",
     shadowOpacity: 0.04,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 4 },

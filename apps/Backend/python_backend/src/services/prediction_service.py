@@ -7,11 +7,13 @@ Model 1 (Yield): land area + crop + season + region + district + irrigation
 Model 2 (Price): production_kg + relative_supply + year + crop + season
     + region  ->  price_rs_per_kg
 """
+import warnings
 from pathlib import Path
 from typing import Any
 
 import joblib
 import pandas as pd
+from sklearn.exceptions import InconsistentVersionWarning
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 MODELS_DIR = BASE_DIR / "models"
@@ -62,7 +64,9 @@ def _load_model(path: Path):
         raise FileNotFoundError(
             f"Model file not found at {path}. Run scripts/train_models.py first."
         )
-    return joblib.load(path)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", InconsistentVersionWarning)
+        return joblib.load(path)
 
 
 def _load_yield_model():
