@@ -8,6 +8,8 @@ import { LoginScreen } from "@/components/screens/LoginScreen";
 import { ProfileCompletionScreen } from "@/components/screens/ProfileCompletionScreen";
 import { ProfileViewScreen } from "@/components/screens/ProfileViewScreen";
 import { SignUpScreen } from "@/components/screens/SignUpScreen";
+import { FarmToolkitScreen } from "@/components/screens/FarmToolkitScreen";
+import { useTheme } from "@/context/ThemeContext";
 import {
     ProfileData,
     Role,
@@ -21,9 +23,11 @@ type Screen =
   | "signup"
   | "profile"
   | "profile-view"
+  | "farm-tools"
   | "home";
 
 export default function EntryScreen() {
+  const { theme } = useTheme();
   const [currentScreen, setCurrentScreen] = useState<Screen>("loading");
   const [userRole, setUserRole] = useState<Role | null>(null);
   const [signupDetails, setSignupDetails] = useState<SignupDetails | null>(
@@ -74,12 +78,12 @@ export default function EntryScreen() {
     setCurrentScreen("profile");
   };
 
-  const handleLogin = () => {
+  const handleLogin = async (_email: string) => {
     setCurrentScreen("home");
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#F8FAFC" }}>
+    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <Animated.View style={screenStyle}>
         {currentScreen === "loading" && (
           <LoadingScreen onLoadComplete={() => setCurrentScreen("login")} />
@@ -127,10 +131,15 @@ export default function EntryScreen() {
         {currentScreen === "home" && (
           <HomeScreen
             profile={profileData}
+            onFarmTools={() => setCurrentScreen("farm-tools")}
             onProfile={() => {
               setCurrentScreen(profileData ? "profile-view" : "profile");
             }}
           />
+        )}
+
+        {currentScreen === "farm-tools" && (
+          <FarmToolkitScreen onBack={() => setCurrentScreen("home")} />
         )}
       </Animated.View>
     </View>

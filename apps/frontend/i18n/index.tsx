@@ -18,8 +18,9 @@ import { useColorScheme } from "react-native";
 
 import { en } from "./translations/en";
 import { si } from "./translations/si";
+import { ta } from "./translations/ta";
 
-export type Language = "en" | "si";
+export type Language = "en" | "si" | "ta";
 
 type TranslationKey = keyof typeof en.common;
 
@@ -32,6 +33,7 @@ type I18nContextValue = {
 const translations: Record<Language, typeof en> = {
   en,
   si,
+  ta,
 };
 
 const LANGUAGE_STORAGE_KEY = "@smart_crop_language";
@@ -49,7 +51,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     (async () => {
       try {
         const saved = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
-        if (mounted && saved && (saved === "en" || saved === "si")) {
+        if (mounted && saved && (saved === "en" || saved === "si" || saved === "ta")) {
           setLanguageState(saved as Language);
         } else {
           // Detect device language - default to Sinhala if device is Sinhala
@@ -59,6 +61,8 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
               : "";
           if (deviceLang.startsWith("si")) {
             setLanguageState("si");
+          } else if (deviceLang.startsWith("ta")) {
+            setLanguageState("ta");
           }
         }
       } catch {

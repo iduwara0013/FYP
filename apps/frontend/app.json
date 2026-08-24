@@ -45,6 +45,13 @@
         }
       ],
       [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Smart Crop to select crop photos for disease screening.",
+          "cameraPermission": "Allow Smart Crop to photograph crops for disease screening."
+        }
+      ],
+      [
         "expo-notifications",
         {
           "color": "#0D504D",

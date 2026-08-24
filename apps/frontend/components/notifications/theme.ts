@@ -6,62 +6,62 @@ export function getNotificationColors(isDark: boolean): AppColors {
 
 export const notificationColors = {
   // Primary
-  primary: "#0D4B5C",
-  primaryHover: "#193642",
-  primarySoft: "#BDEEFF",
-  primaryContrast: "#FFFFFF",
+  primary: lightColors.primary,
+  primaryHover: lightColors.primaryDark,
+  primarySoft: lightColors.primarySoft,
+  primaryContrast: lightColors.primaryContrast,
 
   // Secondary / accent
-  secondary: "#B8FAD8",
-  secondarySoft: "#B8FAD8",
+  secondary: lightColors.secondary,
+  secondarySoft: lightColors.secondarySoft,
 
   // Background
-  background: "#FFFFFF",
-  backgroundGradientStart: "#BDEEFF",
-  backgroundGradientEnd: "#FFFFFF",
+  background: lightColors.background,
+  backgroundGradientStart: lightColors.backgroundAlt,
+  backgroundGradientEnd: lightColors.background,
 
   // Cards
-  card: "#FFFFFF",
-  cardBorder: "#BDEEFF",
-  cardHover: "#BDEEFF",
+  card: lightColors.surface,
+  cardBorder: lightColors.border,
+  cardHover: lightColors.surfaceSecondary,
 
   // Text
-  text: "#193642",
-  textSecondary: "#0D4B5C",
-  textMuted: "#5A7480",
-  textInverted: "#FFFFFF",
+  text: lightColors.text,
+  textSecondary: lightColors.textSecondary,
+  textMuted: lightColors.textMuted,
+  textInverted: lightColors.textInverted,
 
   // Borders
-  border: "#BDEEFF",
-  borderStrong: "#0D4B5C",
+  border: lightColors.border,
+  borderStrong: lightColors.borderStrong,
 
   // Category colors
-  weather: "#0D4B5C",
-  weatherSoft: "#BDEEFF",
-  market: "#193642",
-  marketSoft: "#BDEEFF",
-  prediction: "#0D504D",
-  predictionSoft: "#B8FAD8",
-  tips: "#0D504D",
-  tipsSoft: "#B8FAD8",
-  news: "#0D4B5C",
-  newsSoft: "#BDEEFF",
+  weather: lightColors.weather,
+  weatherSoft: lightColors.weatherSoft,
+  market: lightColors.market,
+  marketSoft: lightColors.marketSoft,
+  prediction: lightColors.prediction,
+  predictionSoft: lightColors.predictionSoft,
+  tips: lightColors.tips,
+  tipsSoft: lightColors.tipsSoft,
+  news: lightColors.news,
+  newsSoft: lightColors.newsSoft,
 
   // Status
-  unread: "#BDEEFF",
-  unreadBorder: "#0D4B5C",
-  danger: "#193642",
-  dangerSoft: "#BDEEFF",
-  warning: "#FFF0BC",
-  success: "#0D504D",
-  successSoft: "#B8FAD8",
+  unread: lightColors.primarySoft,
+  unreadBorder: lightColors.primary,
+  danger: lightColors.danger,
+  dangerSoft: lightColors.dangerSoft,
+  warning: lightColors.warning,
+  success: lightColors.success,
+  successSoft: lightColors.successSoft,
 
   // Alias for backward compatibility
-  white: "#FFFFFF",
+  white: lightColors.white,
 
   // Overlay
-  overlay: "rgba(25, 54, 66, 0.08)",
-  overlayStrong: "rgba(13, 75, 92, 0.12)",
+  overlay: lightColors.overlay,
+  overlayStrong: lightColors.overlayStrong,
 } as const;
 
 export const notificationSpacing = {

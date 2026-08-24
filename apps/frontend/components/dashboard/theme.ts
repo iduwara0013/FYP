@@ -5,20 +5,20 @@ export function getDashboardColors(isDark: boolean): AppColors {
 }
 
 export const dashboardColors = {
-  primary: "#0D4B5C",
-  secondary: "#B8FAD8",
-  background: "#FFFFFF",
-  card: "#FFFFFF",
-  text: "#193642",
-  textSecondary: "#0D4B5C",
-  textMuted: "#5A7480",
-  border: "#BDEEFF",
-  accentBlue: "#0D4B5C",
-  warning: "#FFF0BC",
-  danger: "#193642",
-  success: "#0D504D",
-  white: "#FFFFFF",
-  overlay: "rgba(25, 54, 66, 0.2)",
+  primary: lightColors.primary,
+  secondary: lightColors.secondarySoft,
+  background: lightColors.background,
+  card: lightColors.surface,
+  text: lightColors.text,
+  textSecondary: lightColors.textSecondary,
+  textMuted: lightColors.textMuted,
+  border: lightColors.border,
+  accentBlue: lightColors.info,
+  warning: lightColors.warning,
+  danger: lightColors.danger,
+  success: lightColors.success,
+  white: lightColors.white,
+  overlay: lightColors.overlay,
 } as const;
 
 export const dashboardSpacing = {

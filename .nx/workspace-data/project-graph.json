@@ -68,6 +68,133 @@
         "tags": []
       }
     },
+    "admin-dashboard": {
+      "name": "admin-dashboard",
+      "type": "app",
+      "data": {
+        "root": "apps/admin-dashboard",
+        "name": "admin-dashboard",
+        "tags": [
+          "npm:private"
+        ],
+        "metadata": {
+          "targetGroups": {
+            "NPM Scripts": [
+              "serve:admin",
+              "dev",
+              "start",
+              "test",
+              "lint",
+              "db:generate"
+            ]
+          },
+          "js": {
+            "packageName": "smartcrop-admin-dashboard",
+            "packageVersion": "0.1.0",
+            "isInPackageManagerWorkspaces": false
+          }
+        },
+        "targets": {
+          "serve:admin": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "serve:admin"
+            },
+            "metadata": {
+              "scriptContent": "vinext dev",
+              "runCommand": "npm run serve:admin"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "dev"
+            },
+            "metadata": {
+              "scriptContent": "vinext dev",
+              "runCommand": "npm run dev"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": false
+          },
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            },
+            "metadata": {
+              "scriptContent": "vinext start",
+              "runCommand": "npm run start"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": false
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            },
+            "metadata": {
+              "scriptContent": "npm run build",
+              "runCommand": "npm run test"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            },
+            "metadata": {
+              "scriptContent": "eslint . --ignore-pattern dist --ignore-pattern .next",
+              "runCommand": "npm run lint"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "db:generate": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "db:generate"
+            },
+            "metadata": {
+              "scriptContent": "drizzle-kit generate",
+              "runCommand": "npm run db:generate"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "serve": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "npm run dev",
+              "cwd": "apps/admin-dashboard"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": false
+          },
+          "build": {
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "npm run build",
+              "cwd": "apps/admin-dashboard"
+            },
+            "configurations": {},
+            "parallelism": true
+          }
+        },
+        "$schema": "../../node_modules/nx/schemas/project-schema.json",
+        "sourceRoot": "apps/admin-dashboard/app",
+        "projectType": "application",
+        "implicitDependencies": []
+      }
+    },
     "frontend": {
       "name": "frontend",
       "type": "app",
@@ -14465,6 +14592,63 @@
   "dependencies": {
     "Spring_Backend": [],
     "python_backend": [],
+    "admin-dashboard": [
+      {
+        "source": "admin-dashboard",
+        "target": "npm:react",
+        "type": "static"
+      },
+      {
+        "source": "admin-dashboard",
+        "target": "npm:eslint",
+        "type": "static"
+      },
+      {
+        "source": "admin-dashboard",
+        "target": "npm:@eslint/js",
+        "type": "static"
+      },
+      {
+        "source": "admin-dashboard",
+        "target": "npm:eslint-plugin-react",
+        "type": "static"
+      },
+      {
+        "source": "admin-dashboard",
+        "target": "npm:eslint-plugin-react-hooks",
+        "type": "static"
+      },
+      {
+        "source": "admin-dashboard",
+        "target": "npm:globals",
+        "type": "static"
+      },
+      {
+        "source": "admin-dashboard",
+        "target": "npm:@types/node",
+        "type": "static"
+      },
+      {
+        "source": "admin-dashboard",
+        "target": "npm:@types/react",
+        "type": "static"
+      },
+      {
+        "source": "admin-dashboard",
+        "target": "npm:typescript",
+        "type": "static"
+      },
+      {
+        "source": "admin-dashboard",
+        "target": "npm:vite",
+        "type": "static"
+      },
+      {
+        "source": "admin-dashboard",
+        "target": "npm:react-dom",
+        "type": "static"
+      }
+    ],
     "frontend": [
       {
         "source": "frontend",
@@ -36833,5 +37017,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1787128993745
+  "computedAt": 1787543042818
 }

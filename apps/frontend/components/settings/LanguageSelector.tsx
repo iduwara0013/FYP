@@ -31,6 +31,12 @@ const OPTIONS: LanguageOption[] = [
     label: "සිංහල",
     description: "Sinhala",
   },
+  {
+    lang: "ta",
+    flag: "🇱🇰",
+    label: "தமிழ்",
+    description: "Tamil",
+  },
 ];
 
 export function LanguageSelector() {

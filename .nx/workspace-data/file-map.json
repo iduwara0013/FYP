@@ -131,7 +131,7 @@
       },
       {
         "file": "package.json",
-        "hash": "7581288342695374400"
+        "hash": "8339723871166930524"
       },
       {
         "file": "scripts/reset-project.js",
@@ -158,7 +158,7 @@
         },
         {
           "file": "apps/frontend/EntryScreen.tsx",
-          "hash": "5850962484124622923",
+          "hash": "2102549602525426237",
           "deps": [
             "npm:react",
             "npm:react-native"
@@ -202,7 +202,7 @@
         },
         {
           "file": "apps/frontend/app.json",
-          "hash": "9055584396055852908"
+          "hash": "7286267708133094612"
         },
         {
           "file": "apps/frontend/app/(tabs)/_layout.tsx",
@@ -229,7 +229,7 @@
         },
         {
           "file": "apps/frontend/app/_layout.tsx",
-          "hash": "4065811654428678523",
+          "hash": "12742171028058819389",
           "deps": [
             "npm:@react-navigation/native",
             "npm:expo-router",
@@ -313,7 +313,7 @@
         },
         {
           "file": "apps/frontend/components/buyer/theme.ts",
-          "hash": "9396541730928714527"
+          "hash": "15335561940955997734"
         },
         {
           "file": "apps/frontend/components/chat/ChatBot.tsx",
@@ -399,7 +399,7 @@
         },
         {
           "file": "apps/frontend/components/dashboard/theme.ts",
-          "hash": "3137268674127281612"
+          "hash": "16297618384757008017"
         },
         {
           "file": "apps/frontend/components/external-link.tsx",
@@ -505,7 +505,7 @@
         },
         {
           "file": "apps/frontend/components/market/theme.ts",
-          "hash": "11124505529989696128"
+          "hash": "4163225759648198178"
         },
         {
           "file": "apps/frontend/components/market/types.ts",
@@ -534,7 +534,7 @@
         },
         {
           "file": "apps/frontend/components/notifications/theme.ts",
-          "hash": "5652269889891879896"
+          "hash": "10087626246419672326"
         },
         {
           "file": "apps/frontend/components/parallax-scroll-view.tsx",
@@ -611,11 +611,11 @@
         },
         {
           "file": "apps/frontend/components/prediction/theme.ts",
-          "hash": "12231664095322239831"
+          "hash": "5229377563908615998"
         },
         {
           "file": "apps/frontend/components/screens/AgenticRecommendationScreen.tsx",
-          "hash": "13466840487170285229",
+          "hash": "6452179007785523024",
           "deps": [
             "npm:@expo/vector-icons",
             "npm:react",
@@ -642,7 +642,7 @@
         },
         {
           "file": "apps/frontend/components/screens/CropPlanScreen.tsx",
-          "hash": "3187879458139018429",
+          "hash": "14036837782095778695",
           "deps": [
             "npm:@expo/vector-icons",
             "npm:react",
@@ -887,7 +887,7 @@
         },
         {
           "file": "apps/frontend/constants/theme.ts",
-          "hash": "16508223583303807561",
+          "hash": "3329527712808591819",
           "deps": [
             "npm:react-native"
           ]
@@ -1081,11 +1081,477 @@
         },
         {
           "file": "apps/frontend/theme/theme.ts",
-          "hash": "13517581773739323112"
+          "hash": "11291325268514137360"
         },
         {
           "file": "apps/frontend/tsconfig.json",
           "hash": "12819778645931212833"
+        }
+      ],
+      "admin-dashboard": [
+        {
+          "file": "apps/admin-dashboard/.gitignore",
+          "hash": "6005778883111850257"
+        },
+        {
+          "file": "apps/admin-dashboard/.openai/hosting.json",
+          "hash": "7498558157167816709"
+        },
+        {
+          "file": "apps/admin-dashboard/README.md",
+          "hash": "8293371126647022812"
+        },
+        {
+          "file": "apps/admin-dashboard/app/AdminDashboard.tsx",
+          "hash": "4955120594372657246",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/admin-dashboard/app/chatgpt-auth.ts",
+          "hash": "7733159584132016526"
+        },
+        {
+          "file": "apps/admin-dashboard/app/globals-new.css",
+          "hash": "3413191909559187991"
+        },
+        {
+          "file": "apps/admin-dashboard/app/layout.tsx",
+          "hash": "8928805431603891715"
+        },
+        {
+          "file": "apps/admin-dashboard/app/page.tsx",
+          "hash": "18366966835780521432"
+        },
+        {
+          "file": "apps/admin-dashboard/db/index.ts",
+          "hash": "2446196019663794281"
+        },
+        {
+          "file": "apps/admin-dashboard/db/schema.ts",
+          "hash": "1683882916762504558"
+        },
+        {
+          "file": "apps/admin-dashboard/drizzle.config.ts",
+          "hash": "3061143146512427019"
+        },
+        {
+          "file": "apps/admin-dashboard/drizzle/meta/_journal.json",
+          "hash": "752108365313758928"
+        },
+        {
+          "file": "apps/admin-dashboard/eslint.config.mjs",
+          "hash": "16894861565339580269",
+          "deps": [
+            "npm:eslint",
+            "npm:@eslint/js",
+            "npm:eslint-plugin-react",
+            "npm:eslint-plugin-react-hooks",
+            "npm:globals"
+          ]
+        },
+        {
+          "file": "apps/admin-dashboard/examples/d1/app/api/notes/route.ts",
+          "hash": "17503161086091258001"
+        },
+        {
+          "file": "apps/admin-dashboard/examples/d1/db/schema.ts",
+          "hash": "8657678341649865514"
+        },
+        {
+          "file": "apps/admin-dashboard/lib/api.ts",
+          "hash": "8174192021247205584"
+        },
+        {
+          "file": "apps/admin-dashboard/next-env.d.ts",
+          "hash": "8589519802857150145"
+        },
+        {
+          "file": "apps/admin-dashboard/next.config.ts",
+          "hash": "5307796689141320326"
+        },
+        {
+          "file": "apps/admin-dashboard/package-lock.json",
+          "hash": "10206272538586531349"
+        },
+        {
+          "file": "apps/admin-dashboard/package.json",
+          "hash": "13330110023296351924",
+          "deps": [
+            "npm:@eslint/js",
+            "npm:@types/node",
+            "npm:@types/react",
+            "npm:eslint",
+            "npm:eslint-plugin-react",
+            "npm:eslint-plugin-react-hooks",
+            "npm:globals",
+            "npm:typescript",
+            "npm:vite",
+            "npm:react",
+            "npm:react-dom"
+          ]
+        },
+        {
+          "file": "apps/admin-dashboard/postcss.config.mjs",
+          "hash": "16325831446291273164"
+        },
+        {
+          "file": "apps/admin-dashboard/project.json",
+          "hash": "13540206813472761853"
+        },
+        {
+          "file": "apps/admin-dashboard/public/favicon.svg",
+          "hash": "2320630770270097098"
+        },
+        {
+          "file": "apps/admin-dashboard/public/file.svg",
+          "hash": "6893148357092430962"
+        },
+        {
+          "file": "apps/admin-dashboard/public/globe.svg",
+          "hash": "1127530120210481645"
+        },
+        {
+          "file": "apps/admin-dashboard/public/window.svg",
+          "hash": "5624331005960580322"
+        },
+        {
+          "file": "apps/admin-dashboard/tsconfig.json",
+          "hash": "8011190704114375072"
+        },
+        {
+          "file": "apps/admin-dashboard/vite.config.ts",
+          "hash": "12162671045294898233",
+          "deps": [
+            "npm:vite"
+          ]
+        },
+        {
+          "file": "apps/admin-dashboard/worker/index.ts",
+          "hash": "2942545213936963619"
+        }
+      ],
+      "python_backend": [
+        {
+          "file": "apps/Backend/python_backend/.env.example",
+          "hash": "17660634896053608931"
+        },
+        {
+          "file": "apps/Backend/python_backend/README.md",
+          "hash": "4273144513629157772"
+        },
+        {
+          "file": "apps/Backend/python_backend/__pycache__/app.cpython-314.pyc",
+          "hash": "11834832559190386669"
+        },
+        {
+          "file": "apps/Backend/python_backend/app.py",
+          "hash": "14302304193391021105"
+        },
+        {
+          "file": "apps/Backend/python_backend/docs/DATA_SOURCES.md",
+          "hash": "13204161516418142284"
+        },
+        {
+          "file": "apps/Backend/python_backend/project.json",
+          "hash": "4067369016611127053"
+        },
+        {
+          "file": "apps/Backend/python_backend/requirements.txt",
+          "hash": "13858193480565080987"
+        },
+        {
+          "file": "apps/Backend/python_backend/run_agent.py",
+          "hash": "16085293550693477185"
+        },
+        {
+          "file": "apps/Backend/python_backend/scripts/__pycache__/train_models.cpython-314.pyc",
+          "hash": "3181286166357433178"
+        },
+        {
+          "file": "apps/Backend/python_backend/scripts/seed_neo4j.py",
+          "hash": "14604333394850859399"
+        },
+        {
+          "file": "apps/Backend/python_backend/scripts/train_models.py",
+          "hash": "17977199060408091176"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/__pycache__/api.cpython-314.pyc",
+          "hash": "12989713173835577524"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/__init__.py",
+          "hash": "17529861420632112720"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/__pycache__/__init__.cpython-314.pyc",
+          "hash": "15826727828692775975"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/__pycache__/graph.cpython-314.pyc",
+          "hash": "16598209426665382169"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/__pycache__/llm_factory.cpython-314.pyc",
+          "hash": "644490448140089819"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/__pycache__/nodes.cpython-314.pyc",
+          "hash": "7248344426945457435"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/__pycache__/prompts.cpython-314.pyc",
+          "hash": "3585858350483714355"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/__pycache__/recommendation_engine.cpython-314.pyc",
+          "hash": "2482174237104371393"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/__pycache__/schemas.cpython-314.pyc",
+          "hash": "726045451288036601"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/__pycache__/scoring.cpython-314.pyc",
+          "hash": "3987383990333717132"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/__pycache__/service.cpython-314.pyc",
+          "hash": "17573542295328759581"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/__pycache__/simulation.cpython-314.pyc",
+          "hash": "7806602999328011504"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/__pycache__/state.cpython-314.pyc",
+          "hash": "6396511865103476413"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/__pycache__/tools.cpython-314.pyc",
+          "hash": "8724874907495835385"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/graph.py",
+          "hash": "6291417643617430853"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/llm_factory.py",
+          "hash": "10749948474860428338"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/nodes.py",
+          "hash": "4812307251157735227"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/prompts.py",
+          "hash": "14838947865370617718"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/recommendation_engine.py",
+          "hash": "12636822849054511386"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/schemas.py",
+          "hash": "1322695074965306284"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/scoring.py",
+          "hash": "17023423084791920662"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/service.py",
+          "hash": "16237531328920665553"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/simulation.py",
+          "hash": "10395564228709095702"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/state.py",
+          "hash": "538378787937743869"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/agent/tools.py",
+          "hash": "4009427158223789613"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/api.py",
+          "hash": "17629661870210267974"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/core/__init__.py",
+          "hash": "12670340559581376674"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/core/__pycache__/__init__.cpython-314.pyc",
+          "hash": "5420623750462354255"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/core/__pycache__/config.cpython-314.pyc",
+          "hash": "9470523825826708306"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/core/__pycache__/data_sources.cpython-314.pyc",
+          "hash": "1817952909603275253"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/core/__pycache__/logging.cpython-314.pyc",
+          "hash": "7298105773902342786"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/core/config.py",
+          "hash": "10855747929771812482"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/core/data_sources.py",
+          "hash": "13929438015687759253"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/core/logging.py",
+          "hash": "17388336883687323442"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/crop_median_production.joblib",
+          "hash": "13691589812835659450"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/price_model_features.joblib",
+          "hash": "10156043857776893746"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/price_prediction_model.joblib",
+          "hash": "18388452226950820740"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/yield_model.joblib",
+          "hash": "7153977336095513544"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/yield_model_features.joblib",
+          "hash": "16260038297128887579"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/models/yield_prediction_model.joblib",
+          "hash": "12317942548221981669"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/crop_plan_service.cpython-314.pyc",
+          "hash": "12229885874577084559"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/data_providers.cpython-314.pyc",
+          "hash": "7828893916190736498"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/demand_service.cpython-314.pyc",
+          "hash": "5272573206438099296"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/firebase_service.cpython-313.pyc",
+          "hash": "3607541764718965213"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/firebase_service.cpython-314.pyc",
+          "hash": "11853721896281497737"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/neo4j_service.cpython-314.pyc",
+          "hash": "16718853904941866582"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/prediction_service.cpython-314.pyc",
+          "hash": "3167261836563729578"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/yield_prediction.cpython-313.pyc",
+          "hash": "11197955055776819408"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/__pycache__/yield_prediction.cpython-314.pyc",
+          "hash": "8138885711470409075"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/crop_plan_service.py",
+          "hash": "8386651388131514186"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/data_providers.py",
+          "hash": "4667688095198220313"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/demand_service.py",
+          "hash": "3581296117562869368"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/firebase_service.py",
+          "hash": "16814734335033528260"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/neo4j_service.py",
+          "hash": "17447667454244450157"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/prediction_service.py",
+          "hash": "1589076983601947726"
+        },
+        {
+          "file": "apps/Backend/python_backend/src/services/yield_prediction.py",
+          "hash": "10105334919111318034"
+        },
+        {
+          "file": "apps/Backend/python_backend/sri_lanka_vegetable_dataset.csv",
+          "hash": "10151999312307862927"
+        },
+        {
+          "file": "apps/Backend/python_backend/tests/__init__.py",
+          "hash": "14083988337930736089"
+        },
+        {
+          "file": "apps/Backend/python_backend/tests/__pycache__/__init__.cpython-314.pyc",
+          "hash": "18218901757596010607"
+        },
+        {
+          "file": "apps/Backend/python_backend/tests/__pycache__/test_api.cpython-314-pytest-9.1.1.pyc",
+          "hash": "4516176481201950964"
+        },
+        {
+          "file": "apps/Backend/python_backend/tests/__pycache__/test_data_providers.cpython-314-pytest-9.1.1.pyc",
+          "hash": "2119262391552938270"
+        },
+        {
+          "file": "apps/Backend/python_backend/tests/__pycache__/test_recommendation_engine.cpython-314-pytest-9.1.1.pyc",
+          "hash": "12514872244521329136"
+        },
+        {
+          "file": "apps/Backend/python_backend/tests/__pycache__/test_scoring.cpython-314-pytest-9.1.1.pyc",
+          "hash": "3372460385727483327"
+        },
+        {
+          "file": "apps/Backend/python_backend/tests/__pycache__/test_simulation.cpython-314-pytest-9.1.1.pyc",
+          "hash": "11457169427299464923"
+        },
+        {
+          "file": "apps/Backend/python_backend/tests/test_api.py",
+          "hash": "18031876379881647833"
+        },
+        {
+          "file": "apps/Backend/python_backend/tests/test_data_providers.py",
+          "hash": "2091272068862194862"
+        },
+        {
+          "file": "apps/Backend/python_backend/tests/test_recommendation_engine.py",
+          "hash": "17951987599276559102"
+        },
+        {
+          "file": "apps/Backend/python_backend/tests/test_scoring.py",
+          "hash": "9036311356423226686"
+        },
+        {
+          "file": "apps/Backend/python_backend/tests/test_simulation.py",
+          "hash": "8877153695916538219"
         }
       ],
       "Spring_Backend": [
@@ -1227,7 +1693,7 @@
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/service/FirestoreCollectionService.java",
-          "hash": "11357849937182798963"
+          "hash": "7890284266697455539"
         },
         {
           "file": "apps/Backend/Spring_Backend/src/main/java/com/smartcrop/backend/service/HartiPriceService.java",
@@ -1275,155 +1741,155 @@
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/SpringBackendApplication.class",
-          "hash": "1295398270786542736"
+          "hash": "9930227416320788195"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/config/CorsConfig$1.class",
-          "hash": "9094419340118144046"
+          "hash": "6767595018563730294"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/config/CorsConfig.class",
-          "hash": "15951275082277787213"
+          "hash": "1002368922959567113"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/config/FirebaseConfig.class",
-          "hash": "5837574518868427070"
+          "hash": "8752595212013137412"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/BuyerController.class",
-          "hash": "2656295933145276997"
+          "hash": "9081668016621076558"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/CropController.class",
-          "hash": "5671663928591967281"
+          "hash": "1627258778989303386"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/DemandRecordController.class",
-          "hash": "10037006058060649743"
+          "hash": "3343554122556158339"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/FarmerController.class",
-          "hash": "17557376537846151827"
+          "hash": "14020629283698919893"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/FirestoreCollectionController.class",
-          "hash": "13685916524747965278"
+          "hash": "14923984611737887695"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/HarvestPredictionController.class",
-          "hash": "11977816344479352367"
+          "hash": "13562648461860618716"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/HealthController.class",
-          "hash": "16281562420677036068"
+          "hash": "15181638022221551753"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/LandPlotController.class",
-          "hash": "8316901139566809148"
+          "hash": "13428714222619416586"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/MarketPriceController.class",
-          "hash": "16696173921425530082"
+          "hash": "8194332622653590721"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/MessageController.class",
-          "hash": "11129009102784622539"
+          "hash": "10477784738744077456"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/NotificationController.class",
-          "hash": "115715926513072547"
+          "hash": "130726202997521119"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/WeatherDataController.class",
-          "hash": "15200931980346934917"
+          "hash": "17592178107577416263"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/YieldPredictionController.class",
-          "hash": "5803313307488720473"
+          "hash": "5421908793800102130"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/controller/YieldPredictionSaveController.class",
-          "hash": "16742450518183910195"
+          "hash": "15761294673733564329"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/BuyerRequest.class",
-          "hash": "16294182723056136905"
+          "hash": "951191460097490228"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/CropRequest.class",
-          "hash": "11121550172207480872"
+          "hash": "17926541462344909298"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/DemandRecordRequest.class",
-          "hash": "9538618498594588679"
+          "hash": "11947122934339835052"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/FarmerRequest.class",
-          "hash": "8580112293453708994"
+          "hash": "16429435100006977344"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/HarvestPredictionRequest.class",
-          "hash": "5371135752929493301"
+          "hash": "1584520874944292902"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/LandPlotRequest.class",
-          "hash": "2787007121970281193"
+          "hash": "4429783191867213727"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/MarketPriceRequest.class",
-          "hash": "11706866848784364094"
+          "hash": "143444522095208316"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/MessageRequest.class",
-          "hash": "13773804899872660251"
+          "hash": "1062992154945630361"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/NotificationRequest.class",
-          "hash": "15573486900154984128"
+          "hash": "15402013872944909141"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/WeatherDataRequest.class",
-          "hash": "12688841363629351247"
+          "hash": "12924216841622631664"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/YieldPredictionRequest.class",
-          "hash": "5159129678282724275"
+          "hash": "1417081922867929835"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/dto/YieldPredictionSaveRequest.class",
-          "hash": "16468643178320494256"
+          "hash": "1546495712246924829"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/BuyerService.class",
-          "hash": "7180110747862465836"
+          "hash": "7004386097751081380"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/FarmerService.class",
-          "hash": "517288531802553761"
+          "hash": "893508196150234154"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/FirestoreCollectionService.class",
-          "hash": "12887763839078072439"
+          "hash": "7146711338304829437"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/HartiPriceService$BulletinResult.class",
-          "hash": "11495547140930776935"
+          "hash": "15796298394000272334"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/HartiPriceService$BulletinSource.class",
-          "hash": "1666830020951790520"
+          "hash": "2730732782499777220"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/HartiPriceService.class",
-          "hash": "13853693563155417988"
+          "hash": "12517243328839071940"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/YieldPredictionSaveService.class",
-          "hash": "5669203645735722731"
+          "hash": "11424935448105276768"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/classes/com/smartcrop/backend/service/YieldPredictionService.class",
-          "hash": "2098403488277274395"
+          "hash": "18289710505097863259"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst",
@@ -1442,350 +1908,76 @@
           "hash": "2868281622397003900"
         },
         {
+          "file": "apps/Backend/Spring_Backend/target/surefire-reports/TEST-com.smartcrop.backend.controller.BuyerControllerTest.xml",
+          "hash": "6110392874813099775"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/surefire-reports/TEST-com.smartcrop.backend.controller.FarmerControllerTest.xml",
+          "hash": "2229865842242737090"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/surefire-reports/TEST-com.smartcrop.backend.controller.FirestoreCollectionControllerTest.xml",
+          "hash": "7504462496504571498"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/surefire-reports/TEST-com.smartcrop.backend.service.BuyerServiceTest.xml",
+          "hash": "8429242483020581011"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/surefire-reports/TEST-com.smartcrop.backend.service.FarmerServiceTest.xml",
+          "hash": "1448888110005411577"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/surefire-reports/TEST-com.smartcrop.backend.service.FirestoreCollectionServiceTest.xml",
+          "hash": "235205103405365618"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/surefire-reports/com.smartcrop.backend.controller.BuyerControllerTest.txt",
+          "hash": "12978107385893134262"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/surefire-reports/com.smartcrop.backend.controller.FarmerControllerTest.txt",
+          "hash": "17488997377588012859"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/surefire-reports/com.smartcrop.backend.controller.FirestoreCollectionControllerTest.txt",
+          "hash": "8772195577461919632"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/surefire-reports/com.smartcrop.backend.service.BuyerServiceTest.txt",
+          "hash": "13512786716207015076"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/surefire-reports/com.smartcrop.backend.service.FarmerServiceTest.txt",
+          "hash": "183877193061064716"
+        },
+        {
+          "file": "apps/Backend/Spring_Backend/target/surefire-reports/com.smartcrop.backend.service.FirestoreCollectionServiceTest.txt",
+          "hash": "7779739297230738522"
+        },
+        {
           "file": "apps/Backend/Spring_Backend/target/test-classes/com/smartcrop/backend/controller/BuyerControllerTest.class",
-          "hash": "6986143552532655651"
+          "hash": "243806922032699002"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/test-classes/com/smartcrop/backend/controller/FarmerControllerTest.class",
-          "hash": "12295171322791111598"
+          "hash": "17548143405746648409"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/test-classes/com/smartcrop/backend/controller/FirestoreCollectionControllerTest.class",
-          "hash": "5429418213375810611"
+          "hash": "9188592335894483188"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/test-classes/com/smartcrop/backend/service/BuyerServiceTest.class",
-          "hash": "9667085867840116505"
+          "hash": "2545139085075260927"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/test-classes/com/smartcrop/backend/service/FarmerServiceTest.class",
-          "hash": "7267973675505598256"
+          "hash": "15064378501237685073"
         },
         {
           "file": "apps/Backend/Spring_Backend/target/test-classes/com/smartcrop/backend/service/FirestoreCollectionServiceTest.class",
-          "hash": "1348012477654645622"
-        }
-      ],
-      "python_backend": [
-        {
-          "file": "apps/Backend/python_backend/.env.example",
-          "hash": "17660634896053608931"
-        },
-        {
-          "file": "apps/Backend/python_backend/README.md",
-          "hash": "4273144513629157772"
-        },
-        {
-          "file": "apps/Backend/python_backend/__pycache__/app.cpython-314.pyc",
-          "hash": "11834832559190386669"
-        },
-        {
-          "file": "apps/Backend/python_backend/app.py",
-          "hash": "14302304193391021105"
-        },
-        {
-          "file": "apps/Backend/python_backend/docs/DATA_SOURCES.md",
-          "hash": "13204161516418142284"
-        },
-        {
-          "file": "apps/Backend/python_backend/project.json",
-          "hash": "4067369016611127053"
-        },
-        {
-          "file": "apps/Backend/python_backend/requirements.txt",
-          "hash": "13858193480565080987"
-        },
-        {
-          "file": "apps/Backend/python_backend/run_agent.py",
-          "hash": "16085293550693477185"
-        },
-        {
-          "file": "apps/Backend/python_backend/scripts/__pycache__/train_models.cpython-314.pyc",
-          "hash": "3181286166357433178"
-        },
-        {
-          "file": "apps/Backend/python_backend/scripts/seed_neo4j.py",
-          "hash": "14604333394850859399"
-        },
-        {
-          "file": "apps/Backend/python_backend/scripts/train_models.py",
-          "hash": "17977199060408091176"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/__pycache__/api.cpython-314.pyc",
-          "hash": "12989713173835577524"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/__init__.py",
-          "hash": "17529861420632112720"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/__pycache__/__init__.cpython-314.pyc",
-          "hash": "15826727828692775975"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/__pycache__/graph.cpython-314.pyc",
-          "hash": "16598209426665382169"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/__pycache__/llm_factory.cpython-314.pyc",
-          "hash": "644490448140089819"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/__pycache__/nodes.cpython-314.pyc",
-          "hash": "7248344426945457435"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/__pycache__/prompts.cpython-314.pyc",
-          "hash": "17096690366496907081"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/__pycache__/recommendation_engine.cpython-314.pyc",
-          "hash": "2482174237104371393"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/__pycache__/schemas.cpython-314.pyc",
-          "hash": "726045451288036601"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/__pycache__/scoring.cpython-314.pyc",
-          "hash": "3987383990333717132"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/__pycache__/service.cpython-314.pyc",
-          "hash": "15801931618619920848"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/__pycache__/simulation.cpython-314.pyc",
-          "hash": "7806602999328011504"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/__pycache__/state.cpython-314.pyc",
-          "hash": "6396511865103476413"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/__pycache__/tools.cpython-314.pyc",
-          "hash": "8724874907495835385"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/graph.py",
-          "hash": "6291417643617430853"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/llm_factory.py",
-          "hash": "10749948474860428338"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/nodes.py",
-          "hash": "4812307251157735227"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/prompts.py",
-          "hash": "12441744360550064758"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/recommendation_engine.py",
-          "hash": "12636822849054511386"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/schemas.py",
-          "hash": "1322695074965306284"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/scoring.py",
-          "hash": "17023423084791920662"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/service.py",
-          "hash": "5743447824949643088"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/simulation.py",
-          "hash": "10395564228709095702"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/state.py",
-          "hash": "538378787937743869"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/agent/tools.py",
-          "hash": "4009427158223789613"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/api.py",
-          "hash": "17629661870210267974"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/core/__init__.py",
-          "hash": "12670340559581376674"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/core/__pycache__/__init__.cpython-314.pyc",
-          "hash": "5420623750462354255"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/core/__pycache__/config.cpython-314.pyc",
-          "hash": "3887738190192247853"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/core/__pycache__/data_sources.cpython-314.pyc",
-          "hash": "1817952909603275253"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/core/__pycache__/logging.cpython-314.pyc",
-          "hash": "7298105773902342786"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/core/config.py",
-          "hash": "8808048410307773025"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/core/data_sources.py",
-          "hash": "13929438015687759253"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/core/logging.py",
-          "hash": "17388336883687323442"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/models/crop_median_production.joblib",
-          "hash": "13691589812835659450"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/models/price_model_features.joblib",
-          "hash": "10156043857776893746"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/models/price_prediction_model.joblib",
-          "hash": "18388452226950820740"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/models/yield_model.joblib",
-          "hash": "7153977336095513544"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/models/yield_model_features.joblib",
-          "hash": "16260038297128887579"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/models/yield_prediction_model.joblib",
-          "hash": "12317942548221981669"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/__pycache__/crop_plan_service.cpython-314.pyc",
-          "hash": "12229885874577084559"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/__pycache__/data_providers.cpython-314.pyc",
-          "hash": "7828893916190736498"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/__pycache__/demand_service.cpython-314.pyc",
-          "hash": "5272573206438099296"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/__pycache__/firebase_service.cpython-313.pyc",
-          "hash": "3607541764718965213"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/__pycache__/firebase_service.cpython-314.pyc",
-          "hash": "11853721896281497737"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/__pycache__/neo4j_service.cpython-314.pyc",
-          "hash": "16718853904941866582"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/__pycache__/prediction_service.cpython-314.pyc",
-          "hash": "3167261836563729578"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/__pycache__/yield_prediction.cpython-313.pyc",
-          "hash": "11197955055776819408"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/__pycache__/yield_prediction.cpython-314.pyc",
-          "hash": "8138885711470409075"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/crop_plan_service.py",
-          "hash": "8386651388131514186"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/data_providers.py",
-          "hash": "4667688095198220313"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/demand_service.py",
-          "hash": "3581296117562869368"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/firebase_service.py",
-          "hash": "16814734335033528260"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/neo4j_service.py",
-          "hash": "17447667454244450157"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/prediction_service.py",
-          "hash": "1589076983601947726"
-        },
-        {
-          "file": "apps/Backend/python_backend/src/services/yield_prediction.py",
-          "hash": "10105334919111318034"
-        },
-        {
-          "file": "apps/Backend/python_backend/sri_lanka_vegetable_dataset.csv",
-          "hash": "10151999312307862927"
-        },
-        {
-          "file": "apps/Backend/python_backend/tests/__init__.py",
-          "hash": "14083988337930736089"
-        },
-        {
-          "file": "apps/Backend/python_backend/tests/__pycache__/__init__.cpython-314.pyc",
-          "hash": "18218901757596010607"
-        },
-        {
-          "file": "apps/Backend/python_backend/tests/__pycache__/test_api.cpython-314-pytest-9.1.1.pyc",
-          "hash": "17712474660614546508"
-        },
-        {
-          "file": "apps/Backend/python_backend/tests/__pycache__/test_data_providers.cpython-314-pytest-9.1.1.pyc",
-          "hash": "2119262391552938270"
-        },
-        {
-          "file": "apps/Backend/python_backend/tests/__pycache__/test_recommendation_engine.cpython-314-pytest-9.1.1.pyc",
-          "hash": "12514872244521329136"
-        },
-        {
-          "file": "apps/Backend/python_backend/tests/__pycache__/test_scoring.cpython-314-pytest-9.1.1.pyc",
-          "hash": "3372460385727483327"
-        },
-        {
-          "file": "apps/Backend/python_backend/tests/__pycache__/test_simulation.cpython-314-pytest-9.1.1.pyc",
-          "hash": "11457169427299464923"
-        },
-        {
-          "file": "apps/Backend/python_backend/tests/test_api.py",
-          "hash": "17672140143703752219"
-        },
-        {
-          "file": "apps/Backend/python_backend/tests/test_data_providers.py",
-          "hash": "2091272068862194862"
-        },
-        {
-          "file": "apps/Backend/python_backend/tests/test_recommendation_engine.py",
-          "hash": "17951987599276559102"
-        },
-        {
-          "file": "apps/Backend/python_backend/tests/test_scoring.py",
-          "hash": "9036311356423226686"
-        },
-        {
-          "file": "apps/Backend/python_backend/tests/test_simulation.py",
-          "hash": "8877153695916538219"
+          "hash": "7469785953603202154"
         }
       ]
     }

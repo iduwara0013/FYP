@@ -55,6 +55,31 @@ public class MarketPriceController {
 
     @GetMapping("/live")
     public ResponseEntity<Map<String, Object>> getLiveMarketPrices() throws Exception {
-        return ResponseEntity.ok(hartiPriceService.fetchLivePrices());
+        Map<String, Object> response = hartiPriceService.fetchLivePrices();
+        archiveSuccessfulBulletins(response);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<List<Map<String, Object>>> getMarketPriceHistory() throws Exception {
+        return ResponseEntity.ok(collectionService.getDocuments("market_price_bulletins"));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void archiveSuccessfulBulletins(Map<String, Object> response) {
+        Object rawBulletins = response.get("bulletins");
+        if (!(rawBulletins instanceof List<?> bulletins)) return;
+        for (Object rawBulletin : bulletins) {
+            if (!(rawBulletin instanceof Map<?, ?> rawMap) || !Boolean.TRUE.equals(rawMap.get("success"))) continue;
+            Map<String, Object> bulletin = new HashMap<>((Map<String, Object>) rawMap);
+            String date = String.valueOf(bulletin.get("date"));
+            if (date.isBlank() || "null".equals(date)) continue;
+            bulletin.put("source", "HARTI");
+            try {
+                collectionService.saveDocument("market_price_bulletins", date, bulletin);
+            } catch (Exception ignored) {
+                // Live prices remain available even when archival storage is temporarily unavailable.
+            }
+        }
     }
 }

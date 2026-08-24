@@ -80,6 +80,14 @@ const farmerActionCards: QuickAction[] = [
     background: "#FEF3C7",
     iconColor: "#B45309",
   },
+  {
+    id: "farm-tools",
+    icon: "toolbox-outline",
+    title: "Farmer Toolkit",
+    description: "Calendar, finance, inventory & more",
+    background: "#E0F2FE",
+    iconColor: "#0369A1",
+  },
 ];
 
 const buyerActionCards: QuickAction[] = [
@@ -176,6 +184,7 @@ type HomeScreenProps = {
   onGrowingPlan?: () => void;
   onNotifications?: () => void;
   onSettings?: () => void;
+  onFarmTools?: () => void;
   unreadNotifications?: number;
 };
 
@@ -222,6 +231,7 @@ export function HomeScreen({
   onGrowingPlan,
   onNotifications,
   onSettings,
+  onFarmTools,
   unreadNotifications = 0,
 }: HomeScreenProps) {
   const { theme } = useTheme();
@@ -359,6 +369,8 @@ export function HomeScreen({
         onCropRecommendation?.();
       } else if (id === "growing-plan") {
         onGrowingPlan?.();
+      } else if (id === "farm-tools") {
+        onFarmTools?.();
       }
     },
     [
@@ -369,6 +381,7 @@ export function HomeScreen({
             onYieldPrediction,
       onCropRecommendation,
       onGrowingPlan,
+      onFarmTools,
     ],
   );
 

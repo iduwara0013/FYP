@@ -18,15 +18,19 @@ public class FirestoreCollectionService {
 
     private static final Set<String> ALLOWED_COLLECTIONS = new LinkedHashSet<>(List.of(
         "buyers",
+        "cropPlans",
         "crops",
         "demand_records",
         "farmers",
         "harvest_predictions",
         "land_plots",
         "market_prices",
+        "market_price_bulletins",
+        "market_price_alerts",
         "messages",
         "notifications",
         "weather_data",
+        "yield_predictions",
         "app_notifications",
         "notification_preferences"
     ));
@@ -54,6 +58,15 @@ public class FirestoreCollectionService {
             "id", documentId,
             "collectionName", collectionName
         );
+    }
+
+    public Map<String, String> saveDocument(String collectionName, String documentId, Map<String, Object> payload) throws Exception {
+        ensureAllowedCollection(collectionName);
+        Map<String, Object> document = new HashMap<>(payload);
+        document.put("updated_at", FieldValue.serverTimestamp());
+        document.put("collection_name", collectionName);
+        firestore.collection(collectionName).document(documentId).set(document).get();
+        return Map.of("id", documentId, "collectionName", collectionName);
     }
 
     public List<Map<String, Object>> getDocuments(String collectionName) throws Exception {
