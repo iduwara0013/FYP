@@ -30,13 +30,15 @@ import {
   Animated,
   FlatList,
   RefreshControl,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "@/context/ThemeContext";
+import { ScreenHeader } from "@/components/ui/ScreenHeader";
 
 import {
   getNotificationPreferences,
@@ -44,7 +46,6 @@ import {
 } from "../../lib/notifications/NotificationPreferences";
 import {
   clearDedupCache,
-  deleteNotification,
   fetchNotifications,
   markAllAsRead,
   markAsRead,
@@ -232,6 +233,7 @@ export function NotificationScreen({
   onBackToHome,
   onDeepLink,
 }: NotificationScreenProps) {
+  const { theme } = useTheme();
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -316,10 +318,6 @@ export function NotificationScreen({
     },
     [onDeepLink],
   );
-
-  const handleDelete = useCallback(async (id: string) => {
-    await deleteNotification(id);
-  }, []);
 
   const handleMarkAllRead = useCallback(async () => {
     await markAllAsRead();
@@ -455,12 +453,12 @@ export function NotificationScreen({
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={["top"]} style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View
         style={[
           StyleSheet.absoluteFill,
           {
-            backgroundColor: notificationColors.backgroundGradientStart,
+            backgroundColor: theme.colors.background,
           },
         ]}
       />
@@ -479,25 +477,15 @@ export function NotificationScreen({
           ],
         }}
       >
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={onBackToHome}
-            activeOpacity={0.85}
-            accessibilityLabel="Go back to home"
-          >
-            <MaterialCommunityIcons
-              name="arrow-left"
-              size={22}
-              color={notificationColors.text}
-            />
-            <Text style={styles.backButtonText}>Home</Text>
-          </TouchableOpacity>
-
-          <View style={styles.headerRight}>
+        <ScreenHeader
+          title="Notifications"
+          subtitle={todayDate}
+          icon="bell-outline"
+          onBack={onBackToHome}
+          action={<View style={styles.headerRight}>
             {unreadCount > 0 ? (
               <TouchableOpacity
-                style={styles.markAllButton}
+                style={[styles.markAllButton, { backgroundColor: theme.colors.backgroundAlt, borderColor: theme.colors.border }]}
                 onPress={handleMarkAllRead}
                 activeOpacity={0.8}
                 accessibilityLabel="Mark all notifications as read"
@@ -505,14 +493,14 @@ export function NotificationScreen({
                 <MaterialCommunityIcons
                   name="check-all"
                   size={16}
-                  color={notificationColors.primary}
+                  color={theme.colors.primary}
                 />
-                <Text style={styles.markAllText}>Mark all read</Text>
+                <Text style={[styles.markAllText, { color: theme.colors.primary }]}>Read all</Text>
               </TouchableOpacity>
             ) : null}
 
             <TouchableOpacity
-              style={styles.prefButton}
+              style={[styles.prefButton, { backgroundColor: theme.colors.backgroundAlt, borderColor: theme.colors.border }]}
               onPress={() => setShowPreferences((v) => !v)}
               activeOpacity={0.8}
               accessibilityLabel="Notification preferences"
@@ -520,7 +508,7 @@ export function NotificationScreen({
               <MaterialCommunityIcons
                 name="cog-outline"
                 size={20}
-                color={notificationColors.text}
+                color={theme.colors.text}
               />
             </TouchableOpacity>
 
@@ -536,20 +524,21 @@ export function NotificationScreen({
                 color={notificationColors.primaryContrast}
               />
             </TouchableOpacity>
-          </View>
-        </View>
+          </View>}
+        />
 
-        {/* Greeting */}
-        <View style={styles.greetingWrap}>
-          <Text style={styles.greeting}>
-            {greeting} {"\u{1F331}"}
-          </Text>
-          <Text style={styles.dateText}>{todayDate}</Text>
-          <Text style={styles.subtitle}>
+        <View style={[styles.greetingWrap, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }, theme.shadows.soft]}>
+          <View style={[styles.summaryIcon, { backgroundColor: unreadCount > 0 ? theme.colors.primarySoft : theme.colors.successSoft }]}>
+            <MaterialCommunityIcons name={unreadCount > 0 ? "bell-badge-outline" : "check-circle-outline"} size={27} color={unreadCount > 0 ? theme.colors.primary : theme.colors.success}/>
+          </View>
+          <View style={styles.summaryCopy}>
+            <Text style={[styles.greeting, { color: theme.colors.text }]}>{greeting}</Text>
+            <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
             {unreadCount > 0
               ? `${unreadCount} unread notification${unreadCount === 1 ? "" : "s"}`
               : "You are all caught up!"}
-          </Text>
+            </Text>
+          </View>
         </View>
       </Animated.View>
 
@@ -566,8 +555,8 @@ export function NotificationScreen({
 
       {/* Preferences panel (collapsible) */}
       {showPreferences ? (
-        <View style={styles.preferencesPanel}>
-          <Text style={styles.preferencesTitle}>Notification Preferences</Text>
+        <View style={[styles.preferencesPanel, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }, theme.shadows.soft]}>
+          <Text style={[styles.preferencesTitle, { color: theme.colors.text }]}>Notification preferences</Text>
           {prefLoading ? (
             <ActivityIndicator
               size="small"
@@ -625,11 +614,11 @@ export function NotificationScreen({
 
       {/* Test notification panel (collapsible) */}
       {showTestPanel ? (
-        <View style={styles.testPanel}>
-          <Text style={styles.testPanelTitle}>
-            {"\u{1F9EA}"} Test Notifications
+        <View style={[styles.testPanel, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }, theme.shadows.soft]}>
+          <Text style={[styles.testPanelTitle, { color: theme.colors.text }]}> 
+            Test notifications
           </Text>
-          <Text style={styles.testPanelSubtitle}>
+          <Text style={[styles.testPanelSubtitle, { color: theme.colors.textMuted }]}>
             {
               "Tap a button below to send a test notification of that category. If automatic notifications seem stuck, tap Reset Cache."
             }
@@ -913,11 +902,20 @@ const styles = StyleSheet.create({
   },
   // Greeting
   greetingWrap: {
-    paddingHorizontal: notificationSpacing.lg,
-    paddingBottom: notificationSpacing.sm,
+    marginHorizontal: notificationSpacing.lg,
+    marginTop: notificationSpacing.lg,
+    marginBottom: notificationSpacing.md,
+    padding: notificationSpacing.lg,
+    borderWidth: 1,
+    borderRadius: notificationRadius.lg,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: notificationSpacing.md,
   },
+  summaryIcon: { width: 52, height: 52, borderRadius: 17, alignItems: "center", justifyContent: "center" },
+  summaryCopy: { flex: 1 },
   greeting: {
-    fontSize: 28,
+    fontSize: 18,
     fontWeight: "900",
     color: notificationColors.text,
   },
@@ -928,9 +926,9 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: notificationColors.textSecondary,
-    marginTop: 4,
+    marginTop: 2,
   },
   // Preferences
   preferencesPanel: {
@@ -1060,7 +1058,7 @@ const styles = StyleSheet.create({
   filterRow: {
     gap: notificationSpacing.sm,
     paddingHorizontal: notificationSpacing.lg,
-    paddingVertical: notificationSpacing.xs,
+    paddingVertical: notificationSpacing.sm,
     marginBottom: notificationSpacing.sm,
   },
   filterChip: {
@@ -1090,6 +1088,7 @@ const styles = StyleSheet.create({
   // List
   listContent: {
     paddingHorizontal: notificationSpacing.lg,
-    paddingBottom: notificationSpacing.xxl,
+    paddingTop: notificationSpacing.xs,
+    paddingBottom: 48,
   },
 });

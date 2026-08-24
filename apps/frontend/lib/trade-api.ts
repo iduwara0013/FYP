@@ -1,0 +1,7 @@
+const BASE=process.env.EXPO_PUBLIC_SPRING_BACKEND_URL??"http://127.0.0.1:8080";
+export type TradeCollection="marketplace_listings"|"purchase_requests"|"messages"|"offers"|"trade_orders"|"deliveries"|"payments"|"invoices"|"ratings"|"trusted_contacts"|"disputes"|"verification_requests";
+export type TradeRecord={id:string;ownerId:string;ownerName:string;ownerRole:"farmer"|"buyer";title:string;detail?:string;crop?:string;quantity?:number;price?:number;location?:string;counterpartyId?:string;counterpartyName?:string;status?:string;createdAt?:string};
+async function request<T>(path:string,options?:RequestInit){const response=await fetch(`${BASE}${path}`,options);if(!response.ok)throw new Error((await response.text())||`Request failed (${response.status})`);return response.json() as Promise<T>}
+export const getTradeRecords=(collection:TradeCollection)=>request<TradeRecord[]>(`/api/collections/${collection}`);
+export const createTradeRecord=(collection:TradeCollection,payload:Omit<TradeRecord,"id">)=>request<{id:string}>(`/api/collections/${collection}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+export const updateTradeRecord=(collection:TradeCollection,id:string,payload:TradeRecord)=>request<{id:string}>(`/api/collections/${collection}/${encodeURIComponent(id)}`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});

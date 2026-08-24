@@ -67,7 +67,9 @@ class BuyerServiceTest {
             "Green Mart",
             "Rice",
             100.0,
-            "Need weekly supply"
+            "Need weekly supply",
+            true,
+            true
         );
 
         when(firestore.collection("buyers")).thenReturn(buyersCollection);

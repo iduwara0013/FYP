@@ -35,9 +35,10 @@ export type CropPlanScreenProps = {
   profile?: ProfileData | null;
   plan: CropPlanDraft;
   onBack: () => void;
+  alreadySaved?: boolean;
 };
 
-export function CropPlanScreen({ profile, plan, onBack }: CropPlanScreenProps) {
+export function CropPlanScreen({ profile, plan, onBack, alreadySaved = false }: CropPlanScreenProps) {
   const { t } = useI18n();
   const { isDark } = useTheme();
   const colors = createPredictionPalette(isDark);
@@ -124,13 +125,13 @@ export function CropPlanScreen({ profile, plan, onBack }: CropPlanScreenProps) {
           <View style={styles.statsRow}>
             <Stat label="Crop" value={plan.cropName} />
             <Stat label="Area" value={`${plan.cultivatedAreaHa.toFixed(1)} ha`} />
-            <Stat label="Expected yield" value={`${Math.round(plan.expectedYieldTonnes)} t`} />
-            <Stat label="Est. revenue" value={money(plan.expectedGrossRevenueRs)} />
+            <Stat label="Expected yield" value={`${Math.round(plan.expectedProductionTonnes ?? 0)} t`} />
+            <Stat label="Est. revenue" value={money(plan.expectedRevenueRs)} />
           </View>
         </View>
 
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>{t("planGrowthStages")}</Text>
+        <View style={[styles.card, { backgroundColor: colors.card }, predictionShadow.soft]}>
+          <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>{t("planGrowthStages")}</Text>
           {plan.growthStages.map((stage) => (
             <View key={stage.name} style={styles.stage}>
               <TouchableOpacity
@@ -161,8 +162,8 @@ export function CropPlanScreen({ profile, plan, onBack }: CropPlanScreenProps) {
           ))}
         </View>
 
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>{t("planTimeline")}</Text>
+        <View style={[styles.card, { backgroundColor: colors.card }, predictionShadow.soft]}>
+          <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>{t("planTimeline")}</Text>
           {plan.timeline.map((item) => (
             <View key={item.month} style={styles.timelineItem}>
               <Text style={styles.timelineMonth}>{item.month}</Text>
@@ -171,7 +172,7 @@ export function CropPlanScreen({ profile, plan, onBack }: CropPlanScreenProps) {
           ))}
         </View>
 
-        <View style={styles.card}>
+        <View style={[styles.card, { backgroundColor: colors.card }, predictionShadow.soft]}>
           <Text style={styles.sectionTitle}>{t("planWater")}</Text>
           <Text style={styles.note}>{plan.waterSchedule}</Text>
           <Text style={styles.sectionTitle}>{t("planFertilizer")}</Text>
@@ -182,7 +183,7 @@ export function CropPlanScreen({ profile, plan, onBack }: CropPlanScreenProps) {
           <Text style={styles.note}>{plan.harvestNotes}</Text>
         </View>
 
-        <View style={styles.card}>
+        <View style={[styles.card, { backgroundColor: colors.card }, predictionShadow.soft]}>
           <Text style={styles.sectionTitle}>{t("planEconomy")}</Text>
           <View style={styles.statsRow}>
             <Stat label={t("planArea")} value={`${plan.cultivatedAreaHa} ha`} />
@@ -203,14 +204,19 @@ export function CropPlanScreen({ profile, plan, onBack }: CropPlanScreenProps) {
       </ScrollView>
 
       <View style={[styles.footer, { backgroundColor: colors.card, borderTopColor: colors.border }]}>
-        <TouchableOpacity style={[styles.confirmBtn, { backgroundColor: colors.success }]} onPress={handleConfirm} disabled={confirming} activeOpacity={0.85}>
+        {!alreadySaved ? <TouchableOpacity style={[styles.confirmBtn, { backgroundColor: colors.success }]} onPress={handleConfirm} disabled={confirming} activeOpacity={0.85}>
           {confirming ? (
             <ActivityIndicator size="small" color={predictionColors.white} />
           ) : (
             <MaterialCommunityIcons name="check-circle-outline" size={20} color={predictionColors.white} />
           )}
           <Text style={styles.confirmText}>{confirming ? t("cropSaving") : t("cropConfirm")}</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> : (
+          <View style={[styles.confirmBtn, { backgroundColor: colors.success }]}>
+            <MaterialCommunityIcons name="cloud-check-outline" size={20} color={predictionColors.white} />
+            <Text style={styles.confirmText}>Saved to your growing plans</Text>
+          </View>
+        )}
         <TouchableOpacity style={[styles.secondaryBtn, { borderColor: colors.border, backgroundColor: colors.background }]} onPress={onBack} activeOpacity={0.85}>
           <MaterialCommunityIcons name="arrow-left" size={18} color={colors.text} />
           <Text style={[styles.secondaryBtnText, { color: colors.text }]}>Back to recommendations</Text>

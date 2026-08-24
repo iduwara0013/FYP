@@ -1,6 +1,9 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenHeader } from "@/components/ui/ScreenHeader";
+import { useTheme } from "@/context/ThemeContext";
 
 import { recordPredictionMade } from "../../lib/notifications/DailyTipsService";
 import {
@@ -8,7 +11,6 @@ import {
   getPredictionOptions,
   predictFarm,
 } from "../../lib/prediction-api";
-import { fetchWeatherForRegion } from "../../lib/weather";
 import { FarmSummaryCard } from "../prediction/FarmSummaryCard";
 import {
   InputSection,
@@ -17,11 +19,11 @@ import {
 } from "../prediction/InputSection";
 import { PredictionLoadingSkeleton } from "../prediction/LoadingSkeleton";
 import { PredictionButton } from "../prediction/PredictionButton";
-import { PredictionHeader } from "../prediction/PredictionHeader";
 import { ResultCard } from "../prediction/ResultCard";
 import { ChipSelector, DropdownSelector } from "../prediction/Selectors";
 import {
   predictionColors,
+  createPredictionPalette,
   predictionRadius,
   predictionSpacing,
 } from "../prediction/theme";
@@ -31,12 +33,6 @@ type YieldPredictionScreenProps = {
   profile?: ProfileData | null;
   onBackToHome: () => void;
 };
-
-function formatNumber(value: number) {
-  return value.toLocaleString("en-US", {
-    maximumFractionDigits: 2,
-  });
-}
 
 function regionFromProfile(profile?: ProfileData | null): string {
   const raw = profile?.region?.trim();
@@ -76,6 +72,8 @@ export function YieldPredictionScreen({
   profile,
   onBackToHome,
 }: YieldPredictionScreenProps) {
+  const { isDark } = useTheme();
+  const colors = createPredictionPalette(isDark);
   const [loadingOptions, setLoadingOptions] = useState(true);
   const [predicting, setPredicting] = useState(false);
   const [error, setError] = useState("");
@@ -89,11 +87,11 @@ export function YieldPredictionScreen({
   const farmerLandArea =
     profile && profile.role === "farmer" && profile.totalLandArea
       ? String(profile.totalLandArea)
-      : "0.5";
+      : "";
   const farmerExperience =
     profile && profile.role === "farmer" && profile.experienceYears != null
       ? String(profile.experienceYears)
-      : "10";
+      : "";
   const farmerIrrigation =
     profile && profile.role === "farmer"
       ? profile.hasIrrigation
@@ -109,9 +107,8 @@ export function YieldPredictionScreen({
     useState(farmerIrrigation);
   const [landArea, setLandArea] = useState(farmerLandArea);
   const [fertilizer, setFertilizer] = useState("");
-  const [rainfall, setRainfall] = useState("150");
+  const [rainfall, setRainfall] = useState("");
   const [experience, setExperience] = useState(farmerExperience);
-  const [weatherLoading, setWeatherLoading] = useState(false);
 
   const [touched, setTouched] = useState({
     landArea: false,
@@ -153,23 +150,6 @@ export function YieldPredictionScreen({
   useEffect(() => {
     void loadOptions();
   }, [loadOptions]);
-
-  const fetchRainfall = useCallback(async (region: string) => {
-    try {
-      setWeatherLoading(true);
-      const weather = await fetchWeatherForRegion(region);
-      const rainfallValue = weather.humidity ?? 150;
-      setRainfall(String(Math.round(rainfallValue)));
-    } catch {
-      // Keep the default rainfall value if weather fetch fails
-    } finally {
-      setWeatherLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    void fetchRainfall(farmerRegion);
-  }, [fetchRainfall, farmerRegion]);
 
   const handleRegionChange = (region: string) => {
     setSelectedRegion(region);
@@ -213,9 +193,9 @@ export function YieldPredictionScreen({
         district: selectedDistrict,
         irrigation: selectedIrrigation,
         ...(fertilizer ? { fertilizer_kg: parseFloat(fertilizer) } : {}),
-        rainfall_mm: rainfall ? parseFloat(rainfall) : 150,
-        farmer_experience_yrs: experience ? parseInt(experience, 10) : 10,
-        year: 2026,
+        ...(rainfall ? { rainfall_mm: parseFloat(rainfall) } : {}),
+        ...(experience ? { farmer_experience_yrs: parseInt(experience, 10) } : {}),
+        year: new Date().getFullYear(),
       });
 
       setResult(prediction);
@@ -244,13 +224,17 @@ export function YieldPredictionScreen({
   ]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={["top"]} style={[styles.container, { backgroundColor: colors.background }]}> 
+      <ScreenHeader title="AI yield prediction" subtitle="Forecast harvest and revenue" icon="chart-timeline-variant" onBack={onBackToHome} />
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <PredictionHeader onBackToHome={onBackToHome} />
+        <View style={[styles.introCard, { backgroundColor: colors.accentSoft, borderColor: colors.border }]}> 
+          <View style={[styles.introIcon, { backgroundColor: colors.card }]}><MaterialCommunityIcons name="brain" size={22} color={colors.accent}/></View>
+          <View style={{ flex: 1 }}><Text style={[styles.introTitle, { color: colors.text }]}>Farm-aware forecast</Text><Text style={[styles.introText, { color: colors.textSecondary }]}>Uses your crop, location, land, irrigation and optional field conditions.</Text></View>
+        </View>
 
         {profile ? (
           <FarmSummaryCard
@@ -264,13 +248,13 @@ export function YieldPredictionScreen({
         ) : null}
 
         {error ? (
-          <View style={styles.errorCard}>
+          <View style={[styles.errorCard, { backgroundColor: colors.dangerSoft, borderColor: colors.danger }]}> 
             <MaterialCommunityIcons
               name="alert-circle-outline"
               size={20}
               color={predictionColors.danger}
             />
-            <Text style={styles.errorText}>{error}</Text>
+            <Text style={[styles.errorText, { color: colors.danger }]}>{error}</Text>
           </View>
         ) : null}
 
@@ -372,9 +356,9 @@ export function YieldPredictionScreen({
               <InputSection
                 title="Weather"
                 icon="weather-pouring"
-                subtitle="Auto-filled from region forecast"
+                subtitle="Optional observed rainfall"
               >
-                <LabeledField label="Rainfall (mm)">
+                <LabeledField label="Rainfall (mm, optional)">
                   <NumericInput
                     value={rainfall}
                     onChangeText={setRainfall}
@@ -383,27 +367,7 @@ export function YieldPredictionScreen({
                   />
                 </LabeledField>
 
-                {weatherLoading ? (
-                  <View style={styles.weatherLoadingRow}>
-                    <MaterialCommunityIcons
-                      name="weather-partly-cloudy"
-                      size={16}
-                      color={predictionColors.primary}
-                    />
-                    <Text style={styles.weatherLoadingText}>
-                      Fetching weather forecast…
-                    </Text>
-                  </View>
-                ) : (
-                  <View style={styles.weatherDoneRow}>
-                    <MaterialCommunityIcons
-                      name="check-circle-outline"
-                      size={16}
-                      color={predictionColors.success}
-                    />
-                    <Text style={styles.weatherDoneText}>Forecast loaded</Text>
-                  </View>
-                )}
+                <View style={styles.weatherDoneRow}><MaterialCommunityIcons name="information-outline" size={16} color={predictionColors.info}/><Text style={styles.weatherDoneText}>Leave empty when rainfall is unknown.</Text></View>
               </InputSection>
             </View>
 
@@ -459,6 +423,9 @@ const styles = StyleSheet.create({
     paddingTop: predictionSpacing.lg,
     paddingBottom: predictionSpacing.xxl,
   },
+  introCard: { flexDirection: "row", alignItems: "center", gap: 12, borderWidth: 1, borderRadius: 20, padding: 16, marginBottom: 18 },
+  introIcon: { width: 44, height: 44, borderRadius: 14, alignItems: "center", justifyContent: "center" },
+  introTitle: { fontSize: 15, fontWeight: "900" }, introText: { fontSize: 12, lineHeight: 18, marginTop: 3 },
   errorCard: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -467,6 +434,7 @@ const styles = StyleSheet.create({
     borderRadius: predictionRadius.md,
     padding: predictionSpacing.md,
     marginBottom: predictionSpacing.lg,
+    borderWidth: 1,
   },
   errorText: {
     flex: 1,

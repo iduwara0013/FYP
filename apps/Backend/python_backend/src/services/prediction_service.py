@@ -149,6 +149,16 @@ def predict_farm(
         columns=price_features,
     )
     price_rs_per_kg = float(price_model.predict(x2)[0])
+    price_source = "baseline farm price model"
+    harti_model = None
+    try:
+        from src.services.harti_price_forecast import predict_price
+
+        harti_model = predict_price(crop, 1)
+        price_rs_per_kg = 0.8 * float(harti_model["predictedPriceRsPerKg"]) + 0.2 * price_rs_per_kg
+        price_source = "HARTI daily model + farm context"
+    except (FileNotFoundError, ValueError):
+        pass
 
     revenue_rs = production_kg * price_rs_per_kg
 
@@ -157,6 +167,8 @@ def predict_farm(
         "price_rs_per_kg": round(price_rs_per_kg, 2),
         "revenue_rs": round(revenue_rs, 2),
         "relative_supply": round(relative_supply, 3),
+        "price_source": price_source,
+        "price_model": harti_model,
         "input": {
             "land_area_ha": land_area_ha,
             "crop": crop,

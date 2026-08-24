@@ -249,7 +249,7 @@ export const spacing = {
 } as const;
 export type Spacing = typeof spacing;
 
-export const radius = { sm: 8, md: 12, lg: 16, xl: 20, pill: 999 } as const;
+export const radius = { sm: 10, md: 14, lg: 18, xl: 24, pill: 999 } as const;
 export type Radius = typeof radius;
 
 export type FontWeight = "900" | "800" | "700" | "600" | "500" | "400";
@@ -323,9 +323,9 @@ export function createShadows(colors: AppColors): Shadows {
     card: {
       shadowColor: colors.shadow,
       shadowOpacity: colors.shadowOpacity,
-      shadowRadius: 16,
-      shadowOffset: { width: 0, height: 8 },
-      elevation: 4,
+      shadowRadius: 18,
+      shadowOffset: { width: 0, height: 7 },
+      elevation: 3,
     },
     soft: {
       shadowColor: colors.shadow,

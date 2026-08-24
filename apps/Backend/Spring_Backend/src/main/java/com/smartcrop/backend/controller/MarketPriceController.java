@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.smartcrop.backend.dto.MarketPriceRequest;
 import com.smartcrop.backend.service.FirestoreCollectionService;
-import com.smartcrop.backend.service.HartiPriceService;
+import com.smartcrop.backend.service.MarketPriceAutomationService;
 
 import jakarta.validation.Valid;
 
@@ -23,11 +23,11 @@ import jakarta.validation.Valid;
 public class MarketPriceController {
 
     private final FirestoreCollectionService collectionService;
-    private final HartiPriceService hartiPriceService;
+    private final MarketPriceAutomationService automationService;
 
-    public MarketPriceController(FirestoreCollectionService collectionService, HartiPriceService hartiPriceService) {
+    public MarketPriceController(FirestoreCollectionService collectionService, MarketPriceAutomationService automationService) {
         this.collectionService = collectionService;
-        this.hartiPriceService = hartiPriceService;
+        this.automationService = automationService;
     }
 
     @PostMapping
@@ -55,9 +55,7 @@ public class MarketPriceController {
 
     @GetMapping("/live")
     public ResponseEntity<Map<String, Object>> getLiveMarketPrices() throws Exception {
-        Map<String, Object> response = hartiPriceService.fetchLivePrices();
-        archiveSuccessfulBulletins(response);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(automationService.collectAndArchive());
     }
 
     @GetMapping("/history")
@@ -65,21 +63,4 @@ public class MarketPriceController {
         return ResponseEntity.ok(collectionService.getDocuments("market_price_bulletins"));
     }
 
-    @SuppressWarnings("unchecked")
-    private void archiveSuccessfulBulletins(Map<String, Object> response) {
-        Object rawBulletins = response.get("bulletins");
-        if (!(rawBulletins instanceof List<?> bulletins)) return;
-        for (Object rawBulletin : bulletins) {
-            if (!(rawBulletin instanceof Map<?, ?> rawMap) || !Boolean.TRUE.equals(rawMap.get("success"))) continue;
-            Map<String, Object> bulletin = new HashMap<>((Map<String, Object>) rawMap);
-            String date = String.valueOf(bulletin.get("date"));
-            if (date.isBlank() || "null".equals(date)) continue;
-            bulletin.put("source", "HARTI");
-            try {
-                collectionService.saveDocument("market_price_bulletins", date, bulletin);
-            } catch (Exception ignored) {
-                // Live prices remain available even when archival storage is temporarily unavailable.
-            }
-        }
-    }
 }

@@ -14,6 +14,13 @@ export type FarmPrediction = {
   price_rs_per_kg: number;
   revenue_rs: number;
   relative_supply: number;
+  price_source?: string;
+  price_model?: {
+    forecastDate?: string;
+    modelVersion?: string;
+    trainedAt?: string;
+    validationMae?: number;
+  } | null;
   input: {
     land_area_ha: number;
     crop: string;

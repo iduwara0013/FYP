@@ -5,14 +5,15 @@ import React, {
   useRef,
   useState,
 } from "react";
+import * as Location from "expo-location";
 import {
   Animated,
   Easing,
   RefreshControl,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useTheme } from "../../context/ThemeContext";
 import { useI18n } from "../../i18n";
@@ -20,16 +21,11 @@ import { AIInsightCard } from "../dashboard/AIInsightCard";
 import { DashboardHeader } from "../dashboard/DashboardHeader";
 import { FloatingBottomNav } from "../dashboard/FloatingBottomNav";
 import {
-  AlertCard,
   DashboardFarmSummaryCard,
   MarketPreviewCard,
   SectionTitle,
   type MarketPreviewItem,
 } from "../dashboard/InfoCards";
-import {
-  PredictionCarousel,
-  type PredictionItem,
-} from "../dashboard/PredictionCarousel";
 import { ProfileCard } from "../dashboard/ProfileCard";
 import {
   QuickActionGrid,
@@ -38,6 +34,8 @@ import {
 import { WeatherCard } from "../dashboard/WeatherCard";
 import { dashboardSpacing } from "../dashboard/theme";
 import { ProfileData } from "./profile-types";
+import { fetchWeatherForCoordinates } from "../../lib/weather";
+import { getCropPlansForFarmer, getLiveMarketPrices, type SavedCropPlan } from "../../lib/spring-api";
 
 const farmerActionCards: QuickAction[] = [
   {
@@ -88,6 +86,7 @@ const farmerActionCards: QuickAction[] = [
     background: "#E0F2FE",
     iconColor: "#0369A1",
   },
+  { id: "trade-hub", icon: "handshake-outline", title: "Trade Hub", description: "Market, chat, offers & orders", background: "#F3E8FF", iconColor: "#7E22CE" },
 ];
 
 const buyerActionCards: QuickAction[] = [
@@ -127,52 +126,6 @@ type WeatherState = {
   updatedAt: string;
 };
 
-type MarketEntry = {
-  tableIndex: number;
-  summary: string;
-  values: string[];
-  [key: string]: unknown;
-};
-
-type MarketState = {
-  sourceUrl: string;
-  pageTitle: string;
-  fetchedAt: string;
-  tableCount: number;
-  success: boolean;
-  entries: MarketEntry[];
-};
-
-const recentPredictions: PredictionItem[] = [
-  {
-    crop: "Rice",
-    confidence: "94%",
-    status: "Excellent",
-    accent: "#16A34A",
-    yieldValue: "2,450 kg",
-  },
-  {
-    crop: "Wheat",
-    confidence: "87%",
-    status: "Good",
-    accent: "#2563EB",
-    yieldValue: "1,820 kg",
-  },
-  {
-    crop: "Corn",
-    confidence: "91%",
-    status: "Excellent",
-    accent: "#F59E0B",
-    yieldValue: "3,100 kg",
-  },
-];
-
-const marketPreviewItems: MarketPreviewItem[] = [
-  { crop: "Rice", price: "Rs 185/kg" },
-  { crop: "Carrot", price: "Rs 220/kg" },
-  { crop: "Tomato", price: "Rs 150/kg" },
-];
-
 type HomeScreenProps = {
   profile?: ProfileData | null;
   onProfile?: () => void;
@@ -185,6 +138,7 @@ type HomeScreenProps = {
   onNotifications?: () => void;
   onSettings?: () => void;
   onFarmTools?: () => void;
+  onTradeHub?: () => void;
   unreadNotifications?: number;
 };
 
@@ -208,16 +162,17 @@ function getWeatherDescription(code: number) {
   return "Current weather";
 }
 
-function getWeatherIcon(code: number) {
-  if (code === 0) return "weather-sunny";
-  if (code === 1 || code === 2) return "weather-partly-cloudy";
-  if (code === 3) return "weather-cloudy";
-  if (code === 45 || code === 48) return "weather-fog";
-  if ([51, 53, 55, 56, 57].includes(code)) return "weather-rainy";
-  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return "weather-pouring";
-  if ([71, 73, 75, 77].includes(code)) return "weather-snowy";
-  if ([95, 96, 99].includes(code)) return "weather-lightning-rainy";
-  return "weather-partly-cloudy";
+function highestDisplayedPrice(value: string): number {
+  const values = value.match(/\d[\d,]*(?:\.\d+)?/g)?.map((part) => Number(part.replace(/,/g, ""))).filter(Number.isFinite) ?? [];
+  return values.length ? Math.max(...values) : -1;
+}
+
+function compactPriceRange(value: string): string {
+  const values = value.match(/\d[\d,]*(?:\.\d+)?/g)?.map((part) => Number(part.replace(/,/g, ""))).filter(Number.isFinite) ?? [];
+  if (!values.length) return "Price unavailable";
+  const low = Math.min(...values); const high = Math.max(...values);
+  const format = (price:number) => price.toLocaleString("en-US", { maximumFractionDigits: 0 });
+  return low === high ? `Rs ${format(low)}/kg` : `Rs ${format(low)}–${format(high)}/kg`;
 }
 
 export function HomeScreen({
@@ -232,6 +187,7 @@ export function HomeScreen({
   onNotifications,
   onSettings,
   onFarmTools,
+  onTradeHub,
   unreadNotifications = 0,
 }: HomeScreenProps) {
   const { theme } = useTheme();
@@ -247,6 +203,9 @@ export function HomeScreen({
   const [weatherState, setWeatherState] = useState<WeatherState | null>(null);
   const [now, setNow] = useState(new Date());
   const [refreshing, setRefreshing] = useState(false);
+  const [marketPreviewItems, setMarketPreviewItems] = useState<MarketPreviewItem[]>([]);
+  const [marketUpdatedLabel, setMarketUpdatedLabel] = useState<string | null>(null);
+  const [cropPlans, setCropPlans] = useState<SavedCropPlan[]>([]);
 
   useEffect(() => {
     Animated.parallel([
@@ -274,6 +233,25 @@ export function HomeScreen({
     try {
       setWeatherLoading(true);
       setWeatherError("");
+
+      try {
+        const permission = await Location.requestForegroundPermissionsAsync();
+        if (permission.status === "granted") {
+          const position = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
+          const { latitude, longitude } = position.coords;
+          let label = `${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`;
+          try {
+            const [place] = await Location.reverseGeocodeAsync({ latitude, longitude });
+            const parts = place ? [place.city, place.district, place.region].filter((part): part is string => Boolean(part)) : [];
+            if (parts.length) label = [...new Set(parts)].join(", ");
+          } catch { /* Coordinates remain a valid location label. */ }
+          const gpsWeather = await fetchWeatherForCoordinates(latitude, longitude, label);
+          setWeatherState(gpsWeather);
+          return;
+        }
+      } catch {
+        // Fall back to the farmer's saved region below.
+      }
 
       const geoResponse = await fetch(
         `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(weatherRegion)}&count=1&language=en&format=json`,
@@ -349,11 +327,31 @@ export function HomeScreen({
     void handleWeatherPress();
   }, [handleWeatherPress]);
 
+  const loadDashboardData = useCallback(async () => {
+    const [marketResult, planResult] = await Promise.allSettled([
+      getLiveMarketPrices(),
+      profile?.id ? getCropPlansForFarmer(profile.id) : Promise.resolve([]),
+    ]);
+    if (marketResult.status === "fulfilled") {
+      setMarketPreviewItems([...(marketResult.value.entries ?? [])].sort((a,b)=>highestDisplayedPrice(b.displayPrice)-highestDisplayedPrice(a.displayPrice)).slice(0, 3).map((entry) => ({
+        crop: entry.cropName,
+        price: compactPriceRange(entry.displayPrice),
+      })));
+      setMarketUpdatedLabel(marketResult.value.bulletinDate ?? (marketResult.value.fetchedAt ? new Date(marketResult.value.fetchedAt).toLocaleDateString() : null));
+    } else {
+      setMarketPreviewItems([]);
+      setMarketUpdatedLabel(null);
+    }
+    setCropPlans(planResult.status === "fulfilled" ? planResult.value : []);
+  }, [profile?.id]);
+
+  useEffect(() => { void loadDashboardData(); }, [loadDashboardData]);
+
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
-    await handleWeatherPress();
+    await Promise.all([handleWeatherPress(), loadDashboardData()]);
     setRefreshing(false);
-  }, [handleWeatherPress]);
+  }, [handleWeatherPress, loadDashboardData]);
 
   const handleQuickAction = useCallback(
     (id: string) => {
@@ -371,6 +369,8 @@ export function HomeScreen({
         onGrowingPlan?.();
       } else if (id === "farm-tools") {
         onFarmTools?.();
+      } else if (id === "trade-hub") {
+        onTradeHub?.();
       }
     },
     [
@@ -382,6 +382,7 @@ export function HomeScreen({
       onCropRecommendation,
       onGrowingPlan,
       onFarmTools,
+      onTradeHub,
     ],
   );
 
@@ -400,35 +401,21 @@ export function HomeScreen({
     const landArea =
       profile?.role === "farmer" && profile.totalLandArea
         ? `${profile.totalLandArea} ha`
-        : "1.8 ha";
+        : "Not set";
+
+    const plannedArea = cropPlans.reduce((sum, plan) => sum + Number(plan.cultivatedArea ?? 0), 0);
+    const production = cropPlans.reduce((sum, plan) => sum + Number(plan.predictedProduction ?? 0), 0);
+    const activePlans = cropPlans.filter((plan) => (plan.status ?? "active") === "active");
 
     return [
       { icon: "vector-square" as const, label: "Land Area", value: landArea },
-      { icon: "sprout" as const, label: "Active Crops", value: "3" },
-      {
-        icon: "chart-line" as const,
-        label: "Expected Yield",
-        value: "2,450 kg",
-      },
-      {
-        icon: "calendar-check" as const,
-        label: "Harvest Date",
-        value: "Nov 15",
-      },
-      { icon: "water-outline" as const, label: "Moisture", value: "62%" },
-      { icon: "water" as const, label: "Water Usage", value: "1.2k L" },
+      { icon: "sprout" as const, label: "Active Plans", value: String(activePlans.length) },
+      { icon: "chart-line" as const, label: "Expected Production", value: production > 0 ? `${production.toFixed(1)} t` : "No data" },
+      { icon: "vector-square" as const, label: "Planned Area", value: plannedArea > 0 ? `${plannedArea.toFixed(1)} ha` : "No data" },
+      { icon: "map-marker-outline" as const, label: "Region", value: profile?.region || "Not set" },
+      { icon: "water" as const, label: "Irrigation", value: profile?.role === "farmer" ? (profile.hasIrrigation ? "Available" : "Not available") : "Not set" },
     ];
-  }, [profile]);
-
-  const buyerTiles = useMemo(
-    () => [
-      { icon: "cart-outline" as const, label: "Today's Demand", value: "High" },
-      { icon: "trending-up" as const, label: "Top Selling", value: "Rice" },
-      { icon: "account-group" as const, label: "Nearby Farmers", value: "24" },
-      { icon: "file-document-outline" as const, label: "Requests", value: "8" },
-    ],
-    [],
-  );
+  }, [profile, cropPlans]);
 
   return (
     <SafeAreaView
@@ -479,7 +466,7 @@ export function HomeScreen({
         <ProfileCard profile={profile} onPress={() => onProfile?.()} />
 
         <WeatherCard
-          region={weatherRegion}
+          region={weatherState?.locationName ?? weatherRegion}
           loading={weatherLoading}
           error={weatherError}
           temperature={weatherState?.temperature ?? null}
@@ -492,40 +479,26 @@ export function HomeScreen({
           onPress={onWeatherUpdate ?? handleWeatherPress}
         />
 
-        <AIInsightCard
-          profile={profile}
-          onLearnMore={() => onCropRecommendation?.()}
-        />
-
-        <AlertCard
-          title={t("weatherAlert")}
-          message={t("moderateRain")}
-          severity="warning"
-        />
-
         <SectionTitle title={t("quickActions")} />
         <QuickActionGrid
           actions={isFarmer ? farmerActionCards : buyerActionCards}
           onPress={handleQuickAction}
         />
 
-        <SectionTitle
-          title={t("marketPrices")}
-          actionLabel={t("viewAll")}
-          onAction={onMarketPrices}
-        />
-        <MarketPreviewCard
-          items={marketPreviewItems}
-          onViewReport={() => onMarketPrices?.()}
+        <AIInsightCard
+          profile={profile}
+          onLearnMore={() => onCropRecommendation?.()}
         />
 
-        <SectionTitle title={t("recentPredictions")} />
-        <PredictionCarousel items={recentPredictions} />
+        {marketPreviewItems.length > 0 ? <>
+          <SectionTitle title={t("marketPrices")} actionLabel={t("viewAll")} onAction={onMarketPrices} />
+          <MarketPreviewCard items={marketPreviewItems} updatedLabel={marketUpdatedLabel} onViewReport={() => onMarketPrices?.()} />
+        </> : null}
 
         <SectionTitle
           title={isFarmer ? t("farmSummary") : t("buyerDashboard")}
         />
-        <DashboardFarmSummaryCard tiles={isFarmer ? farmTiles : buyerTiles} />
+        <DashboardFarmSummaryCard tiles={farmTiles} />
       </ScrollView>
 
       <FloatingBottomNav active="home" onSelect={handleNavSelect} />
@@ -540,6 +513,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: dashboardSpacing.lg,
     paddingTop: dashboardSpacing.lg,
-    paddingBottom: 110,
+    paddingBottom: 156,
   },
 });

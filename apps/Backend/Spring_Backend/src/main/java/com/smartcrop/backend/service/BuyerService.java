@@ -43,6 +43,8 @@ public class BuyerService {
         buyer.put("preferred_crop", request.preferredCrop());
         buyer.put("required_quantity", request.requiredQuantity());
         buyer.put("notes", request.notes());
+        buyer.put("has_storage", Boolean.TRUE.equals(request.hasStorage()));
+        buyer.put("has_transport", Boolean.TRUE.equals(request.hasTransport()));
         buyer.put("buyer_code", buyerCode);
         buyer.put("created_at", FieldValue.serverTimestamp());
 
@@ -52,6 +54,20 @@ public class BuyerService {
             "id", savedDocument.getId(),
             "buyerCode", buyerCode
         );
+    }
+
+    public Map<String, Object> updateBuyer(String buyerId, BuyerRequest request) throws Exception {
+        DocumentReference document = firestore.collection(BUYER_COLLECTION).document(buyerId);
+        if (!document.get().get().exists()) return null;
+        Map<String, Object> values = new HashMap<>();
+        values.put("full_name", request.fullName()); values.put("phone_number", request.phoneNumber());
+        values.put("email", request.email()); values.put("address", request.address()); values.put("region", request.region());
+        values.put("buyer_type", request.buyerType()); values.put("organization_name", request.organizationName());
+        values.put("preferred_crop", request.preferredCrop()); values.put("required_quantity", request.requiredQuantity());
+        values.put("notes", request.notes()); values.put("has_storage", Boolean.TRUE.equals(request.hasStorage()));
+        values.put("has_transport", Boolean.TRUE.equals(request.hasTransport())); values.put("updated_at", FieldValue.serverTimestamp());
+        document.update(values).get();
+        return getBuyerById(buyerId);
     }
 
     public List<Map<String, Object>> getBuyers() throws Exception {

@@ -14,15 +14,12 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { useColorScheme } from "react-native";
 
 import { en } from "./translations/en";
 import { si } from "./translations/si";
 import { ta } from "./translations/ta";
 
 export type Language = "en" | "si" | "ta";
-
-type TranslationKey = keyof typeof en.common;
 
 type I18nContextValue = {
   language: Language;
@@ -41,9 +38,7 @@ const LANGUAGE_STORAGE_KEY = "@smart_crop_language";
 const I18nContext = createContext<I18nContextValue | undefined>(undefined);
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const systemScheme = useColorScheme();
   const [language, setLanguageState] = useState<Language>("en");
-  const [isReady, setIsReady] = useState(false);
 
   // Detect device language and load saved preference
   useEffect(() => {
@@ -68,7 +63,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
       } catch {
         // Fall back to English
       } finally {
-        if (mounted) setIsReady(true);
+        // English remains available while the saved preference is loading.
       }
     })();
     return () => {

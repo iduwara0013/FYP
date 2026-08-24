@@ -4,13 +4,13 @@ import {
   ActivityIndicator,
   FlatList,
   PanResponder,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenHeader } from "@/components/ui/ScreenHeader";
 
 import { useI18n } from "../../i18n";
 import { useTheme } from "@/context/ThemeContext";
@@ -84,6 +84,8 @@ function CropRecommendationCard({
   rank: number;
   onRefresh: () => void;
 }) {
+  const { isDark } = useTheme();
+  const colors = createPredictionPalette(isDark);
   const renderFactorBar = (label: string, value: number, color: string) => (
     <View style={styles.factorRow}>
       <Text style={styles.factorLabel}>{label}</Text>
@@ -110,14 +112,14 @@ function CropRecommendationCard({
         : predictionColors.success;
 
   return (
-    <View style={styles.cropCard}>
+    <View style={[styles.cropCard, { backgroundColor: colors.card, borderColor: colors.border }, predictionShadow.soft]}>
       <View style={styles.cropCardHeader}>
         <View style={styles.rankBadge}>
           <Text style={styles.rankText}>#{rank}</Text>
         </View>
         <View style={styles.cropTitleWrap}>
-          <Text style={styles.cropName}>{rec.cropName}</Text>
-          <Text style={styles.cropScore}>
+          <Text style={[styles.cropName, { color: colors.text }]}>{rec.cropName}</Text>
+          <Text style={[styles.cropScore, { color: colors.textSecondary }]}> 
             Score: {rec.recommendationScore}/100
           </Text>
         </View>
@@ -129,14 +131,14 @@ function CropRecommendationCard({
       </View>
 
       <View style={styles.metricGrid}>
-        <View style={styles.metric}>
+        <View style={[styles.metric, { backgroundColor: colors.background }]}> 
           <MaterialCommunityIcons name="scale-balance" size={18} color={predictionColors.primary} />
           <Text style={styles.metricLabel}>Expected Yield</Text>
           <Text style={styles.metricValue}>
             {rec.predictedYieldTPerHa != null ? `${rec.predictedYieldTPerHa} T/ha` : "N/A"}
           </Text>
         </View>
-        <View style={styles.metric}>
+        <View style={[styles.metric, { backgroundColor: colors.background }]}> 
           <MaterialCommunityIcons name="cash" size={18} color={predictionColors.primary} />
           <Text style={styles.metricLabel}>Expected Revenue</Text>
           <Text style={styles.metricValue}>
@@ -145,7 +147,7 @@ function CropRecommendationCard({
               : "N/A"}
           </Text>
         </View>
-        <View style={styles.metric}>
+        <View style={[styles.metric, { backgroundColor: colors.background }]}> 
           <MaterialCommunityIcons name="swap-horizontal" size={18} color={predictionColors.primary} />
           <Text style={styles.metricLabel}>Demand/Supply Gap</Text>
           <Text style={styles.metricValue}>
@@ -154,7 +156,7 @@ function CropRecommendationCard({
               : "N/A"}
           </Text>
         </View>
-        <View style={styles.metric}>
+        <View style={[styles.metric, { backgroundColor: colors.background }]}> 
           <MaterialCommunityIcons name="account-group" size={18} color={factorColor(rec.competitionLevel)} />
           <Text style={styles.metricLabel}>Competition</Text>
           <Text style={[styles.metricValue, { color: factorColor(rec.competitionLevel) }]}>
@@ -316,18 +318,19 @@ export function AgenticRecommendationScreen({
             : "Crop plan saved."
           : res.message,
       );
+      if (res.firestoreSaved) {
+        onViewPlan?.(toCropOptionFromAgent(top));
+      }
     } catch (e) {
-      // Best-effort: if the backend save fails (timeout, abort, etc.) we
-      // still navigate to the CropPlanScreen so the farmer can view the plan.
-      console.warn("confirmCropPlan failed:", e);
+      setConfirmMsg(e instanceof Error ? e.message : "Could not save crop plan.");
     } finally {
       setConfirming(false);
-      onViewPlan?.(toCropOptionFromAgent(top));
     }
   }, [top, profile, landArea, hasIrrigation, district, season, year, onViewPlan]);
 
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} {...edgeSwipeResponder.panHandlers}>
+    <SafeAreaView edges={["top"]} style={[styles.safeArea, { backgroundColor: colors.background }]} {...edgeSwipeResponder.panHandlers}>
+      <ScreenHeader title="AI crop recommendations" subtitle={`${district} · ${season} ${year} · ${landArea.toFixed(1)} ha`} icon="robot-outline" onBack={onBackToHome} />
         <FlatList
           data={[]}
           renderItem={() => null}
@@ -335,42 +338,13 @@ export function AgenticRecommendationScreen({
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={
           <>
-        <LinearGradient
-          colors={["#16A34A", "#22C55E"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.hero}
-        >
-          <View style={styles.topRow}>
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={onBackToHome}
-              activeOpacity={0.8}
-            >
-              <MaterialCommunityIcons
-                name="arrow-left"
-                size={20}
-                color={predictionColors.white}
-              />
-            </TouchableOpacity>
-            <View style={styles.heroIconWrap}>
-              <MaterialCommunityIcons
-                name="robot"
-                size={26}
-                color={predictionColors.primaryDark}
-              />
-            </View>
-          </View>
-
-          <Text style={styles.title}>AI Crop Recommendations</Text>
-          <Text style={styles.subtitle}>
-            Top 3 crops ranked by yield, revenue, demand-supply gap, competition,
-            and risk — powered by a LangGraph agent.
-          </Text>
-                </LinearGradient>
+        <View style={[styles.introCard, { backgroundColor: colors.accentSoft, borderColor: colors.border }]}> 
+          <View style={[styles.introIcon, { backgroundColor: colors.card }]}><MaterialCommunityIcons name="creation" size={22} color={colors.accent}/></View>
+          <View style={{ flex: 1 }}><Text style={[styles.introTitle, { color: colors.text }]}>Personalized for your farm</Text><Text style={[styles.introText, { color: colors.textSecondary }]}>Ranked using yield, revenue, market demand, competition, weather and risk.</Text></View>
+        </View>
 
         <View style={styles.chatSection}>
-          <Text style={styles.chatSectionTitle}>{t("chatHeader")}</Text>
+          <View style={styles.sectionHeadingRow}><Text style={[styles.chatSectionTitle, { color: colors.text }]}>{t("chatHeader")}</Text><View style={[styles.aiBadge, { backgroundColor: colors.accentSoft }]}><Text style={[styles.aiBadgeText, { color: colors.accent }]}>AI assistant</Text></View></View>
           <ChatBot
             profile={profile}
             seedOptions={seedCrops}
@@ -379,14 +353,14 @@ export function AgenticRecommendationScreen({
         </View>
 
         {loading ? (
-          <View style={styles.stateBox}>
+          <View style={[styles.stateBox, { backgroundColor: colors.card, borderColor: colors.border }]}> 
             <ActivityIndicator size="large" color={predictionColors.primary} />
-            <Text style={styles.stateText}>
+            <Text style={[styles.stateText, { color: colors.text }]}> 
               Analyzing yield, market, weather, demand and supply...
             </Text>
           </View>
         ) : error ? (
-          <View style={styles.errorCard}>
+          <View style={[styles.errorCard, { backgroundColor: colors.dangerSoft }]}> 
             <MaterialCommunityIcons
               name="alert-circle-outline"
               size={22}
@@ -409,8 +383,8 @@ export function AgenticRecommendationScreen({
             ))}
 
             {top ? (
-              <View style={styles.actionCard}>
-                <Text style={styles.sectionTitle}>{t("cropDecisionTools")}</Text>
+              <View style={[styles.actionCard, { backgroundColor: colors.card, borderColor: colors.border }, predictionShadow.soft]}> 
+                <Text style={[styles.sectionTitle, { color: colors.text }]}>{t("cropDecisionTools")}</Text>
 
                 <View style={styles.actionRow}>
                   <TouchableOpacity
@@ -475,13 +449,13 @@ export function AgenticRecommendationScreen({
             ) : null}
           </>
         ) : (
-          <View style={styles.stateBox}>
+          <View style={[styles.stateBox, { backgroundColor: colors.card, borderColor: colors.border }]}> 
             <MaterialCommunityIcons
               name="cloud-alert-outline"
               size={40}
               color={predictionColors.textMuted}
             />
-            <Text style={styles.stateText}>No recommendations available.</Text>
+            <Text style={[styles.stateText, { color: colors.text }]}>No recommendations available.</Text>
           </View>
         )}
                       </>
@@ -493,6 +467,7 @@ export function AgenticRecommendationScreen({
 
 
 const styles = StyleSheet.create({
+  safeArea: { flex: 1 },
     container: {
     flex: 1,
     backgroundColor: predictionColors.background,
@@ -502,8 +477,8 @@ const styles = StyleSheet.create({
     marginBottom: predictionSpacing.lg,
   },
   chatSectionTitle: {
-    fontSize: 13,
-    fontWeight: "800",
+    fontSize: 17,
+    fontWeight: "900",
     color: predictionColors.textSecondary,
     marginBottom: predictionSpacing.sm,
   },
@@ -512,6 +487,11 @@ const styles = StyleSheet.create({
     paddingTop: predictionSpacing.lg,
     paddingBottom: predictionSpacing.xxl,
   },
+  introCard: { flexDirection: "row", alignItems: "center", gap: 12, borderWidth: 1, borderRadius: 20, padding: 16, marginBottom: 18 },
+  introIcon: { width: 44, height: 44, borderRadius: 14, alignItems: "center", justifyContent: "center" },
+  introTitle: { fontSize: 15, fontWeight: "900" }, introText: { fontSize: 12, lineHeight: 18, marginTop: 3 },
+  sectionHeadingRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 10 },
+  aiBadge: { borderRadius: 999, paddingHorizontal: 10, paddingVertical: 5 }, aiBadgeText: { fontSize: 10, fontWeight: "800" },
   hero: {
     borderRadius: predictionRadius.xl,
     padding: predictionSpacing.xl,
@@ -558,6 +538,7 @@ const styles = StyleSheet.create({
     backgroundColor: predictionColors.card,
     borderRadius: predictionRadius.lg,
     padding: predictionSpacing.xxl,
+    borderWidth: 1,
     ...predictionShadow.soft,
   },
   stateText: {
@@ -597,6 +578,7 @@ const styles = StyleSheet.create({
     borderRadius: predictionRadius.lg,
     padding: predictionSpacing.lg,
     marginBottom: predictionSpacing.lg,
+    borderWidth: 1,
     ...predictionShadow.soft,
   },
   cropCardHeader: {
@@ -607,7 +589,7 @@ const styles = StyleSheet.create({
   rankBadge: {
     width: 42,
     height: 42,
-    borderRadius: 21,
+    borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: predictionColors.primary,
@@ -676,13 +658,13 @@ const styles = StyleSheet.create({
   },
   factorTrack: {
     flex: 1,
-    height: 8,
+    height: 6,
     borderRadius: 4,
     backgroundColor: predictionColors.border,
     overflow: "hidden",
   },
   factorFill: {
-    height: 8,
+    height: 6,
     borderRadius: 4,
   },
   factorValue: {
@@ -759,6 +741,7 @@ const styles = StyleSheet.create({
     borderRadius: predictionRadius.lg,
     padding: predictionSpacing.lg,
     marginTop: predictionSpacing.md,
+    borderWidth: 1,
     ...predictionShadow.soft,
   },
   sectionTitle: {
@@ -819,4 +802,3 @@ const styles = StyleSheet.create({
     color: predictionColors.success,
   },
 });
-

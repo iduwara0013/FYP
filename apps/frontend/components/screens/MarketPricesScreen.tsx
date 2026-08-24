@@ -2,13 +2,15 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Linking,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenHeader } from "@/components/ui/ScreenHeader";
+import { useTheme } from "@/context/ThemeContext";
 
 import {
   getLiveMarketPrices,
@@ -19,8 +21,6 @@ import {
 import { CategoryAccordion } from "../market/CategoryAccordion";
 import { EmptyState } from "../market/EmptyState";
 import { LoadingSkeleton } from "../market/LoadingSkeleton";
-import { MarketHeader } from "../market/MarketHeader";
-import { MarketSelector } from "../market/MarketSelector";
 import { MarketSummaryCard } from "../market/MarketSummaryCard";
 import { ProductBottomSheet } from "../market/ProductBottomSheet";
 import { SearchBar } from "../market/SearchBar";
@@ -292,12 +292,6 @@ function parseEntry(
 /* Formatting helpers                                                  */
 /* ------------------------------------------------------------------ */
 
-function formatCompactMoney(value: number | null): string {
-  if (value === null) return "—";
-  const [whole] = value.toFixed(2).split(".");
-  return whole.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
 /* ------------------------------------------------------------------ */
 /* Screen                                                              */
 /* ------------------------------------------------------------------ */
@@ -307,6 +301,7 @@ type MarketPricesScreenProps = {
 };
 
 export function MarketPricesScreen({ onBackToHome }: MarketPricesScreenProps) {
+  const { theme } = useTheme();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -517,6 +512,7 @@ export function MarketPricesScreen({ onBackToHome }: MarketPricesScreenProps) {
     const reference = summary.highest;
     if (!reference?.bestQuote) {
       return {
+        marketName: null,
         rangeLow: null,
         rangeHigh: null,
         averageToday: null,
@@ -526,6 +522,7 @@ export function MarketPricesScreen({ onBackToHome }: MarketPricesScreenProps) {
     }
     const quote = reference.bestQuote;
     return {
+      marketName: quote.market.name,
       rangeLow: quote.min ?? null,
       rangeHigh: quote.max ?? null,
       averageToday: quote.average ?? null,
@@ -538,26 +535,26 @@ export function MarketPricesScreen({ onBackToHome }: MarketPricesScreenProps) {
   }, [summary.highest]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={["top"]} style={[styles.container, { backgroundColor: theme.colors.background }]}> 
+      <ScreenHeader
+        title="Market prices"
+        subtitle={lastUpdated ? `Live HARTI feed · Updated ${lastUpdated}` : "Live HARTI wholesale bulletin"}
+        icon="chart-line"
+        onBack={onBackToHome}
+        action={<TouchableOpacity style={[styles.headerRefresh, { backgroundColor: theme.colors.primarySoft }]} onPress={loadMarketPrices} disabled={loading}><MaterialCommunityIcons name={loading ? "loading" : "refresh"} size={20} color={theme.colors.primary}/></TouchableOpacity>}
+      />
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <MarketHeader
-          onBackToHome={onBackToHome}
-          lastUpdated={lastUpdated}
-          onRefresh={loadMarketPrices}
-          refreshing={loading}
-        />
-
         {error ? (
-          <View style={styles.errorCard}>
+          <View style={[styles.errorCard, { backgroundColor: theme.colors.dangerSoft, borderColor: theme.colors.danger }]}> 
             <MaterialCommunityIcons
               name="alert-circle-outline"
               size={20}
               color={colors.danger}
             />
-            <Text style={styles.errorText}>{error}</Text>
+            <Text style={[styles.errorText, { color: theme.colors.danger }]}>{error}</Text>
           </View>
         ) : null}
 
@@ -565,25 +562,20 @@ export function MarketPricesScreen({ onBackToHome }: MarketPricesScreenProps) {
           <LoadingSkeleton />
         ) : (
           <>
+            <View style={[styles.liveStrip, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }, theme.shadows.soft]}> 
+              <View style={[styles.liveDot, { backgroundColor: marketData?.success ? theme.colors.success : theme.colors.warning }]}/>
+              <View style={{ flex: 1 }}><Text style={[styles.liveTitle, { color: theme.colors.text }]}>Current market snapshot</Text><Text style={[styles.liveMeta, { color: theme.colors.textMuted }]}>{selectedBulletin?.date ?? marketData?.bulletinLabel ?? "Latest published bulletin"}</Text></View>
+              <MaterialCommunityIcons name="shield-check-outline" size={21} color={theme.colors.primary}/>
+            </View>
             <SearchBar
               value={searchQuery}
               onChangeText={setSearchQuery}
               placeholder="Search crops..."
             />
 
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Markets</Text>
-            </View>
-
-            <MarketSelector
-              markets={comparisonMarkets.map((market) => market.name)}
-              selected={comparisonMarkets[0].name}
-              onSelect={() => {}}
-            />
-
             <View style={styles.summarySpacing}>
               <MarketSummaryCard
-                marketName={comparisonMarkets[0].name}
+                marketName={marketSummary.marketName ?? "HARTI market"}
                 rangeLow={marketSummary.rangeLow}
                 rangeHigh={marketSummary.rangeHigh}
                 averageToday={marketSummary.averageToday}
@@ -756,9 +748,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+  headerRefresh: { width: 42, height: 42, borderRadius: 14, alignItems: "center", justifyContent: "center" },
+  liveStrip: { flexDirection: "row", alignItems: "center", gap: 11, borderWidth: 1, borderRadius: 18, padding: 15, marginBottom: spacing.lg },
+  liveDot: { width: 9, height: 9, borderRadius: 5 },
+  liveTitle: { fontSize: 14, fontWeight: "900" },
+  liveMeta: { fontSize: 11, marginTop: 2 },
   scrollContent: {
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
+    paddingTop: spacing.md,
     paddingBottom: spacing.xxl,
   },
   errorCard: {
@@ -769,6 +766,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
+    borderWidth: 1,
   },
   errorText: {
     flex: 1,

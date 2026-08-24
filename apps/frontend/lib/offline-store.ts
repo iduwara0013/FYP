@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type OfflineEntity = {
   id: string;
-  kind: "calendar" | "expense" | "inventory" | "listing" | "message" | "alert";
+  kind: "calendar" | "expense" | "inventory" | "listing" | "message" | "alert" | "purchase_request" | "order" | "saved_listing" | "field" | "planting" | "soil" | "input" | "offer" | "farmer_order" | "equipment" | "labour";
   title: string;
   detail: string;
   amount?: number;
@@ -42,5 +42,18 @@ export async function markQueueSynced(): Promise<OfflineEntity[]> {
   const entities = (await loadOfflineEntities()).map((item) => queued.has(item.id) ? { ...item, status: "synced" as const } : item);
   await AsyncStorage.setItem(DATA_KEY, JSON.stringify(entities));
   await AsyncStorage.setItem(QUEUE_KEY, "[]");
+  return entities;
+}
+
+export async function markEntitiesSynced(ids: string[]): Promise<OfflineEntity[]> {
+  const completed = new Set(ids);
+  const entities = (await loadOfflineEntities()).map((item) =>
+    completed.has(item.id) ? { ...item, status: "synced" as const } : item,
+  );
+  await AsyncStorage.setItem(DATA_KEY, JSON.stringify(entities));
+  await AsyncStorage.setItem(
+    QUEUE_KEY,
+    JSON.stringify((await loadSyncQueue()).filter((id) => !completed.has(id))),
+  );
   return entities;
 }

@@ -13,11 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SmartCrop Admin",
-  description: "Operations console for the SmartCrop agricultural decision-support platform.",
+  title: "AgriLanka Admin",
+  description: "Operations console for the AgriLanka smart-agriculture platform.",
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "/agrilanka-logo.png",
+    shortcut: "/agrilanka-logo.png",
   },
 };
 

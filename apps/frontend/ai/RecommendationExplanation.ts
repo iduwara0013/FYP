@@ -14,8 +14,6 @@ export class RecommendationExplanation {
    */
   explain(rec: CropRecommendation): string {
     const parts: string[] = [];
-    const { factors } = rec;
-
     // Demand vs supply
     if (rec.demandGapTonnes != null && rec.demandGapTonnes > 0) {
       parts.push(

@@ -9,6 +9,12 @@ import { ProfileCompletionScreen } from "@/components/screens/ProfileCompletionS
 import { ProfileViewScreen } from "@/components/screens/ProfileViewScreen";
 import { SignUpScreen } from "@/components/screens/SignUpScreen";
 import { FarmToolkitScreen } from "@/components/screens/FarmToolkitScreen";
+import { AgenticRecommendationScreen } from "@/components/screens/AgenticRecommendationScreen";
+import { GrowingPlansScreen } from "@/components/screens/GrowingPlansScreen";
+import { CropPlanScreen } from "@/components/screens/CropPlanScreen";
+import { buildCropPlan } from "@/lib/cropPlanBuilder";
+import type { CropPlanDraft } from "@/lib/plan-types";
+import { getProfileByEmail } from "@/lib/spring-api";
 import { useTheme } from "@/context/ThemeContext";
 import {
     ProfileData,
@@ -24,6 +30,9 @@ type Screen =
   | "profile"
   | "profile-view"
   | "farm-tools"
+  | "crop-recommendation"
+  | "crop-plan"
+  | "growing-plans"
   | "home";
 
 export default function EntryScreen() {
@@ -34,6 +43,7 @@ export default function EntryScreen() {
     null,
   );
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<CropPlanDraft | null>(null);
   const screenOpacity = useRef(new Animated.Value(0)).current;
   const screenOffset = useRef(new Animated.Value(14)).current;
 
@@ -78,7 +88,12 @@ export default function EntryScreen() {
     setCurrentScreen("profile");
   };
 
-  const handleLogin = async (_email: string) => {
+  const handleLogin = async (email: string) => {
+    try {
+      setProfileData(await getProfileByEmail(email));
+    } catch {
+      setProfileData(null);
+    }
     setCurrentScreen("home");
   };
 
@@ -125,6 +140,7 @@ export default function EntryScreen() {
           <ProfileViewScreen
             profile={profileData}
             onBackToHome={() => setCurrentScreen("home")}
+            onProfileUpdated={setProfileData}
           />
         )}
 
@@ -132,6 +148,8 @@ export default function EntryScreen() {
           <HomeScreen
             profile={profileData}
             onFarmTools={() => setCurrentScreen("farm-tools")}
+            onCropRecommendation={() => setCurrentScreen("crop-recommendation")}
+            onGrowingPlan={() => setCurrentScreen("growing-plans")}
             onProfile={() => {
               setCurrentScreen(profileData ? "profile-view" : "profile");
             }}
@@ -140,6 +158,34 @@ export default function EntryScreen() {
 
         {currentScreen === "farm-tools" && (
           <FarmToolkitScreen onBack={() => setCurrentScreen("home")} />
+        )}
+
+        {currentScreen === "crop-recommendation" && (
+          <AgenticRecommendationScreen
+            profile={profileData}
+            onBackToHome={() => setCurrentScreen("home")}
+            onViewPlan={(crop) => {
+              const month = new Date().getMonth() + 1;
+              const season = [10, 11, 12, 1, 2, 3].includes(month) ? "Maha" : "Yala";
+              setSelectedPlan(buildCropPlan(
+                crop,
+                profileData,
+                season,
+                new Date().getFullYear(),
+                profileData?.role === "farmer" ? profileData.totalLandArea ?? 1 : 1,
+                profileData?.role === "farmer" ? profileData.hasIrrigation : true,
+              ));
+              setCurrentScreen("crop-plan");
+            }}
+          />
+        )}
+
+        {currentScreen === "crop-plan" && selectedPlan && (
+          <CropPlanScreen profile={profileData} plan={selectedPlan} alreadySaved onBack={() => setCurrentScreen("crop-recommendation")} />
+        )}
+
+        {currentScreen === "growing-plans" && (
+          <GrowingPlansScreen profile={profileData} onBack={() => setCurrentScreen("home")} />
         )}
       </Animated.View>
     </View>

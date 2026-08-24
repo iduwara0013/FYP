@@ -17,7 +17,7 @@ type AIInsightCardProps = {
 
 function buildInsight(profile?: ProfileData | null): string {
   if (!profile) {
-    return "Based on your region, paddy cultivation is well supported this season.";
+    return "Complete your farmer profile to generate recommendations from your real farm details.";
   }
   if (profile.role === "farmer") {
     const land =
@@ -26,11 +26,11 @@ function buildInsight(profile?: ProfileData | null): string {
         : "your farm";
     const area = profile.region;
     const irrigation = profile.hasIrrigation ? "irrigated" : "rainfed";
-    return `🌱 Based on your ${land} ${irrigation} farm in ${area}, paddy cultivation is recommended this week.`;
+    return `Run a fresh AI analysis for your ${land} ${irrigation} farm in ${area}. Recommendations will use current weather, market and supply data.`;
   }
   const crop = profile.preferredCrop ?? "your preferred crop";
   const area = profile.region;
-  return `📈 ${crop} demand is increasing in ${area}. Consider placing purchase requests today.`;
+  return `Review live market and supply information for ${crop} in ${area} before creating a purchase request.`;
 }
 
 export function AIInsightCard({ profile, onLearnMore }: AIInsightCardProps) {

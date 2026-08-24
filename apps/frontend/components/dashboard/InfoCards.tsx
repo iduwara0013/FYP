@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useTheme } from "../../context/ThemeContext";
 
 import {
   dashboardColors,
@@ -21,42 +22,46 @@ export type MarketPreviewItem = {
 type MarketPreviewCardProps = {
   items: MarketPreviewItem[];
   onViewReport: () => void;
+  updatedLabel?: string | null;
 };
 
 export function MarketPreviewCard({
   items,
   onViewReport,
+  updatedLabel,
 }: MarketPreviewCardProps) {
+  const { theme } = useTheme(); const { colors } = theme;
   return (
-    <View style={styles.marketCard}>
+    <View style={[styles.marketCard,{backgroundColor:colors.surface,borderColor:colors.border},theme.shadows.soft]}>
       <View style={styles.cardHeader}>
-        <View style={styles.cardHeaderIcon}>
+        <View style={[styles.cardHeaderIcon,{backgroundColor:colors.marketSoft}]}>
           <MaterialCommunityIcons
-            name="currency-usd"
-            size={18}
-            color={dashboardColors.primary}
+            name="chart-line"
+            size={20}
+            color={colors.market}
           />
         </View>
         <View style={styles.cardHeaderText}>
-          <Text style={styles.cardTitle}>Today’s Top Prices</Text>
-          <Text style={styles.cardSubtitle}>Live from HARTI bulletin</Text>
+          <Text style={[styles.cardTitle,{color:colors.text}]}>Today’s top prices</Text>
+          <Text style={[styles.cardSubtitle,{color:colors.textMuted}]}>{updatedLabel ? `HARTI bulletin · ${updatedLabel}` : "Live HARTI bulletin"}</Text>
         </View>
+        <View style={[styles.liveChip,{backgroundColor:colors.successSoft}]}><View style={[styles.liveDot,{backgroundColor:colors.success}]}/><Text style={[styles.liveText,{color:colors.success}]}>LIVE</Text></View>
       </View>
 
       <View style={styles.marketList}>
-        {items.map((item) => (
-          <View key={item.crop} style={styles.marketRow}>
+        {items.map((item,index) => (
+          <View key={item.crop} style={[styles.marketRow,{backgroundColor:colors.background,borderColor:colors.border}]}>
             <View style={styles.marketCropWrap}>
-              <View style={styles.cropDot} />
-              <Text style={styles.marketCrop}>{item.crop}</Text>
+              <View style={[styles.rank,{backgroundColor:index===0?colors.marketSoft:colors.primarySoft}]}><Text style={[styles.rankText,{color:index===0?colors.market:colors.primary}]}>#{index+1}</Text></View>
+              <Text numberOfLines={2} style={[styles.marketCrop,{color:colors.text}]}>{item.crop}</Text>
             </View>
-            <Text style={styles.marketPrice}>{item.price}</Text>
+            <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.8} style={[styles.marketPrice,{color:colors.primary}]}>{item.price}</Text>
           </View>
         ))}
       </View>
 
       <TouchableOpacity
-        style={styles.viewReportButton}
+        style={[styles.viewReportButton,{backgroundColor:colors.primary}]}
         onPress={onViewReport}
         activeOpacity={0.85}
       >
@@ -64,7 +69,7 @@ export function MarketPreviewCard({
         <MaterialCommunityIcons
           name="arrow-right"
           size={16}
-          color={dashboardColors.white}
+          color={colors.primaryContrast}
         />
       </TouchableOpacity>
     </View>
@@ -155,22 +160,23 @@ type FarmSummaryCardProps = {
 };
 
 export function DashboardFarmSummaryCard({ tiles }: FarmSummaryCardProps) {
+  const { theme } = useTheme(); const { colors } = theme;
   return (
     <View style={styles.farmSummaryCard}>
       {tiles.map((tile) => (
-        <View key={tile.label} style={styles.farmTile}>
-          <View style={styles.farmIconWrap}>
+        <View key={tile.label} style={[styles.farmTile,{backgroundColor:colors.surface,borderColor:colors.border},theme.shadows.soft]}>
+          <View style={[styles.farmIconWrap,{backgroundColor:colors.primarySoft}]}>
             <MaterialCommunityIcons
               name={tile.icon}
               size={16}
-              color={dashboardColors.primary}
+              color={colors.primary}
             />
           </View>
           <View style={styles.farmTileText}>
-            <Text style={styles.farmTileValue} numberOfLines={1}>
+            <Text style={[styles.farmTileValue,{color:colors.text}]} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.8}>
               {tile.value}
             </Text>
-            <Text style={styles.farmTileLabel}>{tile.label}</Text>
+            <Text style={[styles.farmTileLabel,{color:colors.textMuted}]} numberOfLines={2}>{tile.label}</Text>
           </View>
         </View>
       ))}
@@ -184,6 +190,7 @@ const styles = StyleSheet.create({
     borderRadius: dashboardRadius.lg,
     padding: dashboardSpacing.lg,
     marginBottom: dashboardSpacing.lg,
+    borderWidth: 1,
     ...dashboardShadow.soft,
   },
   cardHeader: {
@@ -198,8 +205,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: dashboardColors.primary,
   },
+  liveChip: { flexDirection: "row", alignItems: "center", gap: 5, borderRadius: 999, paddingHorizontal: 9, paddingVertical: 6 },
+  liveDot: { width: 6, height: 6, borderRadius: 3 }, liveText: { fontSize: 9, fontWeight: "900", letterSpacing: 0.5 },
   cardHeaderText: {
     flex: 1,
   },
@@ -224,11 +232,14 @@ const styles = StyleSheet.create({
     borderRadius: dashboardRadius.md,
     paddingHorizontal: dashboardSpacing.md,
     paddingVertical: dashboardSpacing.md,
+    borderWidth: 1,
   },
   marketCropWrap: {
     flexDirection: "row",
     alignItems: "center",
     gap: dashboardSpacing.sm,
+    flex: 1,
+    minWidth: 0,
   },
   cropDot: {
     width: 8,
@@ -236,15 +247,21 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: dashboardColors.primary,
   },
+  rank: { width: 34, height: 34, borderRadius: 11, alignItems: "center", justifyContent: "center" },
+  rankText: { fontSize: 11, fontWeight: "900" },
   marketCrop: {
     fontSize: 14,
     fontWeight: "700",
     color: dashboardColors.text,
+    flex: 1,
   },
   marketPrice: {
     fontSize: 14,
     fontWeight: "800",
     color: dashboardColors.primary,
+    marginLeft: dashboardSpacing.sm,
+    textAlign: "right",
+    maxWidth: "48%",
   },
   viewReportButton: {
     flexDirection: "row",
@@ -307,7 +324,7 @@ const styles = StyleSheet.create({
     marginBottom: dashboardSpacing.lg,
   },
   farmTile: {
-    flexBasis: "31%",
+    flexBasis: "48%",
     flexGrow: 1,
     flexDirection: "row",
     alignItems: "center",
@@ -315,29 +332,32 @@ const styles = StyleSheet.create({
     backgroundColor: dashboardColors.card,
     borderRadius: dashboardRadius.md,
     padding: dashboardSpacing.md,
+    minHeight: 78,
+    borderWidth: 1,
     ...dashboardShadow.soft,
   },
   farmIconWrap: {
-    width: 30,
-    height: 30,
-    borderRadius: 10,
+    width: 38,
+    height: 38,
+    borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: dashboardColors.primary,
   },
   farmTileText: {
     flex: 1,
   },
   farmTileValue: {
-    fontSize: 13,
+    fontSize: 15,
     fontWeight: "800",
     color: dashboardColors.text,
   },
   farmTileLabel: {
-    fontSize: 9,
+    fontSize: 10,
     fontWeight: "600",
     color: dashboardColors.textMuted,
     textTransform: "uppercase",
+    lineHeight: 13,
+    marginTop: 2,
     letterSpacing: 0.3,
   },
 });

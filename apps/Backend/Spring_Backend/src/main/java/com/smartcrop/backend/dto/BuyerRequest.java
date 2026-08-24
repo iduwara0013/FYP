@@ -13,6 +13,8 @@ public record BuyerRequest(
     String organizationName,
     String preferredCrop,
     Double requiredQuantity,
-    String notes
+    String notes,
+    Boolean hasStorage,
+    Boolean hasTransport
 ) {
 }

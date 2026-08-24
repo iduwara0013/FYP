@@ -38,7 +38,6 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const systemScheme = useColorScheme();
   const [themeMode, setThemeModeState] = useState<ThemeMode>("system");
-  const [isReady, setIsReady] = useState(false);
 
   // Load saved theme mode on mount
   useEffect(() => {
@@ -56,7 +55,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       } catch {
         // Fall back to system
       } finally {
-        if (mounted) setIsReady(true);
+        // The default system theme remains usable while storage is loading.
       }
     })();
     return () => {

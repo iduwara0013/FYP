@@ -45,6 +45,8 @@ type BuyerHomeScreenProps = {
   onProfile: () => void;
   onNotifications?: () => void;
   onSettings?: () => void;
+  onOfflineWorkspace?: () => void;
+  onTradeHub?: () => void;
   unreadNotifications?: number;
 };
 
@@ -76,6 +78,8 @@ export function BuyerHomeScreen({
   onProfile,
   onNotifications,
   onSettings,
+  onOfflineWorkspace,
+  onTradeHub,
   unreadNotifications = 0,
 }: BuyerHomeScreenProps) {
   const { theme } = useTheme();
@@ -265,8 +269,9 @@ export function BuyerHomeScreen({
       if (id === "weather") onWeatherUpdate();
       else if (id === "market") onMarketPrices();
       else if (id === "browse") onBrowsePeople();
+      else if (["requirements", "history", "saved"].includes(id)) onTradeHub?.();
     },
-    [onWeatherUpdate, onMarketPrices, onBrowsePeople],
+    [onWeatherUpdate, onMarketPrices, onBrowsePeople, onTradeHub],
   );
 
   const marketItems: MarketPriceItem[] = useMemo(

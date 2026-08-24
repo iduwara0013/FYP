@@ -3,11 +3,13 @@ import React from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
 import {
+    createPredictionPalette,
     predictionColors,
     predictionRadius,
     predictionShadow,
     predictionSpacing,
 } from "./theme";
+import { useTheme } from "@/context/ThemeContext";
 
 type InputSectionProps = {
   title: string;
@@ -22,19 +24,21 @@ export function InputSection({
   subtitle,
   children,
 }: InputSectionProps) {
+  const { isDark } = useTheme();
+  const colors = createPredictionPalette(isDark);
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}> 
       <View style={styles.header}>
         <View style={styles.iconWrap}>
           <MaterialCommunityIcons
             name={icon}
             size={18}
-            color={predictionColors.primary}
+            color={colors.primary}
           />
         </View>
         <View style={styles.headerText}>
-          <Text style={styles.title}>{title}</Text>
-          {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+          <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
+          {subtitle ? <Text style={[styles.subtitle, { color: colors.textMuted }]}>{subtitle}</Text> : null}
         </View>
       </View>
       <View style={styles.body}>{children}</View>
@@ -48,9 +52,11 @@ type LabeledFieldProps = {
 };
 
 export function LabeledField({ label, children }: LabeledFieldProps) {
+  const { isDark } = useTheme();
+  const colors = createPredictionPalette(isDark);
   return (
     <View style={styles.field}>
-      <Text style={styles.fieldLabel}>{label}</Text>
+      <Text style={[styles.fieldLabel, { color: colors.textSecondary }]}>{label}</Text>
       {children}
     </View>
   );
@@ -71,14 +77,16 @@ export function NumericInput({
   icon,
   error,
 }: NumericInputProps) {
+  const { isDark } = useTheme();
+  const colors = createPredictionPalette(isDark);
   return (
     <View>
-      <View style={[styles.inputWrap, error && styles.inputWrapError]}>
+      <View style={[styles.inputWrap, { backgroundColor: colors.background, borderColor: error ? colors.danger : colors.border }]}> 
         {icon ? (
           <MaterialCommunityIcons
             name={icon}
             size={18}
-            color={predictionColors.textMuted}
+            color={colors.textMuted}
           />
         ) : null}
         <TextInput
@@ -86,8 +94,8 @@ export function NumericInput({
           onChangeText={onChangeText}
           keyboardType="numeric"
           placeholder={placeholder}
-          placeholderTextColor={predictionColors.textMuted}
-          style={styles.input}
+          placeholderTextColor={colors.textMuted}
+          style={[styles.input, { color: colors.text }]}
         />
       </View>
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
@@ -100,6 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: predictionColors.card,
     borderRadius: predictionRadius.lg,
     padding: predictionSpacing.lg,
+    borderWidth: 1,
     ...predictionShadow.soft,
   },
   header: {

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,5 +48,19 @@ public class FirestoreCollectionController {
     @GetMapping("/{collectionName}")
     public ResponseEntity<List<Map<String, Object>>> getDocuments(@PathVariable String collectionName) throws Exception {
         return ResponseEntity.ok(collectionService.getDocuments(collectionName));
+    }
+
+    @PutMapping("/{collectionName}/{documentId}")
+    public ResponseEntity<Map<String, String>> updateDocument(@PathVariable String collectionName, @PathVariable String documentId, @RequestBody Map<String, Object> payload) throws Exception {
+        return ResponseEntity.ok(collectionService.saveDocument(collectionName, documentId, payload));
+    }
+
+    @GetMapping("/cropPlans/farmer/{farmerId}")
+    public ResponseEntity<List<Map<String, Object>>> getFarmerCropPlans(
+        @PathVariable String farmerId
+    ) throws Exception {
+        return ResponseEntity.ok(collectionService.getDocumentsByField(
+            "cropPlans", "farmerId", farmerId
+        ));
     }
 }

@@ -12,6 +12,7 @@ public record FarmerRequest(
     String nationalId,
     String farmerType,
     Double totalLandArea,
-    Integer experienceYears
+    Integer experienceYears,
+    Boolean hasIrrigation
 ) {
 }

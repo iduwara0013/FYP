@@ -1,11 +1,11 @@
 import { getApp, getApps, initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, type Auth } from "firebase/auth";
 
 import { getFirebaseConfig } from "./firebase-config";
 
-let authInstance = null;
+let authInstance: Auth | null = null;
 
-export function getFirebaseAuth() {
+export function getFirebaseAuth(): Auth {
   if (authInstance) {
     return authInstance;
   }

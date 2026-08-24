@@ -3,8 +3,10 @@ import { View } from "react-native";
 
 import { AgenticRecommendationScreen } from "@/components/screens/AgenticRecommendationScreen";
 import { BuyerHomeScreen } from "@/components/screens/BuyerHomeScreen";
+import { BuyerOfflineScreen } from "@/components/screens/BuyerOfflineScreen";
 import { BuyersScreen } from "@/components/screens/BuyersScreen";
 import { ForgotPasswordScreen } from "@/components/screens/ForgotPasswordScreen";
+import { FarmToolkitScreen } from "@/components/screens/FarmToolkitScreen";
 import { HomeScreen } from "@/components/screens/HomeScreen";
 import { LoadingScreen } from "@/components/screens/LoadingScreen";
 import { LoginScreen } from "@/components/screens/LoginScreen";
@@ -27,6 +29,8 @@ import { I18nProvider } from "@/i18n";
 import { getProfileByEmail } from "@/lib/spring-api";
 import { buildCropPlan } from "@/lib/cropPlanBuilder";
 import { CropPlanScreen } from "@/components/screens/CropPlanScreen";
+import { GrowingPlansScreen } from "@/components/screens/GrowingPlansScreen";
+import { TradeHubScreen } from "@/components/screens/TradeHubScreen";
 import type { CropPlanDraft, CropOption } from "@/lib/plan-types";
 
 type Screen =
@@ -41,6 +45,10 @@ type Screen =
   | "yield-prediction"
     | "agentic-recommendation"
   | "crop-plan"
+  | "growing-plans"
+  | "farm-tools"
+  | "buyer-offline"
+  | "trade-hub"
   | "buyers"
   | "notifications"
   | "settings"
@@ -66,6 +74,8 @@ function AppContent() {
         setCurrentScreen("market-prices");
       else if (deepLink === "smartcrop://yield-prediction")
         setCurrentScreen("yield-prediction");
+      else if (deepLink === "smartcrop://trade-hub")
+        setCurrentScreen("trade-hub");
       else if (deepLink === "smartcrop://home") setCurrentScreen("home");
     },
     enabled: !!profileData,
@@ -86,7 +96,7 @@ function AppContent() {
   const handleLogin = async (email: string) => {
     const profile = await getProfileByEmail(email);
     setProfileData(profile);
-    setCurrentScreen(profile.role === "buyer" ? "buyers" : "home");
+    setCurrentScreen("home");
   };
 
     const handleLogout = () => {
@@ -150,7 +160,7 @@ function AppContent() {
           initialValues={signupDetails}
           onComplete={(profile) => {
             setProfileData(profile);
-            setCurrentScreen(profile.role === "buyer" ? "buyers" : "home");
+            setCurrentScreen("home");
           }}
         />
       )}
@@ -159,6 +169,7 @@ function AppContent() {
         <ProfileViewScreen
           profile={profileData}
           onBackToHome={() => setCurrentScreen("home")}
+          onProfileUpdated={setProfileData}
         />
       )}
 
@@ -189,6 +200,8 @@ function AppContent() {
             }
             onNotifications={() => setCurrentScreen("notifications")}
             onSettings={() => setCurrentScreen("settings")}
+            onOfflineWorkspace={() => setCurrentScreen("buyer-offline")}
+            onTradeHub={() => setCurrentScreen("trade-hub")}
             unreadNotifications={unreadCount}
           />
         ) : (
@@ -201,7 +214,9 @@ function AppContent() {
                         onCropRecommendation={() =>
               setCurrentScreen("agentic-recommendation")
             }
-            onGrowingPlan={() => setCurrentScreen("agentic-recommendation")}
+            onGrowingPlan={() => setCurrentScreen("growing-plans")}
+            onFarmTools={() => setCurrentScreen("farm-tools")}
+            onTradeHub={() => setCurrentScreen("trade-hub")}
             onProfile={() =>
               setCurrentScreen(profileData ? "profile-view" : "profile")
             }
@@ -237,11 +252,31 @@ function AppContent() {
         <CropPlanScreen
           profile={profileData}
           plan={cropPlan}
+          alreadySaved
           onBack={() => {
             setCropPlan(null);
             setCurrentScreen("home");
           }}
         />
+      )}
+
+      {currentScreen === "growing-plans" && (
+        <GrowingPlansScreen
+          profile={profileData}
+          onBack={() => setCurrentScreen("home")}
+        />
+      )}
+
+      {currentScreen === "farm-tools" && (
+        <FarmToolkitScreen onBack={() => setCurrentScreen("home")} />
+      )}
+
+      {currentScreen === "buyer-offline" && profileData && (
+        <BuyerOfflineScreen profile={profileData} onBack={() => setCurrentScreen("home")} />
+      )}
+
+      {currentScreen === "trade-hub" && profileData && (
+        <TradeHubScreen profile={profileData} onBack={() => setCurrentScreen("home")} />
       )}
 
       {currentScreen === "market-prices" && (
@@ -265,6 +300,8 @@ function AppContent() {
               setCurrentScreen("market-prices");
             else if (deepLink === "smartcrop://yield-prediction")
               setCurrentScreen("yield-prediction");
+            else if (deepLink === "smartcrop://trade-hub")
+              setCurrentScreen("trade-hub");
             else setCurrentScreen("home");
           }}
         />

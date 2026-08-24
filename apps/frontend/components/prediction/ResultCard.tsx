@@ -148,6 +148,14 @@ export function ResultCard({ result }: ResultCardProps) {
             {result.input.district} · {result.input.season} ·{" "}
             {result.input.irrigation}
           </Text>
+          {result.price_source ? (
+            <Text style={styles.modelText}>
+              Price source: {result.price_source}
+              {result.price_model?.trainedAt
+                ? ` · updated ${new Date(result.price_model.trainedAt).toLocaleDateString()}`
+                : ""}
+            </Text>
+          ) : null}
         </View>
       </View>
 
@@ -304,6 +312,13 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: predictionColors.textMuted,
     fontWeight: "600",
+  },
+  modelText: {
+    fontSize: 10,
+    color: predictionColors.primaryDark,
+    fontWeight: "700",
+    marginTop: 5,
+    textAlign: "center",
   },
   insightWrap: {
     marginTop: predictionSpacing.lg,

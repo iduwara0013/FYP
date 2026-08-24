@@ -1,6 +1,6 @@
 export const si = {
   common: {
-    appName: "ස්මාර්ට් බෝග පුරෝකථනය",
+    appName: "AgriLanka",
     home: "මුල් පිටුව",
     weather: "කාලගුණය",
     marketPrices: "වෙළඳපොළ මිල",
@@ -118,7 +118,7 @@ export const si = {
     contactSupport: "සහාය අමතන්න",
     aboutApp: "ස්මාර්ට් බෝග පුරෝකථනය පිළිබඳ",
     logoutConfirm: "ඔබට ඉවත් වීමට අවශ්‍යද?",
-    logoutHint: "ඔබ ස්මාර්ට් බෝග පුරෝකථනයෙන් ඉවත් වනු ඇත.",
+    logoutHint: "ඔබ AgriLanka වෙතින් ඉවත් වනු ඇත.",
     version: "v1.0.0",
     notSignedIn: "පිවිසී නැත",
     heavyRain: "හෙට තද වැසි ඇති විය හැක.",

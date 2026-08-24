@@ -69,7 +69,8 @@ class FarmerServiceTest {
             "987654321V",
             "individual",
             5.5,
-            10
+            10,
+            true
         );
 
         when(firestore.collection("farmers")).thenReturn(farmersCollection);

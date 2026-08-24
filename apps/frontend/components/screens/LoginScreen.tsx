@@ -5,8 +5,8 @@ import {
   ActivityIndicator,
   Animated,
   Easing,
-  SafeAreaView,
   ScrollView,
+  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -14,6 +14,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { signInWithEmailAndPassword } from "firebase/auth";
 
@@ -33,7 +34,7 @@ export function LoginScreen({
   onLogin,
 }: LoginScreenProps) {
   const { theme } = useTheme();
-  const { colors, spacing, radius } = theme;
+  const { colors } = theme;
   const { t, language, setLanguage } = useI18n();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -255,14 +256,7 @@ export function LoginScreen({
               },
             ]}
           >
-            <LinearGradient
-              colors={[colors.primary, colors.primaryLight]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.logoGradient}
-            >
-              <MaterialCommunityIcons name="sprout" size={34} color="#FFFFFF" />
-            </LinearGradient>
+            <Image source={require("../../assets/images/agrilanka-logo.png")} style={styles.brandLogo} resizeMode="contain" accessibilityLabel="AgriLanka logo" />
           </View>
           <Text style={[styles.title, { color: colors.text }]}>
             {t("appName")}
@@ -454,50 +448,6 @@ export function LoginScreen({
             </TouchableWithoutFeedback>
           </Animated.View>
 
-          {/* Divider */}
-          <View style={styles.dividerRow}>
-            <View
-              style={[styles.divider, { backgroundColor: colors.border }]}
-            />
-            <Text style={[styles.dividerText, { color: colors.textMuted }]}>
-              {t("orContinueWith")}
-            </Text>
-            <View
-              style={[styles.divider, { backgroundColor: colors.border }]}
-            />
-          </View>
-
-          {/* Social buttons */}
-          <View style={styles.socialRow}>
-            <TouchableOpacity
-              style={[
-                styles.socialButton,
-                {
-                  backgroundColor: colors.surface,
-                  borderColor: colors.border,
-                },
-              ]}
-              activeOpacity={0.8}
-              accessibilityLabel="Continue with Google"
-            >
-              <MaterialCommunityIcons name="google" size={22} color="#EA4335" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.socialButtonDark,
-                {
-                  backgroundColor: theme.isDark
-                    ? colors.surfaceSecondary
-                    : "#111827",
-                },
-              ]}
-              activeOpacity={0.8}
-              accessibilityLabel="Continue with Apple"
-            >
-              <MaterialCommunityIcons name="apple" size={22} color="#FFFFFF" />
-            </TouchableOpacity>
-          </View>
-
           <Text style={[styles.footerText, { color: colors.textSecondary }]}>
             {t("dontHaveAccount")}{" "}
             <Text
@@ -589,6 +539,10 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: "center",
     justifyContent: "center",
+  },
+  brandLogo: {
+    width: 68,
+    height: 68,
   },
   title: {
     fontSize: 28,
@@ -689,39 +643,6 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "800",
-  },
-  dividerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 20,
-  },
-  divider: {
-    flex: 1,
-    height: 1,
-  },
-  dividerText: {
-    marginHorizontal: 10,
-    fontSize: 12,
-  },
-  socialRow: {
-    flexDirection: "row",
-    gap: 12,
-    justifyContent: "center",
-  },
-  socialButton: {
-    width: 58,
-    height: 58,
-    borderRadius: 18,
-    borderWidth: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  socialButtonDark: {
-    width: 58,
-    height: 58,
-    borderRadius: 18,
-    alignItems: "center",
-    justifyContent: "center",
   },
   footerText: {
     textAlign: "center",

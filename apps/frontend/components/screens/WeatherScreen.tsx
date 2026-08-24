@@ -3,13 +3,14 @@ import * as Location from "expo-location";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenHeader } from "@/components/ui/ScreenHeader";
 
 import { useTheme } from "../../context/ThemeContext";
 import { useI18n } from "../../i18n";
@@ -165,8 +166,8 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
               ? `${Math.round(weather.humidity)}%`
               : "--",
           icon: "water-percent",
-          tint: "#2563EB",
-          background: "#DBEAFE",
+          tint: colors.weather,
+          background: colors.weatherSoft,
         },
         {
           key: "wind",
@@ -176,74 +177,37 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
               ? `${Math.round(weather.windSpeed)} km/h`
               : "--",
           icon: "weather-windy",
-          tint: "#0F7A3A",
-          background: "#DCFCE7",
+          tint: colors.primary,
+          background: colors.primarySoft,
         },
         {
           key: "location",
           label: t("coordinates"),
           value: `${weather.latitude.toFixed(2)}°, ${weather.longitude.toFixed(2)}°`,
           icon: "map-marker-outline",
-          tint: "#B45309",
-          background: "#FEF3C7",
+          tint: colors.warning,
+          background: colors.warningSoft,
         },
       ]
     : [];
 
   return (
-    <SafeAreaView
+    <SafeAreaView edges={["top"]}
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      <View style={[styles.topBlob, { backgroundColor: colors.weatherSoft }]} />
+      <ScreenHeader title={t("weatherDetails")} subtitle={locationSource === "gps" ? t("currentGps") : region} icon="weather-partly-cloudy" onBack={onBackToHome} />
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.headerRow}>
-          <TouchableOpacity
-            style={[styles.backButton, { backgroundColor: colors.surface }]}
-            onPress={onBackToHome}
-            activeOpacity={0.85}
-          >
-            <MaterialCommunityIcons
-              name="arrow-left"
-              size={22}
-              color={colors.text}
-            />
-            <Text style={[styles.backButtonText, { color: colors.text }]}>
-              {t("home")}
-            </Text>
-          </TouchableOpacity>
-          <View
-            style={[styles.headerIconWrap, { backgroundColor: colors.surface }]}
-          >
-            <MaterialCommunityIcons
-              name="weather-partly-cloudy"
-              size={22}
-              color={colors.weather}
-            />
-          </View>
-        </View>
-
-        <Text style={[styles.title, { color: colors.text }]}>
-          {t("weatherDetails")}
-        </Text>
-        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-          {t("liveConditions")}{" "}
-          {locationSource === "gps"
-            ? t("currentGps")
-            : `${t("regionLabel")}: ${region}`}
-          .
-        </Text>
-
         {locationSource === "gps" && weather ? (
-          <View style={styles.gpsBadge}>
+          <View style={[styles.gpsBadge, { backgroundColor: colors.primarySoft }]}> 
             <MaterialCommunityIcons
               name="crosshairs-gps"
               size={16}
-              color="#0F7A3A"
+              color={colors.primary}
             />
-            <Text style={styles.gpsBadgeText}>{t("usingGps")}</Text>
+            <Text style={[styles.gpsBadgeText, { color: colors.primary }]}>{t("usingGps")}</Text>
           </View>
         ) : null}
 
@@ -255,7 +219,7 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
             </Text>
           </View>
         ) : error ? (
-          <View style={[styles.errorCard, { backgroundColor: colors.surface }]}>
+          <View style={[styles.errorCard, { backgroundColor: colors.surface, borderColor: colors.border }, theme.shadows.card]}> 
             <MaterialCommunityIcons
               name="cloud-alert-outline"
               size={44}
@@ -265,7 +229,7 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
               {error}
             </Text>
             <TouchableOpacity
-              style={styles.retryButton}
+              style={[styles.retryButton, { backgroundColor: colors.primary }]}
               onPress={loadWeather}
               activeOpacity={0.85}
             >
@@ -280,14 +244,14 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
         ) : weather ? (
           <>
             <View
-              style={[styles.heroCard, { backgroundColor: colors.surface }]}
+              style={[styles.heroCard, { backgroundColor: colors.surface, borderColor: colors.border }, theme.shadows.card]}
             >
               <View style={styles.heroTopRow}>
-                <View style={styles.heroIconWrap}>
+                <View style={[styles.heroIconWrap, { backgroundColor: colors.weatherSoft }]}> 
                   <MaterialCommunityIcons
                     name={getWeatherIcon(weather.weatherCode) as never}
                     size={52}
-                    color="#2563EB"
+                    color={colors.weather}
                   />
                 </View>
                 <Text style={[styles.heroTemp, { color: colors.text }]}>
@@ -314,7 +278,8 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
                   key={metric.key}
                   style={[
                     styles.metricCard,
-                    { backgroundColor: colors.surface },
+                    { backgroundColor: colors.surface, borderColor: colors.border, width: metric.key === "location" ? "100%" : "48%" },
+                    theme.shadows.soft,
                   ]}
                 >
                   <View
@@ -344,12 +309,12 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
               ))}
             </View>
 
-            <View style={[styles.card, { backgroundColor: colors.surface }]}>
+            <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }, theme.shadows.soft]}> 
               <View style={styles.cardHeaderRow}>
                 <MaterialCommunityIcons
                   name="information-outline"
                   size={20}
-                  color="#0F7A3A"
+                  color={colors.primary}
                 />
                 <Text style={[styles.cardTitle, { color: colors.text }]}>
                   {t("forecastNote")}
@@ -366,7 +331,7 @@ export function WeatherScreen({ region, onBackToHome }: WeatherScreenProps) {
             </View>
 
             <TouchableOpacity
-              style={styles.refreshFullButton}
+              style={[styles.refreshFullButton, { backgroundColor: colors.primary }]}
               onPress={loadWeather}
               activeOpacity={0.9}
               disabled={loading}
@@ -404,7 +369,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 18,
-    paddingTop: 12,
+    paddingTop: 18,
     paddingBottom: 40,
   },
   headerRow: {
@@ -488,6 +453,7 @@ const styles = StyleSheet.create({
     padding: 28,
     alignItems: "center",
     gap: 14,
+    borderWidth: 1,
     shadowColor: "#0F172A",
     shadowOpacity: 0.06,
     shadowRadius: 16,
@@ -523,6 +489,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 10 },
     elevation: 5,
     marginBottom: 20,
+    borderWidth: 1,
   },
   heroTopRow: {
     flexDirection: "row",
@@ -582,6 +549,7 @@ const styles = StyleSheet.create({
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
     elevation: 4,
+    borderWidth: 1,
   },
   metricIconWrap: {
     width: 44,
@@ -612,6 +580,7 @@ const styles = StyleSheet.create({
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
     elevation: 4,
+    borderWidth: 1,
   },
   cardHeaderRow: {
     flexDirection: "row",
@@ -634,7 +603,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 8,
     backgroundColor: "#2563EB",
-    borderRadius: 999,
+    borderRadius: 16,
+    minHeight: 52,
     paddingVertical: 14,
   },
   refreshFullText: {

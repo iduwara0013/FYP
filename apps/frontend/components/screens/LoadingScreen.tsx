@@ -4,11 +4,12 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Easing,
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
+  Image,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type LoadingScreenProps = {
   onLoadComplete: () => void;
@@ -196,17 +197,12 @@ export function LoadingScreen({ onLoadComplete }: LoadingScreenProps) {
           ]}
         >
           <Animated.View style={[styles.logoGlow, { opacity: glowOpacity }]} />
-          <View style={styles.logoCard}>
-            <MaterialCommunityIcons name="sprout" size={58} color="#FFFFFF" />
-          </View>
-          <View style={styles.leafBadge}>
-            <MaterialCommunityIcons name="leaf" size={16} color="#FBBF24" />
-          </View>
+          <View style={styles.logoCard}><Image source={require("../../assets/images/agrilanka-logo.png")} style={styles.brandLogo} resizeMode="contain" accessibilityLabel="AgriLanka logo" /></View>
         </Animated.View>
 
         {/* App name */}
-        <Text style={styles.title}>Smart Crop Forecasting</Text>
-        <Text style={styles.subtitle}>AI Powered Agriculture</Text>
+        <Text style={styles.title}>AgriLanka</Text>
+        <Text style={styles.subtitle}>Smart farming · Stronger harvests</Text>
 
         {/* Loading message */}
         <Animated.View style={[styles.messageWrap, { opacity: messageFade }]}>
@@ -339,6 +335,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
     elevation: 8,
   },
+  brandLogo: { width: 110, height: 110 },
   leafBadge: {
     position: "absolute",
     bottom: -6,

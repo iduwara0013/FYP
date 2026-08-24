@@ -41,6 +41,7 @@ public class FarmerService {
         farmer.put("farmer_type", request.farmerType());
         farmer.put("total_land_area", request.totalLandArea());
         farmer.put("experience_years", request.experienceYears());
+        farmer.put("has_irrigation", Boolean.TRUE.equals(request.hasIrrigation()));
         farmer.put("farmer_code", farmerCode);
         farmer.put("created_at", FieldValue.serverTimestamp());
 
@@ -50,6 +51,19 @@ public class FarmerService {
             "id", savedDocument.getId(),
             "farmerCode", farmerCode
         );
+    }
+
+    public Map<String, Object> updateFarmer(String farmerId, FarmerRequest request) throws Exception {
+        DocumentReference document = firestore.collection(FARMER_COLLECTION).document(farmerId);
+        if (!document.get().get().exists()) return null;
+        Map<String, Object> values = new HashMap<>();
+        values.put("full_name", request.fullName()); values.put("phone_number", request.phoneNumber());
+        values.put("email", request.email()); values.put("address", request.address()); values.put("region", request.region());
+        values.put("national_id", request.nationalId()); values.put("farmer_type", request.farmerType());
+        values.put("total_land_area", request.totalLandArea()); values.put("experience_years", request.experienceYears());
+        values.put("has_irrigation", Boolean.TRUE.equals(request.hasIrrigation())); values.put("updated_at", FieldValue.serverTimestamp());
+        document.update(values).get();
+        return getFarmerById(farmerId);
     }
 
     public List<Map<String, Object>> getFarmers() throws Exception {

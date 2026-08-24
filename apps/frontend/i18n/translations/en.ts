@@ -1,6 +1,6 @@
 export const en = {
   common: {
-    appName: "Smart Crop Forecasting",
+    appName: "AgriLanka",
     home: "Home",
     weather: "Weather",
     marketPrices: "Market Prices",
@@ -98,7 +98,7 @@ export const en = {
     testNotifications: "Test Notifications",
     resetCache: "Reset Notification Cache",
     managePreferences: "Manage your app preferences",
-    chooseTheme: "Choose how Smart Crop Forecasting looks.",
+    chooseTheme: "Choose how AgriLanka looks.",
     light: "Light",
     dark: "Dark",
     system: "System",
@@ -116,9 +116,9 @@ export const en = {
     dataPrivacy: "Data & Privacy",
     helpCenter: "Help Center",
     contactSupport: "Contact Support",
-    aboutApp: "About Smart Crop Forecasting",
+    aboutApp: "About AgriLanka",
     logoutConfirm: "Are you sure you want to log out?",
-    logoutHint: "You will be signed out of Smart Crop Forecasting.",
+    logoutHint: "You will be signed out of AgriLanka.",
     version: "v1.0.0",
     notSignedIn: "Not signed in",
     heavyRain: "Heavy rain expected tomorrow.",

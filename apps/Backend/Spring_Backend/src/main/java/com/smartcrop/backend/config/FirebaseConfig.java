@@ -3,6 +3,8 @@ package com.smartcrop.backend.config;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
@@ -13,7 +15,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 
 @Configuration
 public class FirebaseConfig {
@@ -41,7 +42,12 @@ public class FirebaseConfig {
                 );
             } else if (credentialsPath != null && !credentialsPath.isBlank()) {
                 builder.setCredentials(
-                    GoogleCredentials.fromStream(new ClassPathResource(credentialsPath).getInputStream())
+                    GoogleCredentials.fromStream(Files.newInputStream(Path.of(credentialsPath)))
+                );
+            } else {
+                throw new IOException(
+                    "Firebase is enabled but no credentials were configured. "
+                    + "Set FIREBASE_CREDENTIALS_PATH or FIREBASE_CREDENTIALS_JSON."
                 );
             }
 

@@ -2,6 +2,14 @@
 
 # dependencies
 node_modules/
+.venv/
+**/.venv/
+.m2/
+**/target/
+**/__pycache__/
+**/.pytest_cache/
+**/.test-tmp/
+**/*.pyc
 
 # Expo
 .expo/

@@ -19,6 +19,7 @@ from src.services.prediction_service import (
     predict_farm,
 )
 from src.services.yield_prediction import FEATURE_COLUMNS, predict_yield
+from src.services.harti_price_forecast import model_status, predict_price, train_from_history
 from src.agent.graph import run_recommendation_agent
 
 app = Flask(__name__)
@@ -85,6 +86,30 @@ def prediction_options():
             "irrigation": IRRIGATION,
         }
     )
+
+
+@app.get("/price-model/status")
+def price_model_status_route():
+    return jsonify(model_status())
+
+
+@app.post("/price-model/retrain")
+def retrain_price_model_route():
+    try:
+        return jsonify(train_from_history())
+    except Exception as error:
+        return jsonify({"error": str(error)}), 503
+
+
+@app.post("/predict-price")
+def predict_price_route():
+    payload = request.get_json(silent=True) or {}
+    if not payload.get("crop"):
+        return jsonify({"error": "crop is required"}), 400
+    try:
+        return jsonify(predict_price(str(payload["crop"]), int(payload.get("days_ahead", 1))))
+    except (FileNotFoundError, ValueError) as error:
+        return jsonify({"error": str(error)}), 409
 
 
 @app.post("/predict-farm")

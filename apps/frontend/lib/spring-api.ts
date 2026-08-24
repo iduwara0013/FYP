@@ -90,6 +90,68 @@ async function getJson<T>(path: string): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+async function putJson<T>(path: string, payload: unknown): Promise<T> {
+  const response = await fetch(`${SPRING_BACKEND_URL}${path}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+  if (!response.ok) throw new Error((await response.text()) || `Request failed with status ${response.status}`);
+  return response.json() as Promise<T>;
+}
+
+export type SavedCropPlan = {
+  id: string;
+  farmerId: string;
+  cropId?: string;
+  cropName: string;
+  season: "Yala" | "Maha";
+  year: number;
+  cultivatedArea: number;
+  predictedProduction?: number;
+  location: string;
+  district?: string;
+  hasIrrigation?: boolean;
+  status?: string;
+  syncStatus?: string;
+  createdAt?: string;
+};
+
+/** Return only plans belonging to the signed-in farmer. */
+export async function getCropPlansForFarmer(
+  farmerId: string,
+): Promise<SavedCropPlan[]> {
+  if (!farmerId.trim()) return [];
+  const plans = await getJson<SavedCropPlan[]>(
+    `/api/collections/cropPlans/farmer/${encodeURIComponent(farmerId)}`,
+  );
+  return plans
+    .filter((plan) => String(plan.farmerId) === farmerId)
+    .sort((a, b) =>
+      String(b.createdAt ?? "").localeCompare(String(a.createdAt ?? "")),
+    );
+}
+
+export async function uploadBuyerOfflineRecord(payload: {
+  id: string;
+  buyerId: string;
+  kind: "purchase_request" | "order" | "message" | "saved_listing";
+  title: string;
+  detail: string;
+  amount?: number;
+  quantity?: number;
+  date?: string;
+  createdAt: string;
+}) {
+  const collection = payload.kind === "message"
+    ? "messages"
+    : payload.kind === "purchase_request"
+      ? "demand_records"
+      : payload.kind === "order"
+        ? "buyer_orders"
+        : "saved_listings";
+  return postJson<{ id: string; message: string }>(
+    `/api/collections/${collection}`,
+    payload,
+  );
+}
+
 type FarmerProfileResponse = {
   id: string;
   farmerCode: string;
@@ -198,6 +260,17 @@ export async function getProfileByEmail(email: string) {
       throw new Error("No saved profile found for this email.");
     }
   }
+}
+
+export async function updateProfile(profile: import("@/components/screens/profile-types").ProfileData) {
+  if (!profile.id) throw new Error("Profile ID is missing.");
+  const common = { fullName: profile.fullName, phoneNumber: profile.phoneNumber, email: profile.email, address: profile.address, region: profile.region };
+  const path = profile.role === "farmer" ? `/api/farmers/${encodeURIComponent(profile.id)}` : `/api/buyers/${encodeURIComponent(profile.id)}`;
+  const payload = profile.role === "farmer"
+    ? { ...common, nationalId: profile.nationalId, farmerType: profile.farmerType, totalLandArea: profile.totalLandArea, experienceYears: profile.experienceYears, hasIrrigation: profile.hasIrrigation }
+    : { ...common, buyerType: profile.buyerType, organizationName: profile.organizationName, preferredCrop: profile.preferredCrop, requiredQuantity: profile.requiredQuantity, notes: profile.notes, hasStorage: profile.hasStorage, hasTransport: profile.hasTransport };
+  const response = await putJson<SpringProfileResponse>(path, payload);
+  return mapSpringProfile({ ...response, role: profile.role });
 }
 
 export type LiveMarketPriceEntry = {

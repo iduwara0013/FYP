@@ -2,6 +2,8 @@ export const SPRING_URL =
   process.env.NEXT_PUBLIC_SPRING_BACKEND_URL ?? "http://127.0.0.1:8080";
 export const AGENT_URL =
   process.env.NEXT_PUBLIC_AGENT_BACKEND_URL ?? "http://127.0.0.1:5001";
+export const PREDICTION_URL =
+  process.env.NEXT_PUBLIC_PYTHON_BACKEND_URL ?? "http://127.0.0.1:5000";
 
 export type DocumentRecord = Record<string, unknown> & { id?: string };
 export type MarketEntry = {
@@ -41,6 +43,16 @@ export type AgentHealth = {
   neo4j?: { status?: string; connected?: boolean } | string;
   demoMode?: boolean;
 };
+export type PriceModelStatus = {
+  ready?: boolean;
+  modelVersion?: string;
+  trainedAt?: string;
+  latestBulletinDate?: string;
+  observations?: number;
+  cropCount?: number;
+  validationMae?: number;
+  message?: string;
+};
 export type LiveData = {
   farmers: DocumentRecord[];
   buyers: DocumentRecord[];
@@ -49,6 +61,7 @@ export type LiveData = {
   market: MarketResponse;
   springHealth: Record<string, unknown>;
   agentHealth: AgentHealth;
+  priceModel: PriceModelStatus;
   loadedAt: string;
   errors: string[];
 };
@@ -69,7 +82,7 @@ export async function loadAdminData(): Promise<LiveData> {
       return fallback;
     }
   };
-  const [farmers, buyers, cropPlans, predictions, market, archive, springHealth, agentHealth] =
+  const [farmers, buyers, cropPlans, predictions, market, archive, springHealth, agentHealth, priceModel] =
     await Promise.all([
       safe("Farmers", request<DocumentRecord[]>(`${SPRING_URL}/api/farmers`), []),
       safe("Buyers", request<DocumentRecord[]>(`${SPRING_URL}/api/buyers`), []),
@@ -79,11 +92,12 @@ export async function loadAdminData(): Promise<LiveData> {
       safe("HARTI archive", request<MarketBulletin[]>(`${SPRING_URL}/api/market-prices/history`), []),
       safe("Spring health", request<Record<string, unknown>>(`${SPRING_URL}/health`), {}),
       safe("AI health", request<AgentHealth>(`${AGENT_URL}/api/ai/health`), { status: "unavailable" }),
+      safe("HARTI price model", request<PriceModelStatus>(`${PREDICTION_URL}/price-model/status`), { ready: false }),
     ]);
   const bulletinMap = new Map<string, MarketBulletin>();
   for (const item of [...archive, ...(market.bulletins ?? [])]) bulletinMap.set(item.date ?? item.url ?? String(bulletinMap.size), item);
   market.bulletins = [...bulletinMap.values()].sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
-  return { farmers, buyers, cropPlans, predictions, market, springHealth, agentHealth, loadedAt: new Date().toISOString(), errors };
+  return { farmers, buyers, cropPlans, predictions, market, springHealth, agentHealth, priceModel, loadedAt: new Date().toISOString(), errors };
 }
 
 export function text(record: DocumentRecord, ...keys: string[]): string {

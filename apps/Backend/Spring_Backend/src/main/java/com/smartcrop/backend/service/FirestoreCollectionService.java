@@ -18,6 +18,7 @@ public class FirestoreCollectionService {
 
     private static final Set<String> ALLOWED_COLLECTIONS = new LinkedHashSet<>(List.of(
         "buyers",
+        "buyer_orders",
         "cropPlans",
         "crops",
         "demand_records",
@@ -27,7 +28,20 @@ public class FirestoreCollectionService {
         "market_prices",
         "market_price_bulletins",
         "market_price_alerts",
+        "marketplace_listings",
+        "purchase_requests",
+        "trade_conversations",
         "messages",
+        "offers",
+        "trade_orders",
+        "deliveries",
+        "payments",
+        "invoices",
+        "ratings",
+        "trusted_contacts",
+        "disputes",
+        "verification_requests",
+        "saved_listings",
         "notifications",
         "weather_data",
         "yield_predictions",
@@ -74,6 +88,19 @@ public class FirestoreCollectionService {
 
         QuerySnapshot snapshot = firestore.collection(collectionName).get().get();
 
+        return snapshot.getDocuments().stream().map(this::toDocumentMap).toList();
+    }
+
+    public List<Map<String, Object>> getDocumentsByField(
+        String collectionName,
+        String fieldName,
+        String fieldValue
+    ) throws Exception {
+        ensureAllowedCollection(collectionName);
+        QuerySnapshot snapshot = firestore.collection(collectionName)
+            .whereEqualTo(fieldName, fieldValue)
+            .get()
+            .get();
         return snapshot.getDocuments().stream().map(this::toDocumentMap).toList();
     }
 
