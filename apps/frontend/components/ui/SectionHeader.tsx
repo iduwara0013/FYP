@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 12,
   },
-  title: { fontSize: 18, fontWeight: "800" },
-  action: { fontSize: 13, fontWeight: "700" },
+  title: { fontSize: 20, lineHeight: 27, fontWeight: "800", letterSpacing: -0.2 },
+  action: { fontSize: 14, lineHeight: 20, fontWeight: "800" },
 });
 
 export default SectionHeader;

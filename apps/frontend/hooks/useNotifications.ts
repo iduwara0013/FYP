@@ -92,6 +92,15 @@ export function useNotifications({
     void refresh();
   }, [enabled, userId, refresh]);
 
+  /* --- Poll for user-to-user messages while the app is running ------ */
+  useEffect(() => {
+    if (!enabled || !userId) return;
+    const timer = setInterval(() => {
+      void fetchNotifications(userId, true);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [enabled, userId]);
+
   /* --- Deep-link response listener ---------------------------------- */
   useEffect(() => {
     if (!enabled || !onDeepLink) return;

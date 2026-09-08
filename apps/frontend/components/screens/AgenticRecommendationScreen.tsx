@@ -75,6 +75,31 @@ function resolveIrrigation(profile?: ProfileData | null): boolean {
   }
   return true;
 }
+
+function friendlyExplanation(rec: AgentCropRecommendation): string {
+  const fallback = `${rec.cropName} is a suitable option based on the current farm, market, and weather data. Use this recommendation as a planning guide, because prices and yields may change before harvest.`;
+  const raw = rec.explanation?.trim();
+  if (!raw) return fallback;
+
+  let text = raw;
+  if (/<\/think\s*>/i.test(text)) {
+    text = text.split(/<\/think\s*>/i).pop()?.trim() ?? "";
+  }
+  text = text.replace(/<think\b[^>]*>[\s\S]*?<\/think\s*>/gi, "").trim();
+
+  const looksLikeReasoning =
+    /<think\b/i.test(text) ||
+    /(analyze user input|identify key information|draft construction|check constraints|thinking process|provided data)/i.test(text);
+  if (!text || looksLikeReasoning) return fallback;
+
+  return text
+    .replace(/```(?:\w+)?/g, "")
+    .replace(/[*_]{1,3}/g, "")
+    .replace(/^\s*(?:#{1,6}|\d+[.)]|[-•])\s*/gm, "")
+    .replace(/\s+/g, " ")
+    .trim() || fallback;
+}
+
 function CropRecommendationCard({
   rec,
   rank,
@@ -84,8 +109,12 @@ function CropRecommendationCard({
   rank: number;
   onRefresh: () => void;
 }) {
+  const { t } = useI18n();
   const { isDark } = useTheme();
   const colors = createPredictionPalette(isDark);
+  const explanation = rec.explanation?.trim() && !/(<think\b|analyze user input|draft construction|check constraints)/i.test(rec.explanation)
+    ? friendlyExplanation(rec)
+    : `${rec.cropName} ${t("personalizedFallback")}`;
   const renderFactorBar = (label: string, value: number, color: string) => (
     <View style={styles.factorRow}>
       <Text style={styles.factorLabel}>{label}</Text>
@@ -120,7 +149,7 @@ function CropRecommendationCard({
         <View style={styles.cropTitleWrap}>
           <Text style={[styles.cropName, { color: colors.text }]}>{rec.cropName}</Text>
           <Text style={[styles.cropScore, { color: colors.textSecondary }]}> 
-            Score: {rec.recommendationScore}/100
+            {t("score")}: {rec.recommendationScore}/100
           </Text>
         </View>
         <MaterialCommunityIcons
@@ -133,14 +162,14 @@ function CropRecommendationCard({
       <View style={styles.metricGrid}>
         <View style={[styles.metric, { backgroundColor: colors.background }]}> 
           <MaterialCommunityIcons name="scale-balance" size={18} color={predictionColors.primary} />
-          <Text style={styles.metricLabel}>Expected Yield</Text>
+          <Text style={styles.metricLabel}>{t("expectedYield")}</Text>
           <Text style={styles.metricValue}>
             {rec.predictedYieldTPerHa != null ? `${rec.predictedYieldTPerHa} T/ha` : "N/A"}
           </Text>
         </View>
         <View style={[styles.metric, { backgroundColor: colors.background }]}> 
           <MaterialCommunityIcons name="cash" size={18} color={predictionColors.primary} />
-          <Text style={styles.metricLabel}>Expected Revenue</Text>
+          <Text style={styles.metricLabel}>{t("expectedRevenue")}</Text>
           <Text style={styles.metricValue}>
             {rec.expectedGrossRevenueRs != null
               ? `Rs. ${rec.expectedGrossRevenueRs.toLocaleString("en-US")}`
@@ -149,7 +178,7 @@ function CropRecommendationCard({
         </View>
         <View style={[styles.metric, { backgroundColor: colors.background }]}> 
           <MaterialCommunityIcons name="swap-horizontal" size={18} color={predictionColors.primary} />
-          <Text style={styles.metricLabel}>Demand/Supply Gap</Text>
+          <Text style={styles.metricLabel}>{t("demandSupplyGap")}</Text>
           <Text style={styles.metricValue}>
             {rec.demandGapTonnes != null
               ? `${rec.demandGapTonnes > 0 ? "+" : ""}${rec.demandGapTonnes} t`
@@ -158,7 +187,7 @@ function CropRecommendationCard({
         </View>
         <View style={[styles.metric, { backgroundColor: colors.background }]}> 
           <MaterialCommunityIcons name="account-group" size={18} color={factorColor(rec.competitionLevel)} />
-          <Text style={styles.metricLabel}>Competition</Text>
+          <Text style={styles.metricLabel}>{t("competition")}</Text>
           <Text style={[styles.metricValue, { color: factorColor(rec.competitionLevel) }]}>
             {rec.competitionLevel}
           </Text>
@@ -166,20 +195,20 @@ function CropRecommendationCard({
       </View>
 
       <View style={styles.factorSection}>
-        <Text style={styles.factorTitle}>Factor Breakdown</Text>
-        {renderFactorBar("Yield", rec.factors?.yieldScore ?? 0, predictionColors.success)}
-        {renderFactorBar("Price", rec.factors?.priceScore ?? 0, predictionColors.primary)}
-        {renderFactorBar("Demand", rec.factors?.demandScore ?? 0, predictionColors.info)}
-        {renderFactorBar("Supply Gap", rec.factors?.supplyGapScore ?? 0, predictionColors.accent)}
-        {renderFactorBar("Competition", rec.factors?.competitionScore ?? 0, predictionColors.warning)}
-        {renderFactorBar("Weather", rec.factors?.weatherScore ?? 0, predictionColors.gold)}
+        <Text style={styles.factorTitle}>{t("factorBreakdown")}</Text>
+        {renderFactorBar(t("expectedYield"), rec.factors?.yieldScore ?? 0, predictionColors.success)}
+        {renderFactorBar(t("price"), rec.factors?.priceScore ?? 0, predictionColors.primary)}
+        {renderFactorBar(t("cropDemand"), rec.factors?.demandScore ?? 0, predictionColors.info)}
+        {renderFactorBar(t("supplyGap"), rec.factors?.supplyGapScore ?? 0, predictionColors.accent)}
+        {renderFactorBar(t("competition"), rec.factors?.competitionScore ?? 0, predictionColors.warning)}
+        {renderFactorBar(t("weather"), rec.factors?.weatherScore ?? 0, predictionColors.gold)}
       </View>
 
       <View style={styles.riskRow}>
         <View style={[styles.riskChip, { backgroundColor: factorColor(rec.riskLevel) + "1A" }]}>
           <MaterialCommunityIcons name="alert-circle-outline" size={15} color={factorColor(rec.riskLevel)} />
           <Text style={[styles.riskChipText, { color: factorColor(rec.riskLevel) }]}>
-            Risk: {rec.riskLevel}
+            {t("risk")}: {rec.riskLevel}
           </Text>
         </View>
         <View style={styles.weatherChip}>
@@ -188,17 +217,18 @@ function CropRecommendationCard({
         </View>
       </View>
 
-      {rec.explanation ? (
-        <View style={styles.explanationBox}>
-          <MaterialCommunityIcons name="brain" size={18} color={predictionColors.primaryDark} />
-          <Text style={styles.explanationText}>{rec.explanation}</Text>
+      <View style={[styles.explanationBox, { backgroundColor: colors.accentSoft }]}> 
+        <MaterialCommunityIcons name="lightbulb-on-outline" size={19} color={colors.primary} />
+        <View style={styles.explanationContent}>
+          <Text style={[styles.explanationTitle, { color: colors.text }]}>{t("whyThisCrop")}</Text>
+          <Text style={[styles.explanationText, { color: colors.textSecondary }]}>{explanation}</Text>
         </View>
-      ) : null}
+      </View>
 
       {onRefresh ? (
         <TouchableOpacity onPress={onRefresh} style={styles.refreshButton}>
           <MaterialCommunityIcons name="refresh" size={18} color={predictionColors.white} />
-          <Text style={styles.refreshButtonText}>Refresh</Text>
+          <Text style={styles.refreshButtonText}>{t("refresh")}</Text>
         </TouchableOpacity>
       ) : null}
     </View>
@@ -330,7 +360,7 @@ export function AgenticRecommendationScreen({
 
   return (
     <SafeAreaView edges={["top"]} style={[styles.safeArea, { backgroundColor: colors.background }]} {...edgeSwipeResponder.panHandlers}>
-      <ScreenHeader title="AI crop recommendations" subtitle={`${district} · ${season} ${year} · ${landArea.toFixed(1)} ha`} icon="robot-outline" onBack={onBackToHome} />
+      <ScreenHeader title={t("aiCropRecommendations")} subtitle={`${district} · ${season} ${year} · ${landArea.toFixed(1)} ha`} icon="robot-outline" onBack={onBackToHome} />
         <FlatList
           data={[]}
           renderItem={() => null}
@@ -340,11 +370,11 @@ export function AgenticRecommendationScreen({
           <>
         <View style={[styles.introCard, { backgroundColor: colors.accentSoft, borderColor: colors.border }]}> 
           <View style={[styles.introIcon, { backgroundColor: colors.card }]}><MaterialCommunityIcons name="creation" size={22} color={colors.accent}/></View>
-          <View style={{ flex: 1 }}><Text style={[styles.introTitle, { color: colors.text }]}>Personalized for your farm</Text><Text style={[styles.introText, { color: colors.textSecondary }]}>Ranked using yield, revenue, market demand, competition, weather and risk.</Text></View>
+          <View style={{ flex: 1 }}><Text style={[styles.introTitle, { color: colors.text }]}>{t("personalizedFarm")}</Text><Text style={[styles.introText, { color: colors.textSecondary }]}>{t("rankingExplanation")}</Text></View>
         </View>
 
         <View style={styles.chatSection}>
-          <View style={styles.sectionHeadingRow}><Text style={[styles.chatSectionTitle, { color: colors.text }]}>{t("chatHeader")}</Text><View style={[styles.aiBadge, { backgroundColor: colors.accentSoft }]}><Text style={[styles.aiBadgeText, { color: colors.accent }]}>AI assistant</Text></View></View>
+          <View style={styles.sectionHeadingRow}><Text style={[styles.chatSectionTitle, { color: colors.text }]}>{t("chatHeader")}</Text><View style={[styles.aiBadge, { backgroundColor: colors.accentSoft }]}><Text style={[styles.aiBadgeText, { color: colors.accent }]}>{t("aiAssistant")}</Text></View></View>
           <ChatBot
             profile={profile}
             seedOptions={seedCrops}
@@ -455,7 +485,7 @@ export function AgenticRecommendationScreen({
               size={40}
               color={predictionColors.textMuted}
             />
-            <Text style={[styles.stateText, { color: colors.text }]}>No recommendations available.</Text>
+            <Text style={[styles.stateText, { color: colors.text }]}>{t("noRecommendations")}</Text>
           </View>
         )}
                       </>
@@ -715,8 +745,15 @@ const styles = StyleSheet.create({
     padding: predictionSpacing.md,
     marginTop: predictionSpacing.lg,
   },
-  explanationText: {
+  explanationContent: {
     flex: 1,
+  },
+  explanationTitle: {
+    fontSize: 13,
+    fontWeight: "800",
+    marginBottom: 4,
+  },
+  explanationText: {
     fontSize: 13,
     lineHeight: 19,
     color: predictionColors.textSecondary,

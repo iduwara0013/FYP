@@ -12685,6 +12685,91 @@
     "type": "static"
   },
   {
+    "source": "npm:expo-dev-client",
+    "target": "npm:expo",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-dev-client",
+    "target": "npm:expo-dev-launcher",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-dev-client",
+    "target": "npm:expo-dev-menu",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-dev-client",
+    "target": "npm:expo-dev-menu-interface",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-dev-client",
+    "target": "npm:expo-manifests",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-dev-client",
+    "target": "npm:expo-updates-interface",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-dev-launcher",
+    "target": "npm:expo",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-dev-launcher",
+    "target": "npm:ajv@8.20.0",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-dev-launcher",
+    "target": "npm:expo-dev-menu",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-dev-launcher",
+    "target": "npm:expo-manifests",
+    "type": "static"
+  },
+  {
+    "source": "npm:ajv@8.20.0",
+    "target": "npm:fast-deep-equal",
+    "type": "static"
+  },
+  {
+    "source": "npm:ajv@8.20.0",
+    "target": "npm:fast-uri",
+    "type": "static"
+  },
+  {
+    "source": "npm:ajv@8.20.0",
+    "target": "npm:json-schema-traverse@1.0.0",
+    "type": "static"
+  },
+  {
+    "source": "npm:ajv@8.20.0",
+    "target": "npm:require-from-string",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-dev-menu",
+    "target": "npm:expo",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-dev-menu",
+    "target": "npm:expo-dev-menu-interface",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-dev-menu-interface",
+    "target": "npm:expo",
+    "type": "static"
+  },
+  {
     "source": "npm:expo-file-system",
     "target": "npm:expo",
     "type": "static"
@@ -12740,6 +12825,21 @@
     "type": "static"
   },
   {
+    "source": "npm:expo-image-loader",
+    "target": "npm:expo",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-image-picker",
+    "target": "npm:expo",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-image-picker",
+    "target": "npm:expo-image-loader",
+    "type": "static"
+  },
+  {
     "source": "npm:expo-keep-awake",
     "target": "npm:expo",
     "type": "static"
@@ -12787,6 +12887,21 @@
   {
     "source": "npm:expo-location",
     "target": "npm:expo",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-manifests",
+    "target": "npm:expo",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-manifests",
+    "target": "npm:@expo/config",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-manifests",
+    "target": "npm:expo-json-utils",
     "type": "static"
   },
   {
@@ -13280,6 +13395,11 @@
     "type": "static"
   },
   {
+    "source": "npm:expo-speech",
+    "target": "npm:expo",
+    "type": "static"
+  },
+  {
     "source": "npm:expo-splash-screen",
     "target": "npm:expo",
     "type": "static"
@@ -13342,6 +13462,11 @@
   {
     "source": "npm:expo-system-ui",
     "target": "npm:debug",
+    "type": "static"
+  },
+  {
+    "source": "npm:expo-updates-interface",
+    "target": "npm:expo",
     "type": "static"
   },
   {

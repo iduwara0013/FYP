@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { View } from "react-native";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Animated, Easing } from "react-native";
 
 import { AgenticRecommendationScreen } from "@/components/screens/AgenticRecommendationScreen";
 import { BuyerHomeScreen } from "@/components/screens/BuyerHomeScreen";
@@ -31,7 +31,9 @@ import { buildCropPlan } from "@/lib/cropPlanBuilder";
 import { CropPlanScreen } from "@/components/screens/CropPlanScreen";
 import { GrowingPlansScreen } from "@/components/screens/GrowingPlansScreen";
 import { TradeHubScreen } from "@/components/screens/TradeHubScreen";
+import { TradeDealScreen } from "@/components/screens/TradeDealScreen";
 import type { CropPlanDraft, CropOption } from "@/lib/plan-types";
+import type { TradeConversation } from "@/lib/trade-api";
 
 type Screen =
   | "loading"
@@ -49,6 +51,7 @@ type Screen =
   | "farm-tools"
   | "buyer-offline"
   | "trade-hub"
+  | "trade-deal"
   | "buyers"
   | "notifications"
   | "settings"
@@ -63,6 +66,18 @@ function AppContent() {
   );
     const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [cropPlan, setCropPlan] = useState<CropPlanDraft | null>(null);
+  const [tradeConversation, setTradeConversation] = useState<TradeConversation | null>(null);
+  const screenOpacity = useRef(new Animated.Value(1)).current;
+  const screenOffset = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    screenOpacity.setValue(0);
+    screenOffset.setValue(12);
+    Animated.parallel([
+      Animated.timing(screenOpacity, { toValue: 1, duration: 260, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
+      Animated.spring(screenOffset, { toValue: 0, damping: 18, stiffness: 180, mass: .75, useNativeDriver: true }),
+    ]).start();
+  }, [currentScreen, screenOffset, screenOpacity]);
 
   // Wire up the notification system (push permission, background checks,
   // deep-link handling, live unread count).
@@ -130,7 +145,7 @@ function AppContent() {
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+    <Animated.View style={{ flex: 1, backgroundColor: theme.colors.background, opacity: screenOpacity, transform: [{ translateY: screenOffset }] }}>
       {currentScreen === "loading" && (
         <LoadingScreen onLoadComplete={() => setCurrentScreen("login")} />
       )}
@@ -276,7 +291,25 @@ function AppContent() {
       )}
 
       {currentScreen === "trade-hub" && profileData && (
-        <TradeHubScreen profile={profileData} onBack={() => setCurrentScreen("home")} />
+        <TradeHubScreen
+          profile={profileData}
+          onBack={() => setCurrentScreen("home")}
+          onOpenDeal={(conversation) => {
+            setTradeConversation(conversation);
+            setCurrentScreen("trade-deal");
+          }}
+        />
+      )}
+
+      {currentScreen === "trade-deal" && profileData && tradeConversation && (
+        <TradeDealScreen
+          profile={profileData}
+          initialConversation={tradeConversation}
+          onBack={() => {
+            setTradeConversation(null);
+            setCurrentScreen("trade-hub");
+          }}
+        />
       )}
 
       {currentScreen === "market-prices" && (
@@ -306,7 +339,7 @@ function AppContent() {
           }}
         />
       )}
-    </View>
+    </Animated.View>
   );
 }
 

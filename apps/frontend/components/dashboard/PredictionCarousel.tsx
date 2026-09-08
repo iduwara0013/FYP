@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import { useTheme } from "@/context/ThemeContext";
 
 import {
     dashboardColors,
@@ -27,6 +28,7 @@ function confidencePercent(confidence: string): number {
 }
 
 export function PredictionCarousel({ items }: PredictionCarouselProps) {
+  const { colors, shadows } = useTheme().theme;
   return (
     <FlatList
       horizontal
@@ -37,7 +39,7 @@ export function PredictionCarousel({ items }: PredictionCarouselProps) {
       renderItem={({ item }) => {
         const percent = confidencePercent(item.confidence);
         return (
-          <View style={styles.card}>
+          <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }, shadows.soft]}>
             <View style={styles.header}>
               <View
                 style={[
@@ -52,15 +54,15 @@ export function PredictionCarousel({ items }: PredictionCarouselProps) {
                 />
               </View>
               <View style={styles.headerText}>
-                <Text style={styles.crop}>{item.crop}</Text>
-                <Text style={styles.status}>{item.status}</Text>
+                <Text style={[styles.crop, { color: colors.text }]}>{item.crop}</Text>
+                <Text style={[styles.status, { color: colors.textMuted }]}>{item.status}</Text>
               </View>
             </View>
 
-            <Text style={styles.confidence}>{item.confidence}</Text>
-            <Text style={styles.confidenceLabel}>Confidence</Text>
+            <Text style={[styles.confidence, { color: colors.text }]}>{item.confidence}</Text>
+            <Text style={[styles.confidenceLabel, { color: colors.textMuted }]}>Confidence</Text>
 
-            <View style={styles.progressTrack}>
+            <View style={[styles.progressTrack, { backgroundColor: colors.border }]}>
               <View
                 style={[
                   styles.progressFill,
@@ -70,7 +72,7 @@ export function PredictionCarousel({ items }: PredictionCarouselProps) {
             </View>
 
             {item.yieldValue ? (
-              <Text style={styles.yieldText}>Expected: {item.yieldValue}</Text>
+              <Text style={[styles.yieldText, { color: colors.textSecondary }]}>Expected: {item.yieldValue}</Text>
             ) : null}
           </View>
         );

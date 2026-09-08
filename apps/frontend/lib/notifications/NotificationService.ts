@@ -350,6 +350,7 @@ export async function sendNotification(
  */
 export async function fetchNotifications(
   userId: string,
+  showNewAlerts = false,
 ): Promise<AppNotification[]> {
   try {
     const response = await fetch(
@@ -363,12 +364,40 @@ export async function fetchNotifications(
     const docs = (await response.json()) as FirestoreNotification[];
     const mine = docs.filter((doc) => doc.user_id === userId);
 
-    const mapped = mine
+    const previousIds = new Set(cachedNotifications.map((item) => item.id));
+    const uniqueDocs = [...new Map(mine.map((doc) => [doc.id, doc])).values()];
+    const mapped = uniqueDocs
       .map(fromFirestore)
       .sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
+
+    if (showNewAlerts) {
+      const newNotifications = mapped.filter((item) => !previousIds.has(item.id));
+      for (const notification of newNotifications.slice(0, 3)) {
+        try {
+          const granted = await requestNotificationPermission();
+          if (granted) {
+            await Notifications.scheduleNotificationAsync({
+              content: {
+                title: `${notification.emoji} ${notification.title}`,
+                body: notification.body,
+                data: { deepLink: notification.deepLink, ...notification.data },
+                sound: true,
+                priority: notification.priority === "high" || notification.priority === "urgent" ? "high" : "default",
+              },
+              trigger: {
+                type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+                seconds: 1,
+              },
+            });
+          }
+        } catch {
+          // The in-app notification remains available if OS banners are unavailable.
+        }
+      }
+    }
 
     cachedNotifications = mapped;
     notifyListeners();

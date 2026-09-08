@@ -6,6 +6,8 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useEffect, useRef } from "react";
 import { Animated, StyleSheet, Text, View } from "react-native";
+import { useTheme } from "@/context/ThemeContext";
+import { useI18n } from "@/i18n";
 
 import {
     CATEGORY_META,
@@ -14,6 +16,7 @@ import {
 } from "../../lib/notifications/types";
 import {
     notificationColors,
+    getNotificationColors,
     notificationRadius,
     notificationShadow,
     notificationSpacing,
@@ -83,6 +86,8 @@ function PremiumCardBase({
   leftColor: string;
   children: React.ReactNode;
 }) {
+  const { isDark } = useTheme();
+  const colors = getNotificationColors(isDark);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(20)).current;
 
@@ -110,8 +115,11 @@ function PremiumCardBase({
       <View
         style={[
           styles.premiumCard,
-          !notification.read && styles.premiumCardUnread,
-          { borderLeftColor: leftColor },
+          {
+            backgroundColor: notification.read ? colors.surface : colors.primarySoft,
+            borderColor: colors.border,
+            borderLeftColor: leftColor,
+          },
         ]}
       >
         {children}
@@ -126,6 +134,8 @@ function PremiumCardBase({
 /* ------------------------------------------------------------------ */
 
 export function PremiumNotificationSkeleton() {
+  const { isDark } = useTheme();
+  const colors = getNotificationColors(isDark);
   const shimmerAnim = useRef(new Animated.Value(-1)).current;
 
   useEffect(() => {
@@ -152,7 +162,7 @@ export function PremiumNotificationSkeleton() {
           key={i}
           style={[
             styles.skeletonCard,
-            { opacity: 0.4, transform: [{ translateX: shimmerAnim }] },
+            { backgroundColor: colors.surfaceSecondary, opacity: 0.55, transform: [{ translateX: shimmerAnim }] },
           ]}
         />
       ))}
@@ -165,19 +175,21 @@ export function PremiumNotificationSkeleton() {
 /* ------------------------------------------------------------------ */
 
 export function PremiumEmptyState() {
+  const { isDark } = useTheme();
+  const { t } = useI18n();
+  const colors = getNotificationColors(isDark);
   return (
     <View style={styles.premiumEmptyContainer}>
-      <View style={styles.premiumEmptyIcon}>
+      <View style={[styles.premiumEmptyIcon, { backgroundColor: colors.successSoft }]}>
         <MaterialCommunityIcons
           name="bell-check-outline"
           size={64}
           color={notificationColors.success}
         />
       </View>
-      <Text style={styles.premiumEmptyTitle}>You are all caught up!</Text>
-      <Text style={styles.premiumEmptyText}>
-        All your notifications have been read. Pull down to refresh or wait for
-        new alerts.
+      <Text style={[styles.premiumEmptyTitle, { color: colors.text }]}>{t("allCaughtUp")}</Text>
+      <Text style={[styles.premiumEmptyText, { color: colors.textSecondary }]}>
+        {t("notificationEmptyText")}
       </Text>
     </View>
   );
@@ -194,6 +206,8 @@ export function PremiumWeatherCard({
   notification: AppNotification;
   index?: number;
 }) {
+  const { isDark } = useTheme();
+  const colors = getNotificationColors(isDark);
   const data = notification.data ?? {};
   const temp =
     typeof data.temperature === "number"
@@ -220,10 +234,10 @@ export function PremiumWeatherCard({
       </View>
       <View style={styles.premiumCardContent}>
         <View style={styles.premiumCardHeader}>
-          <Text style={styles.premiumCardTitle}>{notification.title}</Text>
+          <Text style={[styles.premiumCardTitle, { color: colors.text }]}>{notification.title}</Text>
           <PriorityBadge priority={notification.priority} />
         </View>
-        <Text style={styles.premiumCardBody}>{notification.body}</Text>
+        <Text style={[styles.premiumCardBody, { color: colors.textSecondary }]}>{notification.body}</Text>
         {temp || humidity || wind ? (
           <View style={styles.weatherMetrics}>
             {temp ? <WeatherMetric icon="thermometer" label={temp} /> : null}
@@ -234,13 +248,13 @@ export function PremiumWeatherCard({
           </View>
         ) : null}
         <View style={styles.premiumCardFooter}>
-          <Text style={styles.premiumCardTime}>
+          <Text style={[styles.premiumCardTime, { color: colors.textMuted }]}>
             {formatNotificationTime(notification.createdAt)}
           </Text>
           <MaterialCommunityIcons
             name="chevron-right"
             size={18}
-            color={notificationColors.textMuted}
+            color={colors.textMuted}
           />
         </View>
       </View>
@@ -249,6 +263,8 @@ export function PremiumWeatherCard({
 }
 
 function WeatherMetric({ icon, label }: { icon: string; label: string }) {
+  const { isDark } = useTheme();
+  const colors = getNotificationColors(isDark);
   return (
     <View style={styles.weatherMetricItem}>
       <MaterialCommunityIcons
@@ -256,7 +272,7 @@ function WeatherMetric({ icon, label }: { icon: string; label: string }) {
         size={14}
         color={notificationColors.weather}
       />
-      <Text style={styles.weatherMetricText}>{label}</Text>
+      <Text style={[styles.weatherMetricText, { color: colors.textSecondary }]}>{label}</Text>
     </View>
   );
 }
@@ -272,6 +288,8 @@ export function PremiumMarketCard({
   notification: AppNotification;
   index?: number;
 }) {
+  const { isDark } = useTheme();
+  const colors = getNotificationColors(isDark);
   const data = notification.data ?? {};
   const price =
     typeof data.price === "number" ? `Rs. ${Math.round(data.price)}/kg` : null;
@@ -293,10 +311,10 @@ export function PremiumMarketCard({
       </View>
       <View style={styles.premiumCardContent}>
         <View style={styles.premiumCardHeader}>
-          <Text style={styles.premiumCardTitle}>{notification.title}</Text>
+          <Text style={[styles.premiumCardTitle, { color: colors.text }]}>{notification.title}</Text>
           <PriorityBadge priority={notification.priority} />
         </View>
-        <Text style={styles.premiumCardBody}>{notification.body}</Text>
+        <Text style={[styles.premiumCardBody, { color: colors.textSecondary }]}>{notification.body}</Text>
         {crop ? (
           <View style={styles.marketCropRow}>
             <View
@@ -305,18 +323,18 @@ export function PremiumMarketCard({
                 { backgroundColor: notificationColors.market },
               ]}
             />
-            <Text style={styles.cropName}>{crop}</Text>
+            <Text style={[styles.cropName, { color: colors.text }]}>{crop}</Text>
             {price ? <Text style={styles.cropPrice}>{price}</Text> : null}
           </View>
         ) : null}
         <View style={styles.premiumCardFooter}>
-          <Text style={styles.premiumCardTime}>
+          <Text style={[styles.premiumCardTime, { color: colors.textMuted }]}>
             {formatNotificationTime(notification.createdAt)}
           </Text>
           <MaterialCommunityIcons
             name="chevron-right"
             size={18}
-            color={notificationColors.textMuted}
+            color={colors.textMuted}
           />
         </View>
       </View>
@@ -335,6 +353,8 @@ export function PremiumStandardCard({
   notification: AppNotification;
   index?: number;
 }) {
+  const { isDark } = useTheme();
+  const colors = getNotificationColors(isDark);
   const meta = CATEGORY_META[notification.category];
 
   return (
@@ -352,12 +372,12 @@ export function PremiumStandardCard({
       </View>
       <View style={styles.premiumCardContent}>
         <View style={styles.premiumCardHeader}>
-          <Text style={styles.premiumCardTitle}>
+          <Text style={[styles.premiumCardTitle, { color: colors.text }]}>
             {notification.emoji} {notification.title}
           </Text>
           <PriorityBadge priority={notification.priority} />
         </View>
-        <Text style={styles.premiumCardBody}>{notification.body}</Text>
+        <Text style={[styles.premiumCardBody, { color: colors.textSecondary }]}>{notification.body}</Text>
         <View style={styles.premiumCardFooter}>
           <View
             style={[styles.categoryPillSmall, { backgroundColor: meta.soft }]}
@@ -366,13 +386,13 @@ export function PremiumStandardCard({
               {meta.label}
             </Text>
           </View>
-          <Text style={styles.premiumCardTime}>
+          <Text style={[styles.premiumCardTime, { color: colors.textMuted }]}>
             {formatNotificationTime(notification.createdAt)}
           </Text>
           <MaterialCommunityIcons
             name="chevron-right"
             size={18}
-            color={notificationColors.textMuted}
+            color={colors.textMuted}
           />
         </View>
       </View>
@@ -397,43 +417,34 @@ export function StatisticsDashboard({
   marketCount: number;
   predictionCount: number;
 }) {
+  const { isDark } = useTheme();
+  const { t } = useI18n();
+  const colors = getNotificationColors(isDark);
   const items = [
     {
-      label: "Unread",
+      label: t("unread"),
       value: unreadCount,
       color: notificationColors.danger,
       icon: "alert" as const,
     },
     {
-      label: "Total",
-      value: totalCount,
-      color: notificationColors.primary,
-      icon: "bell" as const,
-    },
-    {
-      label: "Weather",
+      label: t("filterWeather"),
       value: weatherCount,
       color: notificationColors.weather,
       icon: "weather-partly-cloudy" as const,
     },
     {
-      label: "Market",
+      label: t("filterMarket"),
       value: marketCount,
       color: notificationColors.market,
       icon: "currency-usd" as const,
-    },
-    {
-      label: "Predictions",
-      value: predictionCount,
-      color: notificationColors.prediction,
-      icon: "chart-line" as const,
     },
   ];
 
   return (
     <View style={styles.statsContainer}>
       {items.map((item) => (
-        <View key={item.label} style={styles.statCard}>
+        <View key={item.label} style={[styles.statCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
           <View style={styles.statHeader}>
             <MaterialCommunityIcons
               name={item.icon}
@@ -444,7 +455,7 @@ export function StatisticsDashboard({
               {item.label}
             </Text>
           </View>
-          <Text style={styles.statValue}>{item.value}</Text>
+          <Text style={[styles.statValue, { color: colors.text }]}>{item.value}</Text>
         </View>
       ))}
     </View>
@@ -463,7 +474,7 @@ const styles = StyleSheet.create({
     padding: notificationSpacing.md,
     marginBottom: notificationSpacing.sm,
     borderWidth: 1,
-    borderLeftWidth: 4,
+    borderLeftWidth: 3,
     borderColor: notificationColors.cardBorder,
     flexDirection: "row",
     alignItems: "flex-start",
@@ -474,9 +485,9 @@ const styles = StyleSheet.create({
     backgroundColor: notificationColors.unread,
   },
   premiumIconWrap: {
-    width: 52,
-    height: 52,
-    borderRadius: notificationRadius.md,
+    width: 46,
+    height: 46,
+    borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
@@ -493,7 +504,7 @@ const styles = StyleSheet.create({
   },
   premiumCardTitle: {
     fontSize: 15,
-    fontWeight: "700",
+    fontWeight: "800",
     color: notificationColors.text,
     flex: 1,
   },
@@ -643,6 +654,7 @@ const styles = StyleSheet.create({
     padding: notificationSpacing.md,
     alignItems: "center",
     gap: notificationSpacing.xs,
+    borderWidth: 1,
     ...notificationShadow.soft,
   },
   statHeader: {

@@ -1,13 +1,9 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useTheme } from "@/context/ThemeContext";
 
-import {
-    dashboardColors,
-    dashboardRadius,
-    dashboardShadow,
-    dashboardSpacing,
-} from "./theme";
+import { dashboardRadius, dashboardSpacing } from "./theme";
 
 export type QuickAction = {
   id: string;
@@ -24,29 +20,42 @@ type QuickActionGridProps = {
 };
 
 export function QuickActionGrid({ actions, onPress }: QuickActionGridProps) {
+  const { colors, shadows } = useTheme().theme;
   return (
     <View style={styles.grid}>
-      {actions.map((action) => (
+      {actions.map((action, index) => {
+        const tones = [
+          [colors.weatherSoft, colors.weather],
+          [colors.marketSoft, colors.market],
+          [colors.aiSoft, colors.ai],
+          [colors.primarySoft, colors.primary],
+          [colors.warningSoft, colors.warning],
+          [colors.infoSoft, colors.info],
+          [colors.secondarySoft, colors.secondary],
+        ];
+        const [background, iconColor] = tones[index % tones.length];
+        return (
         <TouchableOpacity
           key={action.id}
-          style={styles.card}
+          style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }, shadows.soft]}
           activeOpacity={0.85}
           onPress={() => onPress(action.id)}
           accessibilityLabel={action.title}
         >
           <View
-            style={[styles.iconWrap, { backgroundColor: action.background }]}
+            style={[styles.iconWrap, { backgroundColor: background }]}
           >
             <MaterialCommunityIcons
               name={action.icon}
               size={26}
-              color={action.iconColor}
+              color={iconColor}
             />
           </View>
-          <Text style={styles.title}>{action.title}</Text>
-          <Text style={styles.description}>{action.description}</Text>
+          <Text style={[styles.title, { color: colors.text }]}>{action.title}</Text>
+          <Text style={[styles.description, { color: colors.textSecondary }]}>{action.description}</Text>
         </TouchableOpacity>
-      ))}
+        );
+      })}
     </View>
   );
 }
@@ -61,10 +70,9 @@ const styles = StyleSheet.create({
   },
   card: {
     width: "48%",
-    backgroundColor: dashboardColors.card,
+    borderWidth: 1,
     borderRadius: dashboardRadius.lg,
     padding: dashboardSpacing.lg,
-    ...dashboardShadow.soft,
   },
   iconWrap: {
     width: 48,
@@ -75,15 +83,13 @@ const styles = StyleSheet.create({
     marginBottom: dashboardSpacing.md,
   },
   title: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "800",
-    color: dashboardColors.text,
-    lineHeight: 20,
+    lineHeight: 22,
   },
   description: {
     marginTop: 4,
-    fontSize: 12,
-    color: dashboardColors.textSecondary,
-    lineHeight: 17,
+    fontSize: 13,
+    lineHeight: 19,
   },
 });

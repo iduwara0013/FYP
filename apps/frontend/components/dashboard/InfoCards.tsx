@@ -102,7 +102,8 @@ const severityStyles = {
 };
 
 export function AlertCard({ title, message, severity }: AlertCardProps) {
-  const tone = severityStyles[severity];
+  const { colors } = useTheme().theme;
+  const tone = { ...severityStyles[severity], bg: severity === "success" ? colors.success : severity === "warning" ? colors.warning : colors.danger };
   return (
     <View style={[styles.alertCard, { backgroundColor: tone.bg }]}>
       <MaterialCommunityIcons
@@ -133,12 +134,13 @@ export function SectionTitle({
   actionLabel,
   onAction,
 }: SectionTitleProps) {
+  const { colors } = useTheme().theme;
   return (
     <View style={styles.sectionTitleRow}>
-      <Text style={styles.sectionTitle}>{title}</Text>
+      <Text style={[styles.sectionTitle, { color: colors.text }]}>{title}</Text>
       {actionLabel && onAction ? (
         <TouchableOpacity onPress={onAction} activeOpacity={0.7}>
-          <Text style={styles.sectionAction}>{actionLabel}</Text>
+          <Text style={[styles.sectionAction, { color: colors.primary }]}>{actionLabel}</Text>
         </TouchableOpacity>
       ) : null}
     </View>

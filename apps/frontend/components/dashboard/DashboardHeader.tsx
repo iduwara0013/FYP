@@ -101,7 +101,7 @@ export function DashboardHeader({
             style={[
               styles.avatar,
               {
-                backgroundColor: isFarmer ? colors.primary : "#C47F00",
+                backgroundColor: isFarmer ? colors.primary : colors.secondary,
               },
             ]}
             onPress={onProfile}
@@ -141,12 +141,14 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   eyebrow: {
-    fontSize: 13,
+    fontSize: 14,
+    lineHeight: 20,
     fontWeight: "700",
     textTransform: "capitalize",
   },
   clock: {
-    fontSize: 22,
+    fontSize: 23,
+    lineHeight: 29,
     fontWeight: "800",
     fontVariant: ["tabular-nums"],
   },
@@ -187,11 +189,14 @@ const styles = StyleSheet.create({
     ...dashboardShadow.soft,
   },
   greeting: {
-    fontSize: 26,
+    fontSize: 28,
+    lineHeight: 35,
     fontWeight: "900",
+    letterSpacing: -0.4,
   },
   subtitle: {
     marginTop: 4,
-    fontSize: 13,
+    fontSize: 14,
+    lineHeight: 20,
   },
 });

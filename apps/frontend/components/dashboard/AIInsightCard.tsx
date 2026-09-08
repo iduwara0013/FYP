@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useTheme } from "@/context/ThemeContext";
 
 import type { ProfileData } from "../screens/profile-types";
 import {
@@ -34,30 +35,31 @@ function buildInsight(profile?: ProfileData | null): string {
 }
 
 export function AIInsightCard({ profile, onLearnMore }: AIInsightCardProps) {
+  const { colors, shadows } = useTheme().theme;
   const message = buildInsight(profile);
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: colors.surface, borderLeftColor: colors.ai }, shadows.soft]}>
       <View style={styles.header}>
-        <View style={styles.aiBadge}>
+        <View style={[styles.aiBadge, { backgroundColor: colors.ai }]}>
           <MaterialCommunityIcons
             name="robot-outline"
             size={16}
-            color={dashboardColors.white}
+            color={colors.primaryContrast}
           />
         </View>
-        <Text style={styles.title}>AI Insight</Text>
+        <Text style={[styles.title, { color: colors.text }]}>AI Insight</Text>
       </View>
-      <Text style={styles.message}>{message}</Text>
+      <Text style={[styles.message, { color: colors.textSecondary }]}>{message}</Text>
       <TouchableOpacity
         style={styles.learnMore}
         onPress={onLearnMore}
         activeOpacity={0.8}
       >
-        <Text style={styles.learnMoreText}>Learn More</Text>
+        <Text style={[styles.learnMoreText, { color: colors.ai }]}>Learn More</Text>
         <MaterialCommunityIcons
           name="arrow-right"
           size={16}
-          color={dashboardColors.primary}
+          color={colors.ai}
         />
       </TouchableOpacity>
     </View>

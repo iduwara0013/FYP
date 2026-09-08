@@ -35,6 +35,7 @@ import {
   type SummaryTile,
 } from "../buyer/BuyerComponents";
 import { buyerSpacing } from "../buyer/theme";
+import { FloatingBottomNav } from "../dashboard/FloatingBottomNav";
 import { ProfileData } from "./profile-types";
 
 type BuyerHomeScreenProps = {
@@ -273,6 +274,12 @@ export function BuyerHomeScreen({
     },
     [onWeatherUpdate, onMarketPrices, onBrowsePeople, onTradeHub],
   );
+
+  const handleNavSelect = useCallback((key: string) => {
+    if (key === "trade") onTradeHub?.();
+    else if (key === "alerts") onNotifications?.();
+    else if (key === "profile") onProfile();
+  }, [onTradeHub, onNotifications, onProfile]);
 
   const marketItems: MarketPriceItem[] = useMemo(
     () => [
@@ -554,6 +561,7 @@ export function BuyerHomeScreen({
           <BuyerTipCard message={t("buyerTip")} />
         </Animated.View>
       </ScrollView>
+      <FloatingBottomNav active="home" variant="buyer" onSelect={handleNavSelect} />
     </SafeAreaView>
   );
 }

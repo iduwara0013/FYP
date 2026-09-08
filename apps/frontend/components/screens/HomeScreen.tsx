@@ -392,9 +392,11 @@ export function HomeScreen({
         onProfile?.();
       } else if (key === "predict") {
         onYieldPrediction?.();
+      } else if (key === "alerts") {
+        onNotifications?.();
       }
     },
-    [onProfile, onYieldPrediction],
+    [onProfile, onYieldPrediction, onNotifications],
   );
 
   const farmTiles = useMemo(() => {

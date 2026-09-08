@@ -38,6 +38,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@/context/ThemeContext";
+import { useI18n } from "@/i18n";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 
 import {
@@ -98,6 +99,7 @@ const PremiumFilterChip = React.memo(function PremiumFilterChip({
   active,
   onPress,
 }: FilterChipProps) {
+  const { theme } = useTheme();
   const scaleAnim = React.useRef(new Animated.Value(1)).current;
 
   const handlePressIn = useCallback(() => {
@@ -127,7 +129,10 @@ const PremiumFilterChip = React.memo(function PremiumFilterChip({
       <Animated.View
         style={[
           styles.filterChip,
-          active && styles.filterChipActive,
+          {
+            backgroundColor: active ? theme.colors.primary : theme.colors.surface,
+            borderColor: active ? theme.colors.primary : theme.colors.border,
+          },
           { transform: [{ scale: scaleAnim }] },
         ]}
       >
@@ -136,12 +141,12 @@ const PremiumFilterChip = React.memo(function PremiumFilterChip({
           size={16}
           color={
             active
-              ? notificationColors.primaryContrast
-              : notificationColors.textSecondary
+              ? theme.colors.primaryContrast
+              : theme.colors.textSecondary
           }
         />
         <Text
-          style={[styles.filterChipText, active && styles.filterChipTextActive]}
+          style={[styles.filterChipText, { color: active ? theme.colors.primaryContrast : theme.colors.textSecondary }]}
         >
           {label}
         </Text>
@@ -171,6 +176,7 @@ const PremiumPreferenceCard = React.memo(function PremiumPreferenceCard({
   onToggle,
   color,
 }: PreferenceCardProps) {
+  const { theme } = useTheme();
   const knobPos = React.useRef(new Animated.Value(value ? 1 : 0)).current;
 
   React.useEffect(() => {
@@ -182,16 +188,16 @@ const PremiumPreferenceCard = React.memo(function PremiumPreferenceCard({
   }, [value, knobPos]);
 
   return (
-    <View style={styles.prefCard}>
+    <View style={[styles.prefCard, { borderBottomColor: theme.colors.border }]}> 
       <View style={[styles.prefIconWrap, { backgroundColor: color + "1A" }]}>
         <MaterialCommunityIcons name={icon} size={20} color={color} />
       </View>
       <View style={styles.prefTextWrap}>
-        <Text style={styles.prefLabel}>{label}</Text>
-        <Text style={styles.prefDescription}>{description}</Text>
+        <Text style={[styles.prefLabel, { color: theme.colors.text }]}>{label}</Text>
+        <Text style={[styles.prefDescription, { color: theme.colors.textMuted }]}>{description}</Text>
       </View>
       <TouchableOpacity
-        style={[styles.toggle, value && styles.toggleOn]}
+        style={[styles.toggle, { backgroundColor: value ? theme.colors.primary : theme.colors.surfaceSecondary }]}
         onPress={onToggle}
         activeOpacity={0.8}
         accessibilityLabel={`Toggle ${label}`}
@@ -201,6 +207,7 @@ const PremiumPreferenceCard = React.memo(function PremiumPreferenceCard({
         <Animated.View
           style={[
             styles.toggleKnob,
+            { backgroundColor: theme.colors.primaryContrast },
             {
               transform: [
                 {
@@ -234,6 +241,7 @@ export function NotificationScreen({
   onDeepLink,
 }: NotificationScreenProps) {
   const { theme } = useTheme();
+  const { t } = useI18n();
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -451,6 +459,14 @@ export function NotificationScreen({
     tips: "lightbulb-on",
     news: "newspaper",
   };
+  const filterLabels: Record<NotificationFilter, string> = {
+    all: t("filterAll"),
+    weather: t("filterWeather"),
+    market: t("filterMarket"),
+    prediction: t("filterPrediction"),
+    tips: t("filterTips"),
+    news: t("filterNews"),
+  };
 
   return (
     <SafeAreaView edges={["top"]} style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -478,7 +494,7 @@ export function NotificationScreen({
         }}
       >
         <ScreenHeader
-          title="Notifications"
+          title={t("notifications")}
           subtitle={todayDate}
           icon="bell-outline"
           onBack={onBackToHome}
@@ -495,7 +511,7 @@ export function NotificationScreen({
                   size={16}
                   color={theme.colors.primary}
                 />
-                <Text style={[styles.markAllText, { color: theme.colors.primary }]}>Read all</Text>
+                <Text style={[styles.markAllText, { color: theme.colors.primary }]}>{t("markAllRead")}</Text>
               </TouchableOpacity>
             ) : null}
 
@@ -512,18 +528,6 @@ export function NotificationScreen({
               />
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.prefButton, styles.testButton]}
-              onPress={() => setShowTestPanel((v) => !v)}
-              activeOpacity={0.8}
-              accessibilityLabel="Test notifications"
-            >
-              <MaterialCommunityIcons
-                name="bell-ring-outline"
-                size={18}
-                color={notificationColors.primaryContrast}
-              />
-            </TouchableOpacity>
           </View>}
         />
 
@@ -532,12 +536,16 @@ export function NotificationScreen({
             <MaterialCommunityIcons name={unreadCount > 0 ? "bell-badge-outline" : "check-circle-outline"} size={27} color={unreadCount > 0 ? theme.colors.primary : theme.colors.success}/>
           </View>
           <View style={styles.summaryCopy}>
-            <Text style={[styles.greeting, { color: theme.colors.text }]}>{greeting}</Text>
-            <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
+            <Text style={[styles.greeting, { color: theme.colors.text }]}>{t("stayInformed")}</Text>
+            <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}> 
             {unreadCount > 0
-              ? `${unreadCount} unread notification${unreadCount === 1 ? "" : "s"}`
-              : "You are all caught up!"}
+              ? `${unreadCount} ${t("newUpdatesWaiting")}`
+              : t("reviewedEveryUpdate")}
             </Text>
+          </View>
+          <View style={[styles.totalBadge, { backgroundColor: theme.colors.backgroundAlt }]}> 
+            <Text style={[styles.totalBadgeValue, { color: theme.colors.text }]}>{notifications.length}</Text>
+            <Text style={[styles.totalBadgeLabel, { color: theme.colors.textMuted }]}>{t("total").toUpperCase()}</Text>
           </View>
         </View>
       </Animated.View>
@@ -556,7 +564,7 @@ export function NotificationScreen({
       {/* Preferences panel (collapsible) */}
       {showPreferences ? (
         <View style={[styles.preferencesPanel, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }, theme.shadows.soft]}>
-          <Text style={[styles.preferencesTitle, { color: theme.colors.text }]}>Notification preferences</Text>
+          <Text style={[styles.preferencesTitle, { color: theme.colors.text }]}>{t("notificationPreferences")}</Text>
           {prefLoading ? (
             <ActivityIndicator
               size="small"
@@ -567,40 +575,40 @@ export function NotificationScreen({
             <>
               <PremiumPreferenceCard
                 icon="weather-partly-cloudy"
-                label="Weather Alerts"
-                description="Heavy rain, extreme heat, thunderstorm warnings"
+                label={t("weatherAlerts")}
+                description={t("heavyWeatherDesc")}
                 value={preferences.weatherAlerts}
                 onToggle={() => handleTogglePreference("weatherAlerts")}
                 color={notificationColors.weather}
               />
               <PremiumPreferenceCard
                 icon="currency-usd"
-                label="Market Price Alerts"
-                description="Crop price increase and drop notifications"
+                label={t("marketPriceAlerts")}
+                description={t("marketAlertDesc")}
                 value={preferences.marketPriceAlerts}
                 onToggle={() => handleTogglePreference("marketPriceAlerts")}
                 color={notificationColors.market}
               />
               <PremiumPreferenceCard
                 icon="lightbulb-on"
-                label="Daily Tips"
-                description="One farming tip every morning"
+                label={t("dailyTips")}
+                description={t("dailyTipsDesc")}
                 value={preferences.dailyTips}
                 onToggle={() => handleTogglePreference("dailyTips")}
                 color={notificationColors.tips}
               />
               <PremiumPreferenceCard
                 icon="chart-line"
-                label="Prediction Reminders"
-                description="Reminders to use crop prediction"
+                label={t("predictionReminders")}
+                description={t("predictionReminderDesc")}
                 value={preferences.predictionReminders}
                 onToggle={() => handleTogglePreference("predictionReminders")}
                 color={notificationColors.prediction}
               />
               <PremiumPreferenceCard
                 icon="newspaper"
-                label="News Updates"
-                description="Agricultural news and announcements"
+                label={t("newsUpdates")}
+                description={t("newsUpdateDesc")}
                 value={preferences.newsUpdates}
                 onToggle={() => handleTogglePreference("newsUpdates")}
                 color={notificationColors.news}
@@ -785,6 +793,15 @@ export function NotificationScreen({
       ) : null}
 
       {/* Filter chips */}
+      <View style={styles.listHeadingRow}>
+        <View>
+          <Text style={[styles.listHeading, { color: theme.colors.text }]}>{t("recentUpdates")}</Text>
+          <Text style={[styles.listSubheading, { color: theme.colors.textMuted }]}>{t("tapUpdateDetails")}</Text>
+        </View>
+        <View style={[styles.resultCount, { backgroundColor: theme.colors.primarySoft }]}> 
+          <Text style={[styles.resultCountText, { color: theme.colors.primary }]}>{filteredNotifications.length}</Text>
+        </View>
+      </View>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -793,7 +810,7 @@ export function NotificationScreen({
         {FILTER_CHIPS.map((chip) => (
           <PremiumFilterChip
             key={chip.key}
-            label={chip.label}
+            label={filterLabels[chip.key]}
             icon={filterIcons[chip.key]}
             active={chip.key === activeFilter}
             onPress={() => setActiveFilter(chip.key)}
@@ -905,7 +922,7 @@ const styles = StyleSheet.create({
     marginHorizontal: notificationSpacing.lg,
     marginTop: notificationSpacing.lg,
     marginBottom: notificationSpacing.md,
-    padding: notificationSpacing.lg,
+    padding: 18,
     borderWidth: 1,
     borderRadius: notificationRadius.lg,
     flexDirection: "row",
@@ -914,6 +931,9 @@ const styles = StyleSheet.create({
   },
   summaryIcon: { width: 52, height: 52, borderRadius: 17, alignItems: "center", justifyContent: "center" },
   summaryCopy: { flex: 1 },
+  totalBadge: { minWidth: 56, height: 56, borderRadius: 18, alignItems: "center", justifyContent: "center" },
+  totalBadgeValue: { fontSize: 18, fontWeight: "900", lineHeight: 21 },
+  totalBadgeLabel: { fontSize: 9, fontWeight: "800", letterSpacing: 0.8 },
   greeting: {
     fontSize: 18,
     fontWeight: "900",
@@ -959,6 +979,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: notificationSpacing.sm,
     gap: notificationSpacing.md,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
   prefIconWrap: {
     width: 40,
@@ -1058,15 +1079,27 @@ const styles = StyleSheet.create({
   filterRow: {
     gap: notificationSpacing.sm,
     paddingHorizontal: notificationSpacing.lg,
-    paddingVertical: notificationSpacing.sm,
+    paddingTop: notificationSpacing.sm,
+    paddingBottom: notificationSpacing.md,
     marginBottom: notificationSpacing.sm,
   },
+  listHeadingRow: {
+    paddingHorizontal: notificationSpacing.lg,
+    marginTop: notificationSpacing.sm,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  listHeading: { fontSize: 17, fontWeight: "900" },
+  listSubheading: { marginTop: 2, fontSize: 11.5 },
+  resultCount: { minWidth: 34, height: 28, paddingHorizontal: 10, borderRadius: 14, alignItems: "center", justifyContent: "center" },
+  resultCountText: { fontSize: 12, fontWeight: "900" },
   filterChip: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    paddingHorizontal: notificationSpacing.lg,
-    paddingVertical: notificationSpacing.sm + 2,
+    paddingHorizontal: 15,
+    paddingVertical: 9,
     borderRadius: notificationRadius.pill,
     backgroundColor: notificationColors.card,
     borderWidth: 1,

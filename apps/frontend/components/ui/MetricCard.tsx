@@ -77,9 +77,9 @@ export function MetricCard({ label, value, hint, tone = "default", icon, style }
 const styles = StyleSheet.create({
   card: { padding: 12, minWidth: 110 },
   topRow: { flexDirection: "row", alignItems: "center", gap: 6 },
-  label: { fontSize: 12, fontWeight: "600" },
-  value: { fontSize: 20, fontWeight: "800", marginTop: 6 },
-  hint: { fontSize: 11, marginTop: 2 },
+  label: { fontSize: 13, lineHeight: 18, fontWeight: "700" },
+  value: { fontSize: 22, lineHeight: 28, fontWeight: "900", marginTop: 6, letterSpacing: -0.3 },
+  hint: { fontSize: 12, lineHeight: 17, fontWeight: "500", marginTop: 2 },
 });
 
 export default MetricCard;

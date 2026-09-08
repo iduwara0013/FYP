@@ -17,9 +17,8 @@ import React, {
 
 import { en } from "./translations/en";
 import { si } from "./translations/si";
-import { ta } from "./translations/ta";
 
-export type Language = "en" | "si" | "ta";
+export type Language = "en" | "si";
 
 type I18nContextValue = {
   language: Language;
@@ -30,7 +29,6 @@ type I18nContextValue = {
 const translations: Record<Language, typeof en> = {
   en,
   si,
-  ta,
 };
 
 const LANGUAGE_STORAGE_KEY = "@smart_crop_language";
@@ -46,8 +44,13 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     (async () => {
       try {
         const saved = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
-        if (mounted && saved && (saved === "en" || saved === "si" || saved === "ta")) {
+        if (mounted && saved && (saved === "en" || saved === "si")) {
           setLanguageState(saved as Language);
+        } else if (mounted && saved === "ta") {
+          // Tamil was supported by an earlier build. Migrate that saved option
+          // to Sinhala now that AgriLanka offers English and Sinhala only.
+          setLanguageState("si");
+          await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, "si");
         } else {
           // Detect device language - default to Sinhala if device is Sinhala
           const deviceLang =
@@ -56,8 +59,6 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
               : "";
           if (deviceLang.startsWith("si")) {
             setLanguageState("si");
-          } else if (deviceLang.startsWith("ta")) {
-            setLanguageState("ta");
           }
         }
       } catch {

@@ -31,6 +31,7 @@ public class FirestoreCollectionService {
         "marketplace_listings",
         "purchase_requests",
         "trade_conversations",
+        "trade_messages",
         "messages",
         "offers",
         "trade_orders",

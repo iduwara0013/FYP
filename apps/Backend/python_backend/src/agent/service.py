@@ -7,6 +7,7 @@ numbers.
 """
 from __future__ import annotations
 
+import re
 import time
 import uuid
 from typing import Any
@@ -30,6 +31,15 @@ from src.services import crop_plan_service
 
 log = get_logger(__name__)
 
+_REASONING_MARKERS = (
+    "analyze user input",
+    "identify key information",
+    "draft construction",
+    "check constraints",
+    "thinking process",
+    "provided data",
+)
+
 
 def _now() -> str:
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
@@ -37,6 +47,52 @@ def _now() -> str:
 
 def _new_request_id() -> str:
     return f"REQ-{uuid.uuid4().hex[:12].upper()}"
+
+
+def _clean_model_text(value: Any) -> str:
+    """Return only user-facing prose and discard model reasoning artifacts."""
+    if not isinstance(value, str):
+        return ""
+
+    text = value.strip()
+    if not text:
+        return ""
+
+    # Some reasoning models include private work inside <think> tags. If a
+    # closing tag exists, only content after it is eligible for the user. An
+    # unclosed tag is unsafe/incomplete, so the caller must use its fallback.
+    if re.search(r"</think\s*>", text, flags=re.IGNORECASE):
+        text = re.split(r"</think\s*>", text, flags=re.IGNORECASE)[-1].strip()
+    text = re.sub(
+        r"<think\b[^>]*>.*?</think\s*>",
+        "",
+        text,
+        flags=re.IGNORECASE | re.DOTALL,
+    ).strip()
+    if re.search(r"<think\b", text, flags=re.IGNORECASE):
+        return ""
+
+    lowered = text.lower()
+    if any(marker in lowered for marker in _REASONING_MARKERS):
+        return ""
+
+    # The recommendation card expects a paragraph, not Markdown headings,
+    # numbered drafts, or code fences.
+    text = re.sub(r"```(?:\w+)?", "", text)
+    text = re.sub(r"[*_]{1,3}", "", text)
+    text = re.sub(r"^\s*(?:#{1,6}|\d+[.)]|[-•])\s*", "", text, flags=re.MULTILINE)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
+
+def _fallback_explanation(crop_name: str, reason: str) -> str:
+    reason_text = (reason or "available farm and market data support this option").strip()
+    reason_text = reason_text.rstrip(".! ")
+    return (
+        f"{crop_name} is a suitable option because {reason_text.lower()}. "
+        "Use this recommendation as a planning guide, because market prices "
+        "and yields may change before harvest."
+    )
 
 
 def build_recommendations(
@@ -67,6 +123,7 @@ def generate_explanation(
     language: str = "en",
 ) -> str:
     """LLM explanation with a deterministic, numbers-based fallback."""
+    fallback = _fallback_explanation(crop_name, reason)
     scored_obj = {
         "crop": crop_name,
         "reason": reason,
@@ -84,16 +141,12 @@ def generate_explanation(
                 ),
             ]
             response = model.invoke(messages)
-            text = getattr(response, "content", None)
-            if isinstance(text, str) and text.strip():
-                return text.strip()
+            text = _clean_model_text(getattr(response, "content", None))
+            if text:
+                return text
         except Exception as error:  # noqa: BLE001
             log.warning("LLM explanation failed; using fallback: %s", error)
 
-    fallback = (
-        f"{crop_name} is recommended because {reason or 'the available data supports it'}. "
-        "Estimated gross revenue and market prices may change before harvest."
-    )
     return fallback
 
 
@@ -109,9 +162,9 @@ def generate_general_answer(message: str, language: str = "en") -> str:
                 ),
             ]
             response = model.invoke(messages)
-            text = getattr(response, "content", None)
-            if isinstance(text, str) and text.strip():
-                return text.strip()
+            text = _clean_model_text(getattr(response, "content", None))
+            if text:
+                return text
         except Exception as error:  # noqa: BLE001
             log.warning("LLM general answer failed; using fallback: %s", error)
 
@@ -422,4 +475,3 @@ def confirm_crop_plan(
         competitionAfter=None,
         message="Crop plan saved and supply updated.",
     )
-

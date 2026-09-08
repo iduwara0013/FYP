@@ -37,6 +37,8 @@ def explanation_prompt(for_crop: str, language: str) -> str:
         "this crop was ranked where it is. "
         "Use the exact numbers provided. Do not add new numbers. Do not guarantee profit. "
         "Mention that market prices and yields may change before harvest. "
+        "Return only the final paragraph. Do not include analysis, reasoning, <think> tags, "
+        "headings, lists, Markdown, or a description of these instructions. "
         f"{language_note}"
     )
 

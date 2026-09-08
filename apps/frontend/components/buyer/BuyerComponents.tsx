@@ -11,9 +11,10 @@ import {
 } from "react-native";
 
 import { getWeatherDescription, getWeatherIcon } from "../../lib/weather";
+import { useTheme } from "../../context/ThemeContext";
 import { NotificationBadge } from "../notifications/NotificationComponents";
 import type { ProfileData } from "../screens/profile-types";
-import { buyerColors, buyerRadius, buyerShadow, buyerSpacing } from "./theme";
+import { buyerRadius, buyerShadow, buyerSpacing } from "./theme";
 
 /* ------------------------------------------------------------------ */
 /* BuyerHeader — gradient hero with greeting, date, clock, notifications */
@@ -38,9 +39,10 @@ export function BuyerHeader({
   onSettings,
   unreadCount = 0,
 }: BuyerHeaderProps) {
+  const { colors } = useTheme().theme;
   return (
     <LinearGradient
-      colors={["#C47F00", "#F59E0B"]}
+      colors={[colors.secondary, colors.primary]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.hero}
@@ -133,6 +135,7 @@ type BuyerProfileCardProps = {
 };
 
 export function BuyerProfileCard({ profile, onPress }: BuyerProfileCardProps) {
+  const { colors, shadows } = useTheme().theme;
   if (profile.role !== "buyer") return null;
 
   const chips = [
@@ -174,34 +177,34 @@ export function BuyerProfileCard({ profile, onPress }: BuyerProfileCardProps) {
 
   return (
     <TouchableOpacity
-      style={styles.profileCard}
+      style={[styles.profileCard, { backgroundColor: colors.surface, borderColor: colors.border }, shadows.soft]}
       activeOpacity={0.9}
       onPress={onPress}
     >
       <View style={styles.profileTopRow}>
-        <View style={styles.avatarWrap}>
+        <View style={[styles.avatarWrap, { backgroundColor: colors.primarySoft }]}>
           <MaterialCommunityIcons
             name="storefront-outline"
             size={24}
-            color="#C47F00"
+            color={colors.primary}
           />
         </View>
         <View style={styles.profileNameWrap}>
-          <Text style={styles.profileName}>{profile.fullName}</Text>
-          <Text style={styles.profileOrg}>
+          <Text style={[styles.profileName, { color: colors.text }]}>{profile.fullName}</Text>
+          <Text style={[styles.profileOrg, { color: colors.textMuted }]}>
             {profile.organizationName ?? "Buyer"}
           </Text>
         </View>
       </View>
       <View style={styles.chipRow}>
         {chips.map((chip) => (
-          <View key={chip.label} style={styles.chip}>
+          <View key={chip.label} style={[styles.chip, { backgroundColor: colors.primarySoft }]}>
             <MaterialCommunityIcons
               name={chip.icon}
               size={13}
-              color="#C47F00"
+              color={colors.primary}
             />
-            <Text style={styles.chipValue} numberOfLines={1}>
+            <Text style={[styles.chipValue, { color: colors.primary }]} numberOfLines={1}>
               {chip.value}
             </Text>
           </View>
@@ -242,6 +245,7 @@ export function BuyerWeatherCard({
   onRefresh,
   onPress,
 }: BuyerWeatherCardProps) {
+  const { colors } = useTheme().theme;
   const icon =
     weatherCode !== null
       ? getWeatherIcon(weatherCode)
@@ -253,7 +257,7 @@ export function BuyerWeatherCard({
 
   return (
     <LinearGradient
-      colors={["#C47F00", "#F59E0B"]}
+      colors={[colors.weather, colors.primary]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.weatherCard}
@@ -369,26 +373,27 @@ export function MarketInsightCard({
   message,
   onLearnMore,
 }: MarketInsightCardProps) {
+  const { colors, shadows } = useTheme().theme;
   return (
-    <View style={styles.insightCard}>
+    <View style={[styles.insightCard, { backgroundColor: colors.surface, borderColor: colors.border }, shadows.soft]}>
       <View style={styles.insightHeader}>
-        <View style={styles.insightBadge}>
+        <View style={[styles.insightBadge, { backgroundColor: colors.ai }]}>
           <MaterialCommunityIcons
             name="robot-outline"
             size={15}
             color="#FFFFFF"
           />
         </View>
-        <Text style={styles.insightTitle}>AI Market Insight</Text>
+        <Text style={[styles.insightTitle, { color: colors.text }]}>AI Market Insight</Text>
       </View>
-      <Text style={styles.insightMessage}>{message}</Text>
+      <Text style={[styles.insightMessage, { color: colors.textSecondary }]}>{message}</Text>
       <TouchableOpacity
         onPress={onLearnMore}
         activeOpacity={0.8}
         style={styles.insightLink}
       >
-        <Text style={styles.insightLinkText}>Learn More</Text>
-        <MaterialCommunityIcons name="arrow-right" size={15} color="#C47F00" />
+        <Text style={[styles.insightLinkText, { color: colors.ai }]}>Learn More</Text>
+        <MaterialCommunityIcons name="arrow-right" size={15} color={colors.ai} />
       </TouchableOpacity>
     </View>
   );
@@ -413,12 +418,16 @@ type QuickActionGridProps = {
 };
 
 export function QuickActionGrid({ actions, onPress }: QuickActionGridProps) {
+  const { colors, shadows } = useTheme().theme;
   return (
     <View style={styles.actionGrid}>
-      {actions.map((action) => (
+      {actions.map((action, index) => {
+        const tones = [[colors.weatherSoft, colors.weather], [colors.marketSoft, colors.market], [colors.secondarySoft, colors.secondary], [colors.aiSoft, colors.ai], [colors.primarySoft, colors.primary], [colors.warningSoft, colors.warning]];
+        const [background, iconColor] = tones[index % tones.length];
+        return (
         <TouchableOpacity
           key={action.id}
-          style={styles.actionCard}
+          style={[styles.actionCard, { backgroundColor: colors.surface, borderColor: colors.border }, shadows.soft]}
           activeOpacity={0.85}
           onPress={() => onPress(action.id)}
           accessibilityLabel={action.title}
@@ -426,19 +435,20 @@ export function QuickActionGrid({ actions, onPress }: QuickActionGridProps) {
           <View
             style={[
               styles.actionIconWrap,
-              { backgroundColor: action.background },
+              { backgroundColor: background },
             ]}
           >
             <MaterialCommunityIcons
               name={action.icon}
               size={24}
-              color={action.iconColor}
+              color={iconColor}
             />
           </View>
-          <Text style={styles.actionTitle}>{action.title}</Text>
-          <Text style={styles.actionDescription}>{action.description}</Text>
+          <Text style={[styles.actionTitle, { color: colors.text }]}>{action.title}</Text>
+          <Text style={[styles.actionDescription, { color: colors.textSecondary }]}>{action.description}</Text>
         </TouchableOpacity>
-      ))}
+        );
+      })}
     </View>
   );
 }
@@ -464,14 +474,15 @@ export function MarketPriceCards({
   items,
   onViewReport,
 }: MarketPriceCardsProps) {
+  const { colors, shadows } = useTheme().theme;
   return (
-    <View style={styles.marketSection}>
+    <View style={[styles.marketSection, { backgroundColor: colors.surface, borderColor: colors.border }, shadows.soft]}>
       <View style={styles.marketList}>
         {items.map((item) => (
-          <View key={item.crop} style={styles.marketItem}>
+          <View key={item.crop} style={[styles.marketItem, { borderBottomColor: colors.border }]}>
             <View style={styles.marketItemLeft}>
-              <Text style={styles.marketCrop}>{item.crop}</Text>
-              <Text style={styles.marketPrice}>{item.price}</Text>
+              <Text style={[styles.marketCrop, { color: colors.text }]}>{item.crop}</Text>
+              <Text style={[styles.marketPrice, { color: colors.primary }]}>{item.price}</Text>
             </View>
             <View style={styles.marketItemRight}>
               <View
@@ -480,32 +491,32 @@ export function MarketPriceCards({
                   {
                     backgroundColor:
                       item.trend === "up"
-                        ? buyerColors.greenSoft
-                        : buyerColors.redSoft,
+                        ? colors.successSoft
+                        : colors.dangerSoft,
                   },
                 ]}
               >
                 <MaterialCommunityIcons
                   name={item.trend === "up" ? "trending-up" : "trending-down"}
                   size={13}
-                  color={item.trend === "up" ? "#16A34A" : "#EF4444"}
+                  color={item.trend === "up" ? colors.success : colors.danger}
                 />
                 <Text
                   style={[
                     styles.trendText,
-                    { color: item.trend === "up" ? "#16A34A" : "#EF4444" },
+                    { color: item.trend === "up" ? colors.success : colors.danger },
                   ]}
                 >
                   {item.change}
                 </Text>
               </View>
-              <Text style={styles.marketUpdated}>{item.updated}</Text>
+              <Text style={[styles.marketUpdated, { color: colors.textMuted }]}>{item.updated}</Text>
             </View>
           </View>
         ))}
       </View>
       <TouchableOpacity
-        style={styles.reportButton}
+        style={[styles.reportButton, { backgroundColor: colors.primary }]}
         onPress={onViewReport}
         activeOpacity={0.85}
       >
@@ -527,21 +538,22 @@ export type SummaryTile = {
 };
 
 export function BuyerSummary({ tiles }: { tiles: SummaryTile[] }) {
+  const { colors, shadows } = useTheme().theme;
   return (
     <View style={styles.summaryGrid}>
       {tiles.map((tile) => (
-        <View key={tile.label} style={styles.summaryTile}>
-          <View style={styles.summaryIcon}>
+        <View key={tile.label} style={[styles.summaryTile, { backgroundColor: colors.surface, borderColor: colors.border }, shadows.soft]}>
+          <View style={[styles.summaryIcon, { backgroundColor: colors.primarySoft }]}>
             <MaterialCommunityIcons
               name={tile.icon}
               size={15}
-              color="#C47F00"
+              color={colors.primary}
             />
           </View>
-          <Text style={styles.summaryValue} numberOfLines={1}>
+          <Text style={[styles.summaryValue, { color: colors.text }]} numberOfLines={1}>
             {tile.value}
           </Text>
-          <Text style={styles.summaryLabel}>{tile.label}</Text>
+          <Text style={[styles.summaryLabel, { color: colors.textMuted }]}>{tile.label}</Text>
         </View>
       ))}
     </View>
@@ -562,6 +574,7 @@ export type FarmerCard = {
 };
 
 export function RecommendedFarmers({ farmers }: { farmers: FarmerCard[] }) {
+  const { colors, shadows } = useTheme().theme;
   return (
     <FlatList
       horizontal
@@ -570,25 +583,25 @@ export function RecommendedFarmers({ farmers }: { farmers: FarmerCard[] }) {
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.farmerRow}
       renderItem={({ item }) => (
-        <View style={styles.farmerCard}>
-          <View style={styles.farmerAvatar}>
-            <MaterialCommunityIcons name="account" size={22} color="#C47F00" />
+        <View style={[styles.farmerCard, { backgroundColor: colors.surface, borderColor: colors.border }, shadows.soft]}>
+          <View style={[styles.farmerAvatar, { backgroundColor: colors.primarySoft }]}>
+            <MaterialCommunityIcons name="account" size={22} color={colors.primary} />
           </View>
-          <Text style={styles.farmerName} numberOfLines={1}>
+          <Text style={[styles.farmerName, { color: colors.text }]} numberOfLines={1}>
             {item.name}
           </Text>
-          <Text style={styles.farmerRegion}>{item.region}</Text>
+          <Text style={[styles.farmerRegion, { color: colors.textMuted }]}>{item.region}</Text>
           <View style={styles.farmerRating}>
             <MaterialCommunityIcons name="star" size={12} color="#F59E0B" />
             <Text style={styles.farmerRatingText}>
               {item.rating.toFixed(1)}
             </Text>
           </View>
-          <Text style={styles.farmerCrops} numberOfLines={1}>
+          <Text style={[styles.farmerCrops, { color: colors.textSecondary }]} numberOfLines={1}>
             {item.crops}
           </Text>
           <TouchableOpacity
-            style={styles.contactButton}
+            style={[styles.contactButton, { backgroundColor: colors.primary }]}
             onPress={item.onContact}
             activeOpacity={0.85}
           >
@@ -617,10 +630,11 @@ export type ActivityItem = {
 };
 
 export function ActivityTimeline({ items }: { items: ActivityItem[] }) {
+  const { colors } = useTheme().theme;
   return (
     <View style={styles.activityList}>
       {items.map((item) => (
-        <View key={item.title} style={styles.activityRow}>
+        <View key={item.title} style={[styles.activityRow, { borderBottomColor: colors.border }]}>
           <View
             style={[
               styles.activityIcon,
@@ -634,8 +648,8 @@ export function ActivityTimeline({ items }: { items: ActivityItem[] }) {
             />
           </View>
           <View style={styles.activityText}>
-            <Text style={styles.activityTitle}>{item.title}</Text>
-            <Text style={styles.activityTime}>{item.time}</Text>
+            <Text style={[styles.activityTitle, { color: colors.text }]}>{item.title}</Text>
+            <Text style={[styles.activityTime, { color: colors.textMuted }]}>{item.time}</Text>
           </View>
         </View>
       ))}
@@ -652,9 +666,10 @@ type BuyerTipCardProps = {
 };
 
 export function BuyerTipCard({ message }: BuyerTipCardProps) {
+  const { colors } = useTheme().theme;
   return (
     <LinearGradient
-      colors={["#C47F00", "#F59E0B"]}
+      colors={[colors.secondary, colors.primary]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.tipCard}
@@ -677,7 +692,8 @@ export function BuyerTipCard({ message }: BuyerTipCardProps) {
 /* ------------------------------------------------------------------ */
 
 export function SectionTitle({ title }: { title: string }) {
-  return <Text style={styles.sectionTitle}>{title}</Text>;
+  const { colors } = useTheme().theme;
+  return <Text style={[styles.sectionTitle, { color: colors.text }]}>{title}</Text>;
 }
 
 /* ------------------------------------------------------------------ */
@@ -977,6 +993,7 @@ const styles = StyleSheet.create({
   actionCard: {
     width: "48%",
     backgroundColor: "#FFFFFF",
+    borderWidth: 1,
     borderRadius: buyerRadius.lg,
     padding: buyerSpacing.lg,
     ...buyerShadow.soft,
@@ -990,16 +1007,16 @@ const styles = StyleSheet.create({
     marginBottom: buyerSpacing.md,
   },
   actionTitle: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "800",
     color: "#0F172A",
-    lineHeight: 19,
+    lineHeight: 22,
   },
   actionDescription: {
     marginTop: 4,
-    fontSize: 11,
+    fontSize: 13,
     color: "#64748B",
-    lineHeight: 16,
+    lineHeight: 19,
   },
   marketSection: {
     backgroundColor: "#FFFFFF",
@@ -1223,8 +1240,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 20,
+    lineHeight: 27,
     fontWeight: "800",
+    letterSpacing: -0.2,
     color: "#0F172A",
     marginBottom: buyerSpacing.md,
   },
