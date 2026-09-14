@@ -1,3 +1,4 @@
+import { useFormI18n } from "@/i18n/useFormI18n";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useRef } from "react";
@@ -22,6 +23,8 @@ export function PredictionButton({
   disabled,
   onPress,
 }: PredictionButtonProps) {
+  const { tx } = useFormI18n();
+
   const scale = useRef(new Animated.Value(1)).current;
 
   const handlePressIn = () => {
@@ -72,7 +75,7 @@ export function PredictionButton({
             />
           )}
           <Text style={styles.buttonText}>
-            {loading ? "Predicting…" : "Predict Harvest"}
+            {loading ? tx("Predicting…") : tx("Predict Harvest")}
           </Text>
         </LinearGradient>
       </TouchableWithoutFeedback>

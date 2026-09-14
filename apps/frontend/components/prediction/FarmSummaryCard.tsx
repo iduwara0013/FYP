@@ -1,3 +1,4 @@
+import { useFormI18n } from "@/i18n/useFormI18n";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -33,33 +34,35 @@ export function FarmSummaryCard({
   farmerIrrigation,
   farmerExperience,
 }: FarmSummaryCardProps) {
+  const { tx } = useFormI18n();
+
   if (!profile) return null;
 
   const items: SummaryItem[] = [
     {
       icon: "account-circle-outline",
-      label: "Farmer",
+      label: tx("Farmer"),
       value: profile.fullName,
     },
     {
       icon: "map-marker-outline",
-      label: "Location",
-      value: farmerDistrict || farmerRegion,
+      label: tx("Location"),
+      value: tx(farmerDistrict || farmerRegion),
     },
     {
       icon: "vector-square",
-      label: "Farm Size",
-      value: `${farmerLandArea} ha`,
+      label: tx("Farm Size"),
+      value: `${farmerLandArea} ${tx("ha")}`,
     },
     {
       icon: "water-outline",
-      label: "Irrigation",
-      value: farmerIrrigation,
+      label: tx("Irrigation"),
+      value: tx(farmerIrrigation),
     },
     {
       icon: "star-outline",
-      label: "Experience",
-      value: `${farmerExperience} yrs`,
+      label: tx("Experience"),
+      value: `${farmerExperience} ${tx("yrs")}`,
     },
   ];
 
@@ -71,7 +74,7 @@ export function FarmSummaryCard({
           size={18}
           color={predictionColors.primary}
         />
-        <Text style={styles.title}>Farm Summary</Text>
+        <Text style={styles.title}>{tx("Farm Summary")}</Text>
       </View>
       <View style={styles.grid}>
         {items.slice(0, 2).map((item) => (
@@ -98,7 +101,7 @@ function SummaryTile({ item }: { item: SummaryItem }) {
         />
       </View>
       <View style={styles.tileTextWrap}>
-        <Text style={styles.tileLabel} numberOfLines={1}>
+        <Text style={styles.tileLabel}>
           {item.label}
         </Text>
         <Text style={styles.tileValue} numberOfLines={1}>

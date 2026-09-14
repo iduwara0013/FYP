@@ -1,3 +1,4 @@
+import { useFormI18n } from "@/i18n/useFormI18n";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
@@ -72,6 +73,8 @@ export function YieldPredictionScreen({
   profile,
   onBackToHome,
 }: YieldPredictionScreenProps) {
+  const { tx, errorText } = useFormI18n();
+
   const { isDark } = useTheme();
   const colors = createPredictionPalette(isDark);
   const [loadingOptions, setLoadingOptions] = useState(true);
@@ -138,14 +141,12 @@ export function YieldPredictionScreen({
       setSelectedCrop(options.crops[0] ?? "");
     } catch (requestError) {
       setError(
-        requestError instanceof Error
-          ? requestError.message
-          : "Unable to load prediction options.",
+        errorText(requestError, "Unable to load prediction options."),
       );
     } finally {
       setLoadingOptions(false);
     }
-  }, []);
+  }, [errorText]);
 
   useEffect(() => {
     void loadOptions();
@@ -182,7 +183,7 @@ export function YieldPredictionScreen({
 
       const landAreaHa = parseFloat(landArea);
       if (Number.isNaN(landAreaHa) || landAreaHa <= 0) {
-        throw new Error("Please enter a valid land area in hectares.");
+        throw new Error(tx("Please enter a valid land area in hectares."));
       }
 
       const prediction = await predictFarm({
@@ -204,9 +205,7 @@ export function YieldPredictionScreen({
     } catch (requestError) {
       setResult(null);
       setError(
-        requestError instanceof Error
-          ? requestError.message
-          : "Unable to run the prediction.",
+        errorText(requestError, "Unable to run the prediction."),
       );
     } finally {
       setPredicting(false);
@@ -221,11 +220,13 @@ export function YieldPredictionScreen({
     fertilizer,
     rainfall,
     experience,
+    tx,
+    errorText,
   ]);
 
   return (
     <SafeAreaView edges={["top"]} style={[styles.container, { backgroundColor: colors.background }]}> 
-      <ScreenHeader title="AI yield prediction" subtitle="Forecast harvest and revenue" icon="chart-timeline-variant" onBack={onBackToHome} />
+      <ScreenHeader title={tx("AI yield prediction")} subtitle={tx("Forecast harvest and revenue")} icon="chart-timeline-variant" onBack={onBackToHome} />
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -233,7 +234,7 @@ export function YieldPredictionScreen({
       >
         <View style={[styles.introCard, { backgroundColor: colors.accentSoft, borderColor: colors.border }]}> 
           <View style={[styles.introIcon, { backgroundColor: colors.card }]}><MaterialCommunityIcons name="brain" size={22} color={colors.accent}/></View>
-          <View style={{ flex: 1 }}><Text style={[styles.introTitle, { color: colors.text }]}>Farm-aware forecast</Text><Text style={[styles.introText, { color: colors.textSecondary }]}>Uses your crop, location, land, irrigation and optional field conditions.</Text></View>
+          <View style={{ flex: 1 }}><Text style={[styles.introTitle, { color: colors.text }]}>{tx("Farm-aware forecast")}</Text><Text style={[styles.introText, { color: colors.textSecondary }]}>{tx("Uses your crop, location, land, irrigation and optional field conditions.")}</Text></View>
         </View>
 
         {profile ? (
@@ -264,11 +265,11 @@ export function YieldPredictionScreen({
           <>
             <View style={styles.sectionSpacing}>
               <InputSection
-                title="Farm Information"
+                title={tx("Farm Information")}
                 icon="information-outline"
-                subtitle="Crop, season and location"
+                subtitle={tx("Crop, season and location")}
               >
-                <LabeledField label="Crop">
+                <LabeledField label={tx("Crop")}>
                   <DropdownSelector
                     label=""
                     value={selectedCrop}
@@ -276,13 +277,13 @@ export function YieldPredictionScreen({
                     onChange={setSelectedCrop}
                     error={
                       touched.crop && !cropValid
-                        ? "Please select a crop."
+                        ? tx("Please select a crop.")
                         : null
                     }
                   />
                 </LabeledField>
 
-                <LabeledField label="Season">
+                <LabeledField label={tx("Season")}>
                   <ChipSelector
                     options={["Maha", "Yala"]}
                     value={selectedSeason}
@@ -290,7 +291,7 @@ export function YieldPredictionScreen({
                   />
                 </LabeledField>
 
-                <LabeledField label="Region">
+                <LabeledField label={tx("Region")}>
                   <DropdownSelector
                     label=""
                     value={selectedRegion}
@@ -299,7 +300,7 @@ export function YieldPredictionScreen({
                   />
                 </LabeledField>
 
-                <LabeledField label="District">
+                <LabeledField label={tx("District")}>
                   <DropdownSelector
                     label=""
                     value={selectedDistrict}
@@ -312,28 +313,28 @@ export function YieldPredictionScreen({
 
             <View style={styles.sectionSpacing}>
               <InputSection
-                title="Farm Details"
+                title={tx("Farm Details")}
                 icon="tractor-variant"
-                subtitle="Land, irrigation and experience"
+                subtitle={tx("Land, irrigation and experience")}
               >
-                <LabeledField label="Land Area (hectares)">
+                <LabeledField label={tx("Land Area (hectares)")}>
                   <NumericInput
                     value={landArea}
                     onChangeText={(text) => {
                       setLandArea(text);
                       setTouched((current) => ({ ...current, landArea: true }));
                     }}
-                    placeholder="e.g. 0.5"
+                    placeholder={tx("e.g. 0.5")}
                     icon="vector-square"
                     error={
                       touched.landArea && !landAreaValid
-                        ? "Enter a valid land area."
+                        ? tx("Enter a valid land area.")
                         : null
                     }
                   />
                 </LabeledField>
 
-                <LabeledField label="Irrigation">
+                <LabeledField label={tx("Irrigation")}>
                   <ChipSelector
                     options={["Irrigated", "Rainfed"]}
                     value={selectedIrrigation}
@@ -341,11 +342,11 @@ export function YieldPredictionScreen({
                   />
                 </LabeledField>
 
-                <LabeledField label="Farmer Experience (years)">
+                <LabeledField label={tx("Farmer Experience (years)")}>
                   <NumericInput
                     value={experience}
                     onChangeText={setExperience}
-                    placeholder="e.g. 10"
+                    placeholder={tx("e.g. 10")}
                     icon="star-outline"
                   />
                 </LabeledField>
@@ -354,34 +355,34 @@ export function YieldPredictionScreen({
 
             <View style={styles.sectionSpacing}>
               <InputSection
-                title="Weather"
+                title={tx("Weather")}
                 icon="weather-pouring"
-                subtitle="Optional observed rainfall"
+                subtitle={tx("Optional observed rainfall")}
               >
-                <LabeledField label="Rainfall (mm, optional)">
+                <LabeledField label={tx("Rainfall (mm, optional)")}>
                   <NumericInput
                     value={rainfall}
                     onChangeText={setRainfall}
-                    placeholder="e.g. 150"
+                    placeholder={tx("e.g. 150")}
                     icon="water-outline"
                   />
                 </LabeledField>
 
-                <View style={styles.weatherDoneRow}><MaterialCommunityIcons name="information-outline" size={16} color={predictionColors.info}/><Text style={styles.weatherDoneText}>Leave empty when rainfall is unknown.</Text></View>
+                <View style={styles.weatherDoneRow}><MaterialCommunityIcons name="information-outline" size={16} color={predictionColors.info}/><Text style={styles.weatherDoneText}>{tx("Leave empty when rainfall is unknown.")}</Text></View>
               </InputSection>
             </View>
 
             <View style={styles.sectionSpacing}>
               <InputSection
-                title="Fertilizer (Optional)"
+                title={tx("Fertilizer (Optional)")}
                 icon="sprout-outline"
-                subtitle="Auto default: 150 kg/ha"
+                subtitle={tx("Auto default: 150 kg/ha")}
               >
-                <LabeledField label="Fertilizer (kg)">
+                <LabeledField label={tx("Fertilizer (kg)")}>
                   <NumericInput
                     value={fertilizer}
                     onChangeText={setFertilizer}
-                    placeholder="Auto: 150 kg/ha"
+                    placeholder={tx("Auto: 150 kg/ha")}
                     icon="flower"
                   />
                 </LabeledField>
@@ -396,8 +397,7 @@ export function YieldPredictionScreen({
               />
               {!canPredict && !predicting ? (
                 <Text style={styles.hintText}>
-                  Complete the crop and land area to enable prediction.
-                </Text>
+                  {tx("Complete the crop and land area to enable prediction.")}</Text>
               ) : null}
             </View>
 

@@ -1,3 +1,4 @@
+import { useFormI18n } from "@/i18n/useFormI18n";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -29,19 +30,20 @@ type ChipSelectorProps = {
 };
 
 export function ChipSelector({ options, value, onChange }: ChipSelectorProps) {
+  const { tx } = useFormI18n();
   return (
     <View style={styles.chipRow}>
       {options.map((option) => {
         const active = option === value;
         return (
           <TouchableOpacity
-            key={option}
+            key={tx(option)}
             style={[styles.chip, active && styles.chipActive]}
             activeOpacity={0.85}
             onPress={() => onChange(option)}
           >
             <Text style={[styles.chipText, active && styles.chipTextActive]}>
-              {option}
+              {tx(option)}
             </Text>
           </TouchableOpacity>
         );
@@ -69,6 +71,8 @@ export function DropdownSelector({
   onChange,
   error,
 }: DropdownSelectorProps) {
+  const { tx } = useFormI18n();
+
   const [visible, setVisible] = useState(false);
 
   return (
@@ -88,7 +92,7 @@ export function DropdownSelector({
           <Text
             style={[styles.dropdownText, !value && styles.dropdownPlaceholder]}
           >
-            {value || "Select..."}
+            {value ? tx(value) : tx("Select...")}
           </Text>
         </View>
         <MaterialCommunityIcons
@@ -101,7 +105,7 @@ export function DropdownSelector({
 
       <DropdownSheet
         visible={visible}
-        title={label}
+        title={label || tx("Select...")}
         value={value}
         options={options}
         onClose={() => setVisible(false)}
@@ -129,6 +133,7 @@ function DropdownSheet({
   onClose: () => void;
   onSelect: (value: string) => void;
 }) {
+  const { tx } = useFormI18n();
   const translateY = useRef(new Animated.Value(600)).current;
   const opacity = useRef(new Animated.Value(0)).current;
 
@@ -186,7 +191,7 @@ function DropdownSheet({
               const active = option === value;
               return (
                 <TouchableOpacity
-                  key={option}
+                  key={tx(option)}
                   style={[styles.option, active && styles.optionActive]}
                   activeOpacity={0.8}
                   onPress={() => onSelect(option)}
@@ -197,7 +202,7 @@ function DropdownSheet({
                       active && styles.optionTextActive,
                     ]}
                   >
-                    {option}
+                    {tx(option)}
                   </Text>
                   {active ? (
                     <MaterialCommunityIcons

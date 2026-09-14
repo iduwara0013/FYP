@@ -1,3 +1,4 @@
+import { useFormI18n } from "@/i18n/useFormI18n";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useEffect, useRef } from "react";
 import { Animated, StyleSheet, Text, View } from "react-native";
@@ -68,6 +69,8 @@ function buildInsights(result: FarmPrediction): {
 }
 
 export function ResultCard({ result }: ResultCardProps) {
+  const { tx } = useFormI18n();
+
   const fade = useRef(new Animated.Value(0)).current;
   const slide = useRef(new Animated.Value(30)).current;
 
@@ -100,7 +103,7 @@ export function ResultCard({ result }: ResultCardProps) {
           size={18}
           color={predictionColors.white}
         />
-        <Text style={styles.successText}>Prediction Complete</Text>
+        <Text style={styles.successText}>{tx("Prediction Complete")}</Text>
       </View>
 
       <View style={styles.card}>
@@ -110,33 +113,33 @@ export function ResultCard({ result }: ResultCardProps) {
             size={14}
             color={predictionColors.primaryDark}
           />
-          <Text style={styles.cropText}>{result.input.crop}</Text>
+          <Text style={styles.cropText}>{tx(result.input.crop)}</Text>
         </View>
 
-        <Text style={styles.heroLabel}>Estimated Yield</Text>
+        <Text style={styles.heroLabel}>{tx("Estimated Yield")}</Text>
         <View style={styles.heroRow}>
           <Text style={styles.heroValue}>
             {formatNumber(result.production_kg)}
           </Text>
-          <Text style={styles.heroUnit}>kg</Text>
+          <Text style={styles.heroUnit}>{tx("kg")}</Text>
         </View>
 
         <View style={styles.revenueCard}>
-          <Text style={styles.revenueLabel}>Estimated Revenue</Text>
+          <Text style={styles.revenueLabel}>{tx("Estimated Revenue")}</Text>
           <Text style={styles.revenueValue}>
-            Rs {formatNumber(result.revenue_rs)}
+            {tx("Rs")}{formatNumber(result.revenue_rs)}
           </Text>
         </View>
 
         <View style={styles.metricRow}>
           <View style={styles.metricTile}>
-            <Text style={styles.metricLabel}>Price / kg</Text>
+            <Text style={styles.metricLabel}>{tx("Price / kg")}</Text>
             <Text style={styles.metricValue}>
-              Rs {formatNumber(result.price_rs_per_kg)}
+              {tx("Rs")}{formatNumber(result.price_rs_per_kg)}
             </Text>
           </View>
           <View style={styles.metricTile}>
-            <Text style={styles.metricLabel}>Relative Supply</Text>
+            <Text style={styles.metricLabel}>{tx("Relative Supply")}</Text>
             <Text style={styles.metricValue}>
               {result.relative_supply.toFixed(3)}×
             </Text>
@@ -145,14 +148,14 @@ export function ResultCard({ result }: ResultCardProps) {
 
         <View style={styles.metaRow}>
           <Text style={styles.metaText}>
-            {result.input.district} · {result.input.season} ·{" "}
-            {result.input.irrigation}
+            {tx(result.input.district)} · {tx(result.input.season)} ·{" "}
+            {tx(result.input.irrigation)}
           </Text>
           {result.price_source ? (
             <Text style={styles.modelText}>
-              Price source: {result.price_source}
+              {tx("Price source:")}{tx(result.price_source)}
               {result.price_model?.trainedAt
-                ? ` · updated ${new Date(result.price_model.trainedAt).toLocaleDateString()}`
+                ? ` · ${tx("updated")} ${new Date(result.price_model.trainedAt).toLocaleDateString()}`
                 : ""}
             </Text>
           ) : null}
@@ -161,7 +164,7 @@ export function ResultCard({ result }: ResultCardProps) {
 
       {insights.length > 0 ? (
         <View style={styles.insightWrap}>
-          <Text style={styles.insightTitle}>Insights</Text>
+          <Text style={styles.insightTitle}>{tx("Insights")}</Text>
           {insights.map((insight, index) => {
             const toneColor =
               insight.tone === "success"
@@ -186,7 +189,7 @@ export function ResultCard({ result }: ResultCardProps) {
                   color={toneColor}
                 />
                 <Text style={[styles.insightText, { color: toneColor }]}>
-                  {insight.message}
+                  {tx(insight.message)}
                 </Text>
               </View>
             );

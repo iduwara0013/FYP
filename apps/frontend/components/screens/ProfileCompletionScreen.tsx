@@ -1,3 +1,4 @@
+import { useFormI18n } from "@/i18n/useFormI18n";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -34,6 +35,8 @@ export function ProfileCompletionScreen({
   initialValues,
   onComplete,
 }: ProfileCompletionScreenProps) {
+  const { tx, errorText } = useFormI18n();
+
   const isFarmer = role === "farmer";
   const themeColor = isFarmer ? "#16A34A" : "#F59E0B";
   const lightThemeColor = isFarmer ? "#DCFCE7" : "#FEF3C7";
@@ -93,8 +96,8 @@ export function ProfileCompletionScreen({
   };
 
   const submitLabel = useMemo(
-    () => (saving ? "Saving..." : "Complete Profile"),
-    [saving],
+    () => (saving ? tx("Saving...") : tx("Complete Profile")),
+    [saving, tx],
   );
 
   const handleSubmit = async () => {
@@ -173,7 +176,7 @@ export function ProfileCompletionScreen({
       }
     } catch (error) {
       setErrorMessage(
-        error instanceof Error ? error.message : "Failed to save profile",
+        errorText(error, "Failed to save profile"),
       );
     } finally {
       setSaving(false);
@@ -205,18 +208,16 @@ export function ProfileCompletionScreen({
           </View>
           <View style={styles.roleChip}>
             <Text style={[styles.roleChipText, { color: themeColor }]}>
-              {isFarmer ? "Farmer Profile" : "Buyer Profile"}
+              {isFarmer ? tx("Farmer Profile") : tx("Buyer Profile")}
             </Text>
           </View>
-          <Text style={styles.title}>Complete Your Profile</Text>
+          <Text style={styles.title}>{tx("Complete Your Profile")}</Text>
           <Text style={styles.subtitle}>
-            Tell us more about your {isFarmer ? "farm" : "business"} so we can
-            save it in Firebase through Spring.
+            {tx(isFarmer ? "Tell us more about your farm so we can complete your profile." : "Tell us more about your business so we can complete your profile.")}
           </Text>
           {initialValues ? (
             <Text style={styles.prefillText}>
-              Signup details are already carried forward.
-            </Text>
+              {tx("Signup details are already carried forward.")}</Text>
           ) : null}
         </Animated.View>
 
@@ -240,9 +241,9 @@ export function ProfileCompletionScreen({
               />
             </View>
             <View>
-              <Text style={styles.sectionTitle}>{role} Profile</Text>
+              <Text style={styles.sectionTitle}>{tx(isFarmer ? "Farmer Profile" : "Buyer Profile")}</Text>
               <Text style={styles.sectionSubtitleSmall}>
-                Required information
+                {tx("Required information")}
               </Text>
             </View>
           </View>
@@ -255,7 +256,7 @@ export function ProfileCompletionScreen({
                 color="#64748B"
               />
               <TextInput
-                placeholder="Full Name"
+                placeholder={tx("Full Name")}
                 placeholderTextColor="#9CA3AF"
                 value={fullName}
                 onChangeText={setFullName}
@@ -270,7 +271,7 @@ export function ProfileCompletionScreen({
                 color="#64748B"
               />
               <TextInput
-                placeholder="Email"
+                placeholder={tx("Email")}
                 placeholderTextColor="#9CA3AF"
                 value={email}
                 onChangeText={setEmail}
@@ -286,7 +287,7 @@ export function ProfileCompletionScreen({
                 color="#64748B"
               />
               <TextInput
-                placeholder="Phone Number"
+                placeholder={tx("Phone Number")}
                 placeholderTextColor="#9CA3AF"
                 value={phoneNumber}
                 onChangeText={setPhoneNumber}
@@ -302,7 +303,7 @@ export function ProfileCompletionScreen({
                 color="#64748B"
               />
               <TextInput
-                placeholder="Address"
+                placeholder={tx("Address")}
                 placeholderTextColor="#9CA3AF"
                 value={address}
                 onChangeText={setAddress}
@@ -317,7 +318,7 @@ export function ProfileCompletionScreen({
                 color="#64748B"
               />
               <TextInput
-                placeholder="Region or District"
+                placeholder={tx("Region or District")}
                 placeholderTextColor="#9CA3AF"
                 value={region}
                 onChangeText={setRegion}
@@ -334,7 +335,7 @@ export function ProfileCompletionScreen({
                     color="#64748B"
                   />
                   <TextInput
-                    placeholder="National ID or Farmer ID"
+                    placeholder={tx("National ID or Farmer ID")}
                     placeholderTextColor="#9CA3AF"
                     value={nationalId}
                     onChangeText={setNationalId}
@@ -349,7 +350,7 @@ export function ProfileCompletionScreen({
                     color="#64748B"
                   />
                   <TextInput
-                    placeholder="Farmer Type"
+                    placeholder={tx("Farmer Type")}
                     placeholderTextColor="#9CA3AF"
                     value={farmerType}
                     onChangeText={setFarmerType}
@@ -365,7 +366,7 @@ export function ProfileCompletionScreen({
                       color="#64748B"
                     />
                     <TextInput
-                      placeholder="Land Size (ha)"
+                      placeholder={tx("Land Size (ha)")}
                       placeholderTextColor="#9CA3AF"
                       value={landSize}
                       onChangeText={setLandSize}
@@ -380,7 +381,7 @@ export function ProfileCompletionScreen({
                       color="#64748B"
                     />
                     <TextInput
-                      placeholder="Experience (years)"
+                      placeholder={tx("Experience (years)")}
                       placeholderTextColor="#9CA3AF"
                       value={experienceYears}
                       onChangeText={setExperienceYears}
@@ -397,7 +398,7 @@ export function ProfileCompletionScreen({
                       size={20}
                       color="#2563EB"
                     />
-                    <Text style={styles.inlineLabel}>Irrigation Available</Text>
+                    <Text style={styles.inlineLabel}>{tx("Irrigation Available")}</Text>
                   </View>
                   <Switch
                     value={hasIrrigation}
@@ -414,7 +415,7 @@ export function ProfileCompletionScreen({
                     color="#64748B"
                   />
                   <TextInput
-                    placeholder="Organization Name"
+                    placeholder={tx("Organization Name")}
                     placeholderTextColor="#9CA3AF"
                     value={organizationName}
                     onChangeText={setOrganizationName}
@@ -429,7 +430,7 @@ export function ProfileCompletionScreen({
                     color="#64748B"
                   />
                   <TextInput
-                    placeholder="Buyer Type"
+                    placeholder={tx("Buyer Type")}
                     placeholderTextColor="#9CA3AF"
                     value={buyerType}
                     onChangeText={setBuyerType}
@@ -444,7 +445,7 @@ export function ProfileCompletionScreen({
                     color="#64748B"
                   />
                   <TextInput
-                    placeholder="Preferred Crop"
+                    placeholder={tx("Preferred Crop")}
                     placeholderTextColor="#9CA3AF"
                     value={preferredCrop}
                     onChangeText={setPreferredCrop}
@@ -459,7 +460,7 @@ export function ProfileCompletionScreen({
                     color="#64748B"
                   />
                   <TextInput
-                    placeholder="Required Quantity"
+                    placeholder={tx("Required Quantity")}
                     placeholderTextColor="#9CA3AF"
                     value={requiredQuantity}
                     onChangeText={setRequiredQuantity}
@@ -487,8 +488,7 @@ export function ProfileCompletionScreen({
                         hasStorage && styles.toggleTextActive,
                       ]}
                     >
-                      Storage Available
-                    </Text>
+                      {tx("Storage Available")}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={[
@@ -508,8 +508,7 @@ export function ProfileCompletionScreen({
                         hasTransport && styles.toggleTextActive,
                       ]}
                     >
-                      Transport Available
-                    </Text>
+                      {tx("Transport Available")}</Text>
                   </TouchableOpacity>
                 </View>
 
@@ -520,7 +519,7 @@ export function ProfileCompletionScreen({
                     color="#64748B"
                   />
                   <TextInput
-                    placeholder="Notes"
+                    placeholder={tx("Notes")}
                     placeholderTextColor="#9CA3AF"
                     value={notes}
                     onChangeText={setNotes}
